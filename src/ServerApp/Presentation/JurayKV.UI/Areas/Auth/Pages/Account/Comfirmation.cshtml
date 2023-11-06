@@ -1,0 +1,207 @@
+﻿@page
+@model JurayKV.UI.Areas.Auth.Pages.Account.ComfirmationModel
+@{
+    Layout = "~/Pages/Shared/_Register.cshtml";
+    ViewData["Title"] = "Account Comfirmation";
+
+}
+
+<style>
+    #wrapper {
+        font-family: Lato;
+        font-size: 1.5rem;
+        text-align: center;
+        box-sizing: border-box;
+        color: #333;
+    }
+
+        #wrapper #dialog {
+            border: solid 1px #ccc0;
+            margin: 10px auto;
+            padding: 20px 30px;
+            display: inline-block;
+            box-shadow: 0 0 4px #ccc0;
+            background-color: #faf8f800;
+            overflow: hidden;
+            position: relative;
+            max-width: 650px;
+        }
+
+            #wrapper #dialog h3 {
+                margin: 0 0 10px;
+                padding: 0;
+                line-height: 1.25;
+            }
+
+            #wrapper #dialog span {
+                font-size: 90%;
+            }
+
+            #wrapper #dialog #form {
+                max-width: 550px;
+                margin: 25px auto 0;
+            }
+
+                #wrapper #dialog #form input {
+                    margin: 0 5px;
+                    text-align: center;
+                    line-height: 80px;
+                    font-size: 50px;
+                    border: solid 1px #ccc;
+                    box-shadow: 0 0 5px #ccc inset;
+                    outline: none;
+                    width: 100%;
+                    transition: all 0.2s ease-in-out;
+                    border-radius: 3px;
+                }
+
+                    #wrapper #dialog #form input:focus {
+                        border-color: purple;
+                        box-shadow: 0 0 5px purple inset;
+                    }
+
+                    #wrapper #dialog #form input::-moz-selection {
+                        background: transparent;
+                    }
+
+                    #wrapper #dialog #form input::selection {
+                        background: transparent;
+                    }
+
+                #wrapper #dialog #form button {
+                    margin: 30px 0 50px;
+                    width: 80%;
+                    padding: 6px;
+                    background-color: #B85FC6;
+                    border: none;
+                    text-transform: uppercase;
+                }
+
+            #wrapper #dialog button.close {
+                border: solid 2px;
+                border-radius: 30px;
+                line-height: 19px;
+                font-size: 120%;
+                width: 22px;
+                position: absolute;
+                right: 5px;
+                top: 5px;
+            }
+
+            #wrapper #dialog div {
+                position: relative;
+                z-index: 1;
+            }
+
+            #wrapper #dialog img {
+                position: absolute;
+                bottom: -70px;
+                right: -63px;
+            }
+</style>
+<div id="wrapper">
+    <div id="dialog">
+
+        <h3>Please enter the 6-digit verification code sent to @TempData["codetype"]</h3>
+
+        <div id="form">
+            <form method="post">
+                <input asp-for="Xtxnt" type="hidden" />
+                <input type="text" id="inputField" asp-for="One" onkeyup="removeSpace(event)" onpaste="removeSpacesAndLetters(event)" />
+                <button type="submit" class="btn btn-primary btn-embossed">Verify</button>
+            </form>
+        </div>
+
+        <div>
+            <span style="text-align:center;">Didn't receive the code?<br /></span>
+            <form method="post" asp-page="Verify">
+                <input asp-for="Xtxnt" type="hidden" />
+                <input asp-for="NotificationNumber" type="hidden" value="1" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="btn-section">
+                            <button class="btn btn-green">
+
+                                <span class="btn-text">Resend Via SMS <i class="fa fa-sms" style="margin-left:20px;"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+            <form method="post" asp-page="Verify">
+                <input asp-for="Xtxnt" type="hidden" />
+                <input asp-for="NotificationNumber" type="hidden" value="3" />
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="btn-section">
+                            <button class="btn btn-twitter">
+
+                                <span class="btn-text">Resend Via Voice <i class="fa fa-phone" style="margin-left:20px;"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <form method="post" asp-page="Verify">
+                <input asp-for="Xtxnt" type="hidden" />
+                <input asp-for="NotificationNumber" type="hidden" value="2" />
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="btn-section">
+                            <button class="btn btn-github">
+
+                                <span class="btn-text">Resend Via Email <i class="fa fa-envelope" style="margin-left:20px;"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function removeSpace(event) {
+            // Get the input field value
+            let inputField = document.getElementById('inputField');
+            let inputValue = inputField.value;
+
+            // Remove spaces from the input value
+            inputValue = inputValue.replace(/ /g, '');
+
+            // Update the input field with the modified value
+            inputField.value = inputValue;
+        }
+
+        function removeSpacesAndLetters(event) {
+            // Get the pasted text
+            let clipboardData = event.clipboardData || window.clipboardData;
+            let pastedData = clipboardData.getData('text');
+
+            // Remove spaces and letters from the pasted text
+            let sanitizedText = pastedData.replace(/ /g, '').replace(/[a-zA-Z]/g, '');
+
+            // Prevent the default paste action
+            event.preventDefault();
+
+            // Insert the sanitized text into the input field
+            document.execCommand('insertText', false, sanitizedText);
+        }
+    </script>
+
+}

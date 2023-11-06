@@ -1,0 +1,170 @@
+﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Commands.WalletCommands;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.Aggregates.WalletAggregate;
+using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TanvirArjel.ArgumentChecker;
+using TanvirArjel.EFCore.GenericRepository;
+
+namespace JurayKV.Application.Commands.UserManagerCommands
+{
+    public sealed class CreateUserManagerCommand : IRequest<ResponseCreateUserDto>
+    {
+        public CreateUserManagerCommand(CreateUserDto data)
+        {
+            Data = data;
+        }
+        public CreateUserDto Data { get; set; }
+    }
+
+    internal class CreateUserManagerCommandHandler : IRequestHandler<CreateUserManagerCommand, ResponseCreateUserDto>
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserManagerCacheHandler _userManagerCacheHandler;
+        private readonly IRepository _repository;
+        private readonly IWalletRepository _wallet;
+        private readonly IMediator _mediator;
+
+        public CreateUserManagerCommandHandler(
+UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCacheHandler, IRepository repository, IMediator mediator, IWalletRepository wallet)
+        {
+            _userManager = userManager;
+            _userManagerCacheHandler = userManagerCacheHandler;
+            _repository = repository;
+            _mediator = mediator;
+            _wallet = wallet;
+        }
+
+        public async Task<ResponseCreateUserDto> Handle(CreateUserManagerCommand request, CancellationToken cancellationToken)
+        {
+            request.ThrowIfNull(nameof(request));
+            IDbContextTransaction dbContextTransaction = await _repository
+               .BeginTransactionAsync(IsolationLevel.Unspecified, cancellationToken);
+            ResponseCreateUserDto response = new ResponseCreateUserDto();
+            try
+            {
+                // Split the full name into parts
+                string[] nameParts = request.Data.Fullname.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                string firstName = "";
+                string middleName = "";
+                string lastName = "";
+
+                // Check if we have at least one part (FirstName)
+                if (nameParts.Length >= 1)
+                {
+                    firstName = nameParts[0];
+                }
+
+                // Check if we have at least two parts (FirstName and LastName)
+                if (nameParts.Length >= 2)
+                {
+                    lastName = nameParts[nameParts.Length - 1];
+                }
+
+                // Check if we have at least three parts (FirstName, MiddleName, and LastName)
+                if (nameParts.Length >= 3)
+                {
+                    middleName = string.Join(" ", nameParts, 1, nameParts.Length - 2);
+                }
+
+                // Create a random number generator
+                Random random = new Random();
+
+                // Generate a 6-digit verification code
+                int verificationCode = random.Next(100000, 1000000);
+                Guid newGuid = Guid.NewGuid();
+
+                var checkphone = await _wallet.CheckPhoneUnique(request.Data.PhoneNumber);
+                if (checkphone == true)
+                {
+                    response.Succeeded = false;
+                    response.Message = " Phone Number Already Used...";
+
+                }
+                var checkemail = await _wallet.CheckEmailUnique(request.Data.Email);
+                if (checkemail == true)
+                {
+                    response.Succeeded = false;
+                    response.Message = response.Message +" Email Already Used...";
+
+                }
+
+                if (checkemail == true || checkphone == true)
+                {
+                    return response;
+                }
+                ApplicationUser applicationUser = new ApplicationUser
+                {
+                    SurName = firstName,
+                    FirstName = middleName,
+                    LastName = lastName,
+                    UserName = request.Data.Email,
+                    PhoneNumber = request.Data.PhoneNumber,
+                    Email = request.Data.Email,
+                    Xvalue = verificationCode.ToString(),
+                    XvalueDate = DateTime.UtcNow.AddHours(1).AddMinutes(20),
+                    XtxtGuid = newGuid.ToString(),
+                   CreationUTC = DateTime.UtcNow.AddHours(1)
+                };
+
+                IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, request.Data.Password);
+
+                if (identityResult.Succeeded == true)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, "User");
+
+                    response.Succeeded = true;
+                }
+                else
+                {
+                    var errorBuilder = new StringBuilder();
+                    response.Succeeded = false;
+                    foreach (var error in identityResult.Errors)
+                    {
+                        response.Message = error.Description;
+                    }
+
+                    return response;
+                }
+                var user = await _userManager.FindByEmailAsync(applicationUser.Email);
+                //create wallet
+                CreateWalletCommand walletcommand = new CreateWalletCommand(user.Id, "", "wallet created on " + DateTime.UtcNow, 0);
+                Guid Result = await _mediator.Send(walletcommand);
+
+                string maskedEmail = EmailMask.MaskEmail(applicationUser.Email);
+
+                response.Id = applicationUser.Id;
+                response.Mxemail = maskedEmail;
+                //remove catch
+                await _userManagerCacheHandler.RemoveListAsync();
+                await _userManagerCacheHandler.RemoveDetailsByIdAsync(applicationUser.Id);
+                await dbContextTransaction.CommitAsync(cancellationToken);
+            }
+            catch (Exception)
+            {
+                await dbContextTransaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+            return response;
+        }
+    }
+
+    public class ResponseCreateUserDto
+    {
+        public bool Succeeded { get; set; }
+        public string Mxemail { get; set; }
+        public string Message { get; set; }
+        public Guid Id { get; set; }
+    }
+
+}

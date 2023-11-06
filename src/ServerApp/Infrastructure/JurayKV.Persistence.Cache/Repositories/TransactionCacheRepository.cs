@@ -1,0 +1,161 @@
+﻿using JurayKV.Application.Caching.Repositories;
+using JurayKV.Application.Queries.KvPointQueries;
+using JurayKV.Application.Queries.TransactionQueries;
+using JurayKV.Domain.Aggregates.KvPointAggregate;
+using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Persistence.Cache.Keys;
+using Microsoft.Extensions.Caching.Distributed;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using TanvirArjel.EFCore.GenericRepository;
+using TanvirArjel.Extensions.Microsoft.Caching;
+
+namespace JurayKV.Persistence.Cache.Repositories
+{
+    public sealed class TransactionCacheRepository : ITransactionCacheRepository
+    {
+        private readonly IDistributedCache _distributedCache;
+        private readonly IQueryRepository _repository;
+        private readonly ITransactionRepository _transactionRepository;
+        public TransactionCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, ITransactionRepository transactionRepository)
+        {
+            _distributedCache = distributedCache;
+            _repository = repository;
+            _transactionRepository = transactionRepository;
+        }
+
+        public async Task<List<TransactionListDto>> GetListAsync()
+        {
+            string cacheKey = TransactionCacheKeys.ListKey;
+            List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
+
+            if (list == null)
+            {
+                Expression<Func<Transaction, TransactionListDto>> selectExp = d => new TransactionListDto
+                {
+                    Id = d.Id,
+                    Amount = d.Amount,
+                    Description = d.Description,
+                    Note = d.Note,
+                    Status = d.Status,
+                    TrackCode = d.TrackCode,
+                    TransactionReference = d.TransactionReference,
+                    TransactionType = d.TransactionType,
+                    UserId = d.UserId,
+                    Fullname = d.User.SurName + " " + d.User.SurName,
+                    WalletId = d.WalletId,
+                    WalletBalance = d.Wallet.Amount,
+                    CreatedAtUtc = d.CreatedAtUtc
+                };
+
+                list = await _repository.GetListAsync(selectExp);
+
+                await _distributedCache.SetAsync(cacheKey, list);
+            }
+
+            return list;
+        }
+
+        public async Task<TransactionDetailsDto> GetByIdAsync(Guid transactionId)
+        {
+            string cacheKey = TransactionCacheKeys.GetKey(transactionId);
+            TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
+
+            if (transaction == null)
+            {
+                Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
+                {
+                    Id = d.Id,
+                    Amount = d.Amount,
+                    Description = d.Description,
+                    Note = d.Note,
+                    Status = d.Status,
+                    TrackCode = d.TrackCode,
+                    TransactionReference = d.TransactionReference,
+                    TransactionType = d.TransactionType,
+                    UserId = d.UserId,
+                    WalletId = d.WalletId,
+                    CreatedAtUtc = d.CreatedAtUtc
+                };
+
+                transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+
+                await _distributedCache.SetAsync(cacheKey, transaction);
+            }
+
+            return transaction;
+        }
+
+        public async Task<TransactionDetailsDto> GetDetailsByIdAsync(Guid transactionId)
+        {
+            string cacheKey = TransactionCacheKeys.GetDetailsKey(transactionId);
+            TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
+
+            if (transaction == null)
+            {
+                Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
+                {
+                    Id = d.Id,
+                    Amount = d.Amount,
+                    Description = d.Description,
+                    Note = d.Note,
+                    Status = d.Status,
+                    TrackCode = d.TrackCode,
+                    TransactionReference = d.TransactionReference,
+                    TransactionType = d.TransactionType,
+                    UserId = d.UserId,
+                    WalletId = d.WalletId,
+                    CreatedAtUtc = d.CreatedAtUtc
+                };
+
+                transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+
+                await _distributedCache.SetAsync(cacheKey, transaction);
+            }
+
+            return transaction;
+        }
+
+       
+        public async Task<List<TransactionListDto>> GetListByCountAsync(int toplistcount, Guid userId)
+        {
+            string cacheKey = TransactionCacheKeys.ListByCountUserIdKey(userId);
+            List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
+
+            if (list == null)
+            {
+
+                var xlist = await _transactionRepository.LastListByCountByUserId(toplistcount, userId);
+                list = xlist.Select(d => new TransactionListDto
+                {
+                    Id = d.Id,
+                    Amount = d.Amount,
+                    Description = d.Description,
+                    Note = d.Note,
+                    Status = d.Status,
+                    TrackCode = d.TrackCode,
+                    TransactionReference = d.TransactionReference,
+                    TransactionType = d.TransactionType,
+                    UserId = d.UserId,
+                    Fullname = d.User.SurName + " " + d.User.SurName,
+                    WalletId = d.WalletId,
+                    WalletBalance = d.Wallet.Amount,
+                    CreatedAtUtc = d.CreatedAtUtc
+                }).ToList();
+
+                await _distributedCache.SetAsync(cacheKey, list);
+            }
+
+            return list;
+        }
+
+        public Task<List<TransactionListDto>> GetListByCountAsync(int latestcount)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+}

@@ -1,0 +1,31 @@
+﻿@page
+@model JurayKV.UI.Areas.User.Pages.Account.BucketModel
+@{
+}
+<div class="row">
+    <div class="col-md-12">
+        <h3>ADVERT BUCKET FOR YOUR STATUS</h3>
+        <p>Kindl Make Sure You Pick Your Advert From Any of the Bucket Below</p>
+    </div>
+    @foreach (var item in Model.Bucket)
+    {
+        
+            <div class="col-sm-4">
+                <div class="service-simple">
+
+
+                    <a asp-page="./Ads" asp-route-id="@item.Id">
+                        <div class="position-relative">
+                            <img src="~/img/photo3.jpg" alt="" class="img-fluid">
+                            <div class="ribbon-wrapper ribbon-xl">
+                                <div class="ribbon bg-warning text-lg">
+                                    @item.Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        
+    }
+</div>

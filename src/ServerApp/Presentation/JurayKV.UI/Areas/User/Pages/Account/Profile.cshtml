@@ -1,0 +1,80 @@
+﻿@page
+@model JurayKV.UI.Areas.User.Pages.Account.ProfileModel
+@{
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Widget: user widget style 1 -->
+        <div class="card card-widget widget-user">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header text-white" style="background: url('/dashboard/dist/img/photo1.png') center center;">
+                <h3 class="widget-user-username text-right">@Model.UserData.Fullname</h3>
+                <h5 class="widget-user-desc text-right">User</h5>
+            </div>
+            <div class="widget-user-image">
+                <img class="img-circle" src="~/img/KV-Icon.jpg" alt="User Avatar">
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header">@Model.UserData.WalletBalance</h5>
+                            <span class="description-text">POINTS</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header">0</h5>
+                            <span class="description-text">ADs</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4">
+                        <div class="description-block">
+                            <h5 class="description-header">0</h5>
+                            <span class="description-text">TRANSACTIONS</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+        <!-- /.widget-user -->
+
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">About Me</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <strong><i class="fas fa-envelope mr-1"></i> Email</strong>
+
+                <p class="text-muted">
+                    @Model.UserData.Email
+                </p>
+
+                <hr>
+                <strong><i class="fas fa-phone mr-1"></i> Phone Number</strong>
+
+                <p class="text-muted">
+                    @Model.UserData.PhoneNumber
+                </p>
+
+                <hr>
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                <p class="text-muted">------</p>
+
+                <hr>
+  </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>

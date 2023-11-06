@@ -1,0 +1,179 @@
+﻿@page
+@using JurayKV.Application;
+@model JurayKV.UI.Areas.KvMain.Pages.IUserAds.InfoModel
+@{
+}
+<style>
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio (change as needed) */
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+    }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+<div class="row">
+    <div class="col-md-12">
+
+
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center service-simple" style="margin-top:15px;padding:10px;">
+
+            <h3>ADs from @Model.IdentityKvAdDetailsDto.Fullname</h3>
+            <p>Kindly upload your whatsapp status proof of views</p>
+            <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
+            @if (!String.IsNullOrEmpty(Model.IdentityKvAdDetailsDto.VideoUrl))
+            {
+                <video controls>
+                    <source src="@Model.IdentityKvAdDetailsDto.VideoUrl" type="video/mp4">
+                    <!-- Add more source elements for other video formats -->
+                    Your browser does not support the video tag.
+                </video>
+            }
+        </div>
+    </div>
+    <div class="col-md-12">
+
+
+        <div class="col-md-4"></div>
+        <div class="col-md-4 service-simple" style="margin-top: 15px; padding: 10px;">
+            <h4>Kindly Update The Points from the Video</h4>
+
+            <div class="service-simple">
+                @if (User.IsInRole(Constants.AdminOne) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultOne</a>
+                }
+
+                @if (User.IsInRole(Constants.AdminTwo) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultTwo</a>
+                }
+
+                @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultThree</a>
+                }
+                @if (User.IsInRole(Constants.AdminPolicy))
+                {
+                    <form method="post" enctype="multipart/form-data" asp-page-handler="UpdatePoint">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
+
+                        <div class="form-group">
+                            <label class="control-label">Choose to Validate</label>
+                            <select asp-for="PointChoose" class="form-control">
+                                <option value="">Choose</option>
+                                <option value="First">First Option</option>
+                                <option value="Second">Second Option</option>
+                                <option value="Third">Third Option</option> 
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="If the Point are Verified. Kindly Update the User Point" class="btn btn-primary" />
+                            <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="">Back</a>
+
+                        </div>
+                    </form>
+                }
+                </div>
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
+
+                @if (User.IsInRole(Constants.AdminOne) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <div class="form-group">
+                        <label asp-for="PointOne" class="control-label">Total Views in These Advert</label>
+                        <input asp-for="PointOne" class="form-control" />
+                    </div>
+                }
+
+                @if (User.IsInRole(Constants.AdminTwo) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <div class="form-group">
+                        <label asp-for="PointTwo" class="control-label">Total Views in These Advert</label>
+                        <input asp-for="PointTwo" class="form-control" />
+                    </div>
+                }
+
+                @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.AdminPolicy))
+                {
+                    <div class="form-group">
+                        <label asp-for="PointThree" class="control-label">Total Views in These Advert</label>
+                        <input asp-for="PointThree" class="form-control" />
+                    </div>
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="">Back</a>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-12">
+
+
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="service-simple" style="margin-top: 15px; padding: 10px;">
+                <a href="@Model.IdentityKvAdDetailsDto.KvAdImage">
+                    <div class="position-relative">
+                        <img src="@Model.IdentityKvAdDetailsDto.KvAdImage" alt="" class="img-fluid">
+
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    <script>
+        // Function to update countdown for all items with the "countdown" class
+        function updateCountdowns() {
+            var now = new Date();
+            var countdownElements = document.getElementsByClassName("countdown");
+
+            for (var i = 0; i < countdownElements.length; i++) {
+                var element = countdownElements[i];
+                var targetTime = new Date(now);
+                var targetTimeString = element.getAttribute("data-target-time").split(":");
+                targetTime.setHours(targetTimeString[0], targetTimeString[1], targetTimeString[2], 0); // Set the target time for the current item
+
+                if (now >= targetTime) {
+                    // If it's already past the target time, set the target time to the next day
+                    targetTime.setDate(targetTime.getDate() + 1);
+                }
+
+                var timeDifference = targetTime - now; // Calculate the time difference in milliseconds
+                var hoursRemaining = Math.floor(timeDifference / 3600000); // Convert to hours
+                var minutesRemaining = Math.floor((timeDifference % 3600000) / 60000); // Convert to minutes
+                var secondsRemaining = Math.floor((timeDifference % 60000) / 1000); // Convert to seconds
+
+                element.textContent = hoursRemaining + "h " + minutesRemaining + "m " + secondsRemaining + "s";
+            }
+        }
+
+        // Update the countdown for all items every second (1,000 milliseconds)
+        setInterval(updateCountdowns, 1000);
+
+        // Initial call to set the initial countdown
+        updateCountdowns();
+    </script>
+
+
+}

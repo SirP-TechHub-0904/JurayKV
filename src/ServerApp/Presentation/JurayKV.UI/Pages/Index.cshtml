@@ -1,0 +1,266 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<section class="pt-0 pb-0">
+    <div class="container-fluid px-0">
+        <div class="row no-gutters">
+            <div class="col-12">
+                <div class="gen-banner-movies banner-style-2">
+                    <div class="owl-carousel owl-loaded owl-drag" data-dots="false" data-nav="true" data-desk_num="1"
+                         data-lap_num="1" data-tab_num="1" data-mob_num="1" data-mob_sm="1" data-autoplay="true"
+                         data-loop="true" data-margin="0">
+                        @foreach (var item in Model.Slider)
+                        {
+                            <div class="item" style="background: url(@item.Url)">
+                                <div class="gen-movie-contain-style-2 h-100">
+                                    <div class="container h-100">
+                                        <div class="row align-items-center h-100">
+
+                                            <div class="col-xl-6">
+                                                <div class="gen-tag-line"><span>@Html.Raw(item.MiniTitle)</span></div>
+                                                <div class="gen-movie-info">
+                                                    <h3>@Html.Raw(item.Title)</h3>
+                                                </div>
+                                                <div class="gen-movie-meta-holder">
+
+                                                    <p>
+                                                        @Html.Raw(item.Text)
+                                                    </p>
+
+                                                </div>
+
+                                                <div class="gen-movie-action">
+                                                    <div class="gen-btn-container">
+                                                        @if (item.ButtonLink == "0")
+                                                        {
+
+                                                            <a href="#" class="gen-button .gen-button-dark disable-style1">
+                                                                <span class="text">
+                                                                    @Html.Raw(item.ButtonText)
+                                                                </span>
+                                                            </a>
+
+                                                        }
+                                                        else if (item.ButtonLink == "000")
+                                                        {
+                                                            <a asp-page="/Contact" class="gen-button .gen-button-dark disable-style1">
+                                                                <span class="text">
+                                                                    @Html.Raw(item.ButtonText)
+                                                                </span>
+                                                            </a>
+
+                                                        }
+                                                        else if (item.ButtonLink != "0" && item.ButtonLink == "000")
+                                                        {
+                                                            <a asp-page="/Source" asp-route-id="@item.ButtonLink" class="gen-button .gen-button-dark disable-style1">
+                                                                <span class="text">
+                                                                    @Html.Raw(item.ButtonText)
+                                                                </span>
+                                                            </a>
+
+                                                        }
+
+
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+
+                                            @if (item.DisableVideoButton == false)
+                                            {
+                                                <div class="col-xl-6">
+                                                    <div class="gen-front-image">
+                                                        <img src="@item.SecondUrl" alt="owl-carousel-banner-image">
+                                                        <a href="@item.VideoLink" class="playBut popup-youtube popup-vimeo popup-gmaps">
+                                                            <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
+                                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="213.7px"
+                                                                 height="213.7px" viewBox="0 0 213.7 213.7"
+                                                                 enable-background="new 0 0 213.7 213.7" xml:space="preserve">
+                                                            <polygon class="triangle" id="XMLID_17_" fill="none" stroke-width="7"
+                                                                     stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                                                     points="
+                  73.5,62.5 148.5,105.8 73.5,149.1 "></polygon>
+                                                            <circle class="circle" id="XMLID_18_" fill="none" stroke-width="7"
+                                                                    stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                                                    cx="106.8" cy="106.8" r="103.3">
+   </circle>
+</svg>
+                                                            <span>@item.VideoButtonText</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-block-grey">
+    <div class="container">
+        <div class="boxed-div">
+
+
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-12">
+                    <div class="pr-30-md">
+                        <div class="section-heading">
+                            <h4>Welcome To KoboView</h4>
+                        </div>
+                        <div class="section-heading-line-left"></div>
+                        <div class="text-content-big mt-20">
+                            <p>
+                                KoboView is an advertising company that specializes in advertising on WhatsApp status, one of the most popular and engaging social media features. We offer a unique and effective way for businesses to connect with their target audience, tapping into the vast user base of WhatsApp. Our advertising approach is built on the principles of user privacy, relevance, and engagement.
+                            </p>
+                            <p>
+                                At KoboView, we understand the power of storytelling and visual content, and we leverage this to create compelling advertising campaigns that resonate with users. We provide a user-friendly, non-intrusive experience, ensuring that our clients' messages are seen by the right people at the right time.
+                            </p>
+                        </div>
+
+                        <div class="mt-25">
+                            <a href="#" class="primary-button button-sm mb-15-xs">Join Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-12">
+                    <img src="~/img/about.jpg" class="rounded-border shadow-primary" alt="img">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-block">
+    <div class="container">
+        <div class="boxed-div">
+            <div class="section-heading center-holder">
+                <h2 class="text-center">How It Work</h2>
+                <div class="section-heading-line"></div>
+                <p class="text-center">it's that simple. Share the power of user-centric advertising today.</p>
+            </div>
+            <div class="row mt-50">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="number-box">
+                        <h3>01</h3>
+                        <div class="number-box-line"></div>
+                        <h4>Register</h4>
+                        <p>Join our platform by registering as an advertiser. Provide the necessary information and set up your advertising account.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="number-box">
+                        <h3>02</h3>
+                        <div class="number-box-line"></div>
+                        <h4>Share on Status</h4>
+                        <p>Your ads will be shared on the WhatsApp statuses of users who choose to participate in our program. Users will post your ads on their status, expanding your reach.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="number-box">
+                        <h3>03</h3>
+                        <div class="number-box-line"></div>
+                        <h4>Reward with Points Base On Views Earned</h4>
+                        <p>you're rewarded based on the views your ads earn. Join us for effortless, point-based earnings through ethical advertising.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="number-box">
+                        <h3>04</h3>
+                        <div class="number-box-line"></div>
+                        <h4>Earn Payouts</h4>
+                        <p>As users share your ads on their status, you'll benefit from increased exposure. For each share, you'll earn payouts, making your advertising investment a profitable venture.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-block-bg section-md" style="background-image: url(../img/bg12.jpg);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="pr-30-md">
+                    <div class="section-heading white-color mt-30">
+                        <h2><strong>Why KoboView Outshines the Competition</strong></h2>
+                        <div class="section-heading-line-left"></div>
+                    </div>
+                    <div class="text-content white-color mt-25">
+                        <p>
+                            Discover the myriad ways in which KoboView stands head and shoulders above other advertising companies. Our commitment to ethical practices, user-centricity, innovative solutions, and a track record of proven success make us the unequivocal choice for businesses seeking advertising excellence and impactful results.
+                        </p>
+                    </div>
+
+                    <a href="#" class="primary-button button-md mt-25">Become a Client</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="row">
+
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="feature-box">
+                            <i class="icon-clock2"></i>
+                            <h4>User-Centric Approach</h4>
+                            <p>
+                                KoboView engages users through incentives, paying them for sharing advertisements on their WhatsApp status. This unique system boosts user engagement and amplifies brand reach.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="feature-box">
+                            <i class="icon-wallet2"></i>
+                            <h4>
+                                Ethical Advertising Practices
+                            </h4>
+                            <p>
+                                KoboView stands out by respecting user preferences and privacy, ensuring a non-intrusive and user-friendly ad experience. Unlike some competitors, we prioritize user satisfaction over aggressive ad exposure.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="feature-box">
+                            <i class="icon-wallet2"></i>
+                            <h4>
+                                Precision Targeting and Engagement
+                            </h4>
+                            <p>
+                                KoboView excels in precise targeting, enabling you to reach your ideal audience with tailored campaigns. This contrasts with broader, less accurate approaches offered by other platforms.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="feature-box">
+                            <i class="icon-wallet2"></i>
+                            <h4>
+                                Innovative Solutions and Proven Success
+                            </h4>
+                            <p>
+                                KoboView leads with innovation, offering cutting-edge advertising tools and techniques. With a track record of successful campaigns and satisfied clients, we continue to evolve and set new standards in the dynamic world of digital marketing.
+
+
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Component.InvokeAsync("Ads")

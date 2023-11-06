@@ -1,0 +1,110 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+ 
+<p class="login-box-msg">Login to Your Account</p>
+
+<form id="registrationForm" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="input-group mb-3">
+        <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password" id="passwordInput">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-eye" id="togglePassword"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="icheck-primary">
+                <input type="checkbox" asp-for="Input.RememberMe">
+                <label for="agreeTerms">
+                    Remember Me?
+                </label>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </div>
+        <!-- /.col -->
+    </div>
+</form>
+
+<div class="social-auth-links text-center">
+    <p>- OR -</p>
+    <a href="#" class="btn btn-block btn-primary">
+        <i class="fab fa-facebook mr-2"></i>
+        Sign up using Facebook
+    </a>
+    <a href="#" class="btn btn-block btn-danger">
+        <i class="fab fa-google-plus mr-2"></i>
+        Sign up using Google+
+    </a>
+</div>
+
+<a asp-page="./ForgotPassword" class="text-center">Forgot your password?</a><br />
+<a asp-page="./Register" class="text-center">Create New Account</a>
+ 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Function to toggle password visibility
+        $("#togglePassword").click(function () {
+            const passwordInput = $("#passwordInput");
+            const icon = $("#togglePassword");
+
+            if (passwordInput.attr("type") === "password") {
+                passwordInput.attr("type", "text");
+                icon.removeClass("fas fa-lock").addClass("fas fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                icon.removeClass("fas fa-eye-slash").addClass("fas fa-eye");
+            }
+        });
+    </script>
+}
+@*<div class="col-md-6 col-md-offset-2">
+    <section>
+        <h3>Use another service to log in.</h3>
+        <hr />
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div>
+                    <p>
+                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                            article
+                            about setting up this ASP.NET application to support logging in via external services
+                        </a>.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div>
+                        <p>
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        }
+    </section>
+</div>*@

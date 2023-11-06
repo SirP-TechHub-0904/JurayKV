@@ -1,0 +1,84 @@
+﻿@page
+@model JurayKV.UI.Areas.User.Pages.Account.AdsModel
+@{
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h3>ADs from @Model.Bucket.Name</h3>
+        <p>Click to Share to Your Whatsapp Status</p>
+    </div>
+    @foreach (var item in Model.Ads)
+    {
+
+        <div class="col-sm-4">
+            <div class="service-simple">
+                <a href="javascript:void(0);" onclick="shareToWhatsApp('@item.ImageUrl', '@item.Id')" id="@item.Id">
+                    <div class="position-relative">
+                        <img src="@item.ImageUrl" alt="" class="img-fluid">
+                        <div class="ribbon-wrapper ribbon-xl">
+                            <div class="ribbon bg-warning text-lg">
+                                click to share
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    }
+     
+</div>
+ 
+@section Scripts {
+
+   
+    <script>
+
+        // Function to convert an image URL to a base64 data URI.
+        function imageUrlToBase64(imageUrl, callback) {
+            // You can fetch the image using AJAX and convert it to base64.
+            // Here's a simplified example using the FileReader API:
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", imageUrl, true);
+            xhr.responseType = "blob";
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const blob = xhr.response;
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        const base64 = reader.result;
+                        callback(base64);
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            };
+
+            xhr.send();
+        }
+        function shareToWhatsApp(imageUrl, itemId) {
+
+            // Make an AJAX request to update the post content.
+            $.ajax({
+
+                type: "GET",
+                url: "/User/Account/RegisterAds",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { id: itemId },
+                success: function (data) {
+                    console.log("22 here we are");
+                    if (data == "Successfully") {
+                         
+                        window.open(imageUrl, "_blank");
+                    }
+                },
+                error: function () {
+                    alert('Unable to register your Ads');
+                }
+            });
+        }
+    </script>
+
+}
