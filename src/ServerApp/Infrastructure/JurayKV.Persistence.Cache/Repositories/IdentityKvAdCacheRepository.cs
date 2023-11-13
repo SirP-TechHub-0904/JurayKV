@@ -1,6 +1,8 @@
-﻿using JurayKV.Application.Caching.Repositories;
+﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
+using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Persistence.Cache.Keys;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -15,14 +17,19 @@ namespace JurayKV.Persistence.Cache.Repositories
 {
     public sealed class IdentityKvAdCacheRepository : IIdentityKvAdCacheRepository
     {
+        private readonly IIdentityKvAdCacheHandler _departmentCacheHandler;
+
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
         private readonly IIdentityKvAdRepository _adRepository;
-        public IdentityKvAdCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IIdentityKvAdRepository adRepository)
+        private readonly IKvPointRepository _kvPointRepository;
+        public IdentityKvAdCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IIdentityKvAdRepository adRepository, IIdentityKvAdCacheHandler departmentCacheHandler, IKvPointRepository kvPointRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
             _adRepository = adRepository;
+            _departmentCacheHandler = departmentCacheHandler;
+            _kvPointRepository = kvPointRepository;
         }
 
         public async Task<List<IdentityKvAdListDto>> GetListAsync()
@@ -49,7 +56,7 @@ namespace JurayKV.Persistence.Cache.Repositories
 
                 list = await _repository.GetListAsync(selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, list);
+                await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x=>x.CreatedAtUtc));
             }
 
             return list;
@@ -117,25 +124,44 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             if (list == null)
             {
-                 
+                var mainlist = await _adRepository.GetListByUserId(userId);
 
-              var mainlist = await _adRepository.GetListByUserId(userId);
-               list = mainlist.Select(d => new IdentityKvAdListDto
-{
-                   Id = d.Id,
-                   Activity = d.Activity,
-                   CreatedAtUtc = d.CreatedAtUtc,
-                   KvAdId = d.KvAdId,
-                   LastModifiedAtUtc = d.LastModifiedAtUtc,
-                   UserId = d.UserId,
-                   VideoUrl = d.VideoUrl,
-                   Active = d.Active,
-                   ImageUrl = d.KvAd.ImageUrl
-               }).ToList();
+                list = new List<IdentityKvAdListDto>();
+
+                foreach (var d in mainlist)
+                {
+                    var adListDto = new IdentityKvAdListDto
+                    {
+                        Id = d.Id,
+                        Activity = d.Activity,
+                        CreatedAtUtc = d.CreatedAtUtc,
+                        KvAdId = d.KvAdId,
+                        LastModifiedAtUtc = d.LastModifiedAtUtc,
+                        UserId = d.UserId,
+                        VideoUrl = d.VideoUrl,
+                        Active = d.Active,
+                        ImageUrl = d.KvAd.ImageUrl,
+                        Points = await PointByIdentityId(d.Id, d.UserId),
+                        AdsStatus = d.AdsStatus
+                    };
+
+                    list.Add(adListDto);
+                }
+
                 await _distributedCache.SetAsync(cacheKey, list);
             }
 
             return list;
+        }
+
+        public async Task<int> PointByIdentityId(Guid identityKvId, Guid userId)
+        {
+            var data = await _kvPointRepository.GetByIdentityIdByUserAsync(identityKvId, userId);
+            if (data == null)
+            {
+                return 0;
+            }
+            return data.Point;
         }
 
         public async Task<List<IdentityKvAdListDto>> GetActiveByUserIdAsync(Guid userId)
@@ -160,6 +186,33 @@ namespace JurayKV.Persistence.Cache.Repositories
                     ImageUrl = d.KvAd.ImageUrl
                 }).ToList();
                 await _distributedCache.SetAsync(cacheKey, list);
+            }
+
+            return list;
+        }
+
+        public async Task<List<IdentityKvAdListDto>> GetListActiveTodayAsync()
+        {
+            string cacheKey = IdentityKvAdCacheKeys.ListActiveKey;
+            List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+             
+            if (list == null)
+            {
+                 
+                 var mainlist = await _adRepository.ListActiveToday();
+                list = mainlist.Select(d => new IdentityKvAdListDto
+                {
+                    Id = d.Id,
+                    Activity = d.Activity,
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    KvAdId = d.KvAdId,
+                    LastModifiedAtUtc = d.LastModifiedAtUtc,
+                    UserId = d.UserId,
+                    VideoUrl = d.VideoUrl,
+                    Active = d.Active,
+                    ImageUrl = d.KvAd.ImageUrl
+                }).ToList();
+                await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
             }
 
             return list;

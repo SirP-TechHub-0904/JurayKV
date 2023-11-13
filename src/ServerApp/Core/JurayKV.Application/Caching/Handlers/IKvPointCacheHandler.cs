@@ -10,6 +10,7 @@ namespace JurayKV.Application.Caching.Handlers
     {
         Task RemoveDetailsByIdAsync(Guid modelId);
         Task RemoveListBy10ByUserAsync(Guid userId);
+        Task RemoveListByUserAsync(Guid userId);
         Task RemoveGetAsync(Guid modelId);
 
         Task RemoveListAsync(); 

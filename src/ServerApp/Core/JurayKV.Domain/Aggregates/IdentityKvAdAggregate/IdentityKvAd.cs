@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
 {
@@ -14,7 +15,7 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
         public IdentityKvAd(Guid id)
         {
             Id = id;
-            CreatedAtUtc = DateTime.UtcNow;
+            CreatedAtUtc = DateTime.UtcNow.AddHours(1);
         }
 
         // This is needed for EF Core query mapping or deserialization.
@@ -33,6 +34,8 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
         public DateTime? LastModifiedAtUtc { get; set; }
         public string? VideoUrl { get; set; }
         public string? VideoKey { get; set; }
+
+        public AdsStatus AdsStatus { get;set; }
 
         public string KvAdHash { get; set; }
         public int ResultOne { get; set; }

@@ -27,6 +27,9 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
         [BindProperty]
         public IFormFile? imagefile2 { get; set; }
 
+        [BindProperty]
+        public bool RemoveImage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             try
@@ -47,7 +50,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
         {
             try
             {
-                UpdateSliderCommand command = new UpdateSliderCommand(Slider, imagefile, imagefile2);
+                UpdateSliderCommand command = new UpdateSliderCommand(Slider, imagefile, imagefile2, RemoveImage);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfully";
             }

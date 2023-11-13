@@ -1,5 +1,6 @@
 using JurayKV.Application;
 using JurayKV.Application.Queries.IdentityKvAdQueries;
+using JurayKV.Application.Queries.KvPointQueries;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.UI.Services;
 using MediatR;
@@ -28,13 +29,13 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         public async Task<IActionResult> OnGetAsync()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            GetIdentityKvAdByUserIdListQuery command = new GetIdentityKvAdByUserIdListQuery(Guid.Parse(userId));
+            GetKvPointListByUserIdQuery command = new GetKvPointListByUserIdQuery(Guid.Parse(userId));
 
             Ads = await _mediator.Send(command);
 
             return Page();
         }
-        public List<IdentityKvAdListDto> Ads { get; set; }
+        public List<KvPointListDto> Ads { get; set; }
 
 
     }

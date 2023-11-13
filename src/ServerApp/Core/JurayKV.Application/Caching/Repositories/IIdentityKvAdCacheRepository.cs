@@ -8,9 +8,10 @@ namespace JurayKV.Application.Caching.Repositories
     public interface IIdentityKvAdCacheRepository
     {
         Task<List<IdentityKvAdListDto>> GetListAsync(); 
+        Task<List<IdentityKvAdListDto>> GetListActiveTodayAsync();
 
         Task<IdentityKvAdDetailsDto> GetByIdAsync(Guid modelId);
-        Task<List<IdentityKvAdListDto>> GetByUserIdAsync(Guid userId);
+        Task<List<IdentityKvAdListDto>> GetByUserIdAsync(Guid userId); 
         Task<List<IdentityKvAdListDto>> GetActiveByUserIdAsync(Guid userId);
 
         Task<IdentityKvAdDetailsDto> GetDetailsByIdAsync(Guid modelId);

@@ -12,6 +12,6 @@ namespace JurayKV.Application.Caching.Handlers
         Task RemoveByBucketIdAsync(Guid bucketId);
         Task RemoveGetAsync(Guid modelId);
 
-        Task RemoveListAsync();
+        Task RemoveListAsync(); 
     }
 }

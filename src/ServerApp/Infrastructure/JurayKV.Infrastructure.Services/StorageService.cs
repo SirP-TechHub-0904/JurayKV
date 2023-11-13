@@ -18,14 +18,14 @@ namespace JurayKV.Infrastructure.Services
     public class StorageService : IStorageService
     {
         private readonly IConfiguration _config;
-         public StorageService(IConfiguration config)
+        public StorageService(IConfiguration config)
         {
             _config = config;
-         }
+        }
 
         public async Task<S3ResponseDto> UploadFileAsync(Application.Services.AwsDtos.S3Object obj, AwsCredentials awsCredentialsValues)
         {
-            
+
             var credentials = new Amazon.Runtime.BasicAWSCredentials(awsCredentialsValues.AccessKey, awsCredentialsValues.SecretKey);
 
             var config = new AmazonS3Config()
@@ -337,6 +337,54 @@ namespace JurayKV.Infrastructure.Services
             }
             response.Message = "error 500 file empty";
             return response;
+        }
+
+        public async Task<bool> MainDeleteAsync(string old_key)
+        {
+            if (old_key != null)
+            {
+
+                var cred = new AwsCredentials()
+                {
+                    AccessKey = _config["AwsConfiguration:AWSAccessKey"],
+                    SecretKey = _config["AwsConfiguration:AWSSecretKey"]
+                };
+                var credentials = new BasicAWSCredentials(cred.AccessKey, cred.SecretKey);
+
+                var config = new AmazonS3Config()
+                {
+                    RegionEndpoint = Amazon.RegionEndpoint.USEast1
+                };
+
+                // initialise client
+                using var client = new AmazonS3Client(credentials, config);
+                if (!String.IsNullOrEmpty(old_key))
+                {
+                    try
+                    {
+                        //delete object
+                        var deleteObjectRequest = new DeleteObjectRequest
+                        {
+                            BucketName = "juray2023",
+                            Key = old_key
+                        };
+
+                        Console.WriteLine("Deleting an object");
+                        await client.DeleteObjectAsync(deleteObjectRequest);
+                    }
+                    catch (AmazonS3Exception e)
+                    {
+                        Console.WriteLine("Error encountered on server. Message:'{0}' when deleting an object", e.Message);
+                    }
+                    catch (Exception c)
+                    {
+
+                    }
+                }
+
+                return true;
+            }
+            return false;
         }
     }
 

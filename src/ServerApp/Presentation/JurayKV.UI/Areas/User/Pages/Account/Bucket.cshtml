@@ -1,29 +1,46 @@
 ﻿@page
 @model JurayKV.UI.Areas.User.Pages.Account.BucketModel
 @{
+//Guid idd = Guid.NewGuid();
+//ViewData["datavalidate"] = idd.ToString();
 }
 <div class="row">
     <div class="col-md-12">
         <h3>ADVERT BUCKET FOR YOUR STATUS</h3>
         <p>Kindl Make Sure You Pick Your Advert From Any of the Bucket Below</p>
+
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>@TempData["error"]</strong>
+            </div>
+        } @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>@TempData["success"]</strong>
+            </div>
+        }
     </div>
     @foreach (var item in Model.Bucket)
     {
         
             <div class="col-sm-4">
                 <div class="service-simple">
+                    <form method="get" asp-page="Ads">
+
+                        <input type="hidden" name="kvId" value="@item.Id" />
 
 
-                    <a asp-page="./Ads" asp-route-id="@item.Id">
                         <div class="position-relative">
-                            <img src="~/img/photo3.jpg" alt="" class="img-fluid">
-                            <div class="ribbon-wrapper ribbon-xl">
+                            <input type="image" src="~/img/photo3.jpg" alt="Submit" class="img-fluid">
+                             <div class="ribbon-wrapper ribbon-xl">
                                 <div class="ribbon bg-warning text-lg">
                                     @item.Name
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    </form>
+                   
                 </div>
             </div>
         

@@ -1,7 +1,56 @@
 ﻿@page
+ 
+
 @model JurayKV.UI.Areas.User.Pages.Account.AdsModel
 @{
 }
+
+<style>
+    #button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 30px;
+        background-color: #eee;
+        border: solid #ccc 1px;
+        cursor: pointer;
+    }
+
+    #overlay {
+        position: fixed;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: rgba(0,0,0,0.6);
+    }
+
+    .cv-spinner {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px #ddd solid;
+        border-top: 4px #2e93e6 solid;
+        border-radius: 50%;
+        animation: sp-anime 0.8s infinite linear;
+    }
+
+    @@keyframes sp-anime {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .is-hide {
+        display: none;
+    }
+</style>
 
 <div class="row">
     <div class="col-md-12 text-center">
@@ -10,31 +59,54 @@
     </div>
     @foreach (var item in Model.Ads)
     {
-
+        
         <div class="col-sm-4">
             <div class="service-simple">
-                <a href="javascript:void(0);" onclick="shareToWhatsApp('@item.ImageUrl', '@item.Id')" id="@item.Id">
+
+
+                <form method="post">
+
+                    <input type="hidden" asp-for="kId" value="@item.Id" />
+
+
                     <div class="position-relative">
-                        <img src="@item.ImageUrl" alt="" class="img-fluid">
-                        <div class="ribbon-wrapper ribbon-xl">
-                            <div class="ribbon bg-warning text-lg">
-                                click to share
-                            </div>
-                        </div>
+                        <input type="image" src="@item.ImageUrl" alt="Submit" class="img-fluid">
                     </div>
-                </a>
+                </form>
+
             </div>
         </div>
+     }
 
-    }
-     
 </div>
- 
+
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
+</div>
 @section Scripts {
 
-   
-    <script>
 
+    <script>
+        jQuery(function ($) {
+            $(document).ajaxSend(function () {
+                $("#overlay").fadeIn(300);
+            });
+
+            $('#button').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data);
+                    }
+                }).done(function () {
+                    //setTimeout(function () {
+                    //    $("#overlay").fadeOut(300);
+                    //}, 500);
+                });
+            });
+        });
         // Function to convert an image URL to a base64 data URI.
         function imageUrlToBase64(imageUrl, callback) {
             // You can fetch the image using AJAX and convert it to base64.
@@ -70,12 +142,21 @@
                 success: function (data) {
                     console.log("22 here we are");
                     if (data == "Successfully") {
-                         
-                        window.open(imageUrl, "_blank");
+
+                        window.open(imageUrl);
+
+                        var url = '/User/Account/Bucket?success=Ads Registered Successfully';
+
+                        // Redirect to the constructed URL
+                        window.location.href = url;
                     }
                 },
                 error: function () {
-                    alert('Unable to register your Ads');
+                    @{
+                        ViewData["Error"] = "Unable to register your Ads";
+                    }
+                    var url2 = '/User/Account/Bucket?error=Unable to register your Ads';
+                    window.location.href = url2;
                 }
             });
         }

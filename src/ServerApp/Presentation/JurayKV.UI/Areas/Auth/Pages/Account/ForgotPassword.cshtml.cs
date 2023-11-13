@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Azure.Core;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace JurayKV.UI.Areas.Auth.Pages.Account
 {
@@ -64,13 +66,12 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new { area = "Identity", code },
+                    values: new { area = "Auth", code },
                     protocol: Request.Scheme);
+                string mail = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
-                //await _emailSender.SendEmailAsync(
-                //    Input.Email,
-                //    "Reset Password",
-                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await _emailSender.SendAsync(mail, user.Id.ToString(), "Reset Password");
+
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

@@ -77,6 +77,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
             await _kvPointCacheHandler.RemoveListAsync();
             await _kvPointCacheHandler.RemoveDetailsByIdAsync(check.Id);
             await _kvPointCacheHandler.RemoveListBy10ByUserAsync(check.UserId);
+            await _kvPointCacheHandler.RemoveListByUserAsync(check.UserId);
             await _kvPointCacheHandler.RemoveGetAsync(check.Id);
 
             return check.Id;

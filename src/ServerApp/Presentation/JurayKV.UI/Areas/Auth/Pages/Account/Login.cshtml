@@ -3,108 +3,59 @@
 
 @{
     ViewData["Title"] = "Log in";
+    Layout = "/Pages/Shared/_LoginPage.cshtml";
+
 }
- 
+
 <p class="login-box-msg">Login to Your Account</p>
 
-<form id="registrationForm" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="input-group mb-3">
-        <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-            </div>
-        </div>
+<form id="account" method="post">
+
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-floating">
+        <label asp-for="Input.Email" class="form-label"></label>
+
+        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
     </div>
-    <div class="input-group mb-3">
-        <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password" id="passwordInput">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-eye" id="togglePassword"></span>
-            </div>
-        </div>
+    <div class="form-floating">
+        <label asp-for="Input.Password" class="form-label"></label>
+
+        <input asp-for="Input.Password" id="myInput" class="form-control" autocomplete="current-password" aria-required="true" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
-    <div class="row">
-        <div class="col-8">
-            <div class="icheck-primary">
-                <input type="checkbox" asp-for="Input.RememberMe">
-                <label for="agreeTerms">
-                    Remember Me?
-                </label>
-            </div>
-        </div>
-        <!-- /.col -->
-        <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </div>
-        <!-- /.col -->
+
+    <div class="clearfix" style="margin-bottom:20px;">
+        <input type="checkbox" onclick="myFunction()" style="float:left;"><span style="float:left;">Show Password</span>
     </div>
+    <div class="fo-s">
+        <div class="form-floating">
+
+            <input class="" asp-for="Input.RememberMe" />
+            @Html.DisplayNameFor(m => m.Input.RememberMe)
+
+        </div>
+        <a id="forgot-password" asp-page="./ForgotPassword" class="forgot-password">Forgot Password</a>
+    </div>
+    <div>
+        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+    </div>
+
 </form>
 
-<div class="social-auth-links text-center">
-    <p>- OR -</p>
-    <a href="#" class="btn btn-block btn-primary">
-        <i class="fab fa-facebook mr-2"></i>
-        Sign up using Facebook
-    </a>
-    <a href="#" class="btn btn-block btn-danger">
-        <i class="fab fa-google-plus mr-2"></i>
-        Sign up using Google+
-    </a>
-</div>
 
-<a asp-page="./ForgotPassword" class="text-center">Forgot your password?</a><br />
-<a asp-page="./Register" class="text-center">Create New Account</a>
- 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Function to toggle password visibility
-        $("#togglePassword").click(function () {
-            const passwordInput = $("#passwordInput");
-            const icon = $("#togglePassword");
-
-            if (passwordInput.attr("type") === "password") {
-                passwordInput.attr("type", "text");
-                icon.removeClass("fas fa-lock").addClass("fas fa-eye-slash");
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.type === "password") {
+                x.type = "text";
             } else {
-                passwordInput.attr("type", "password");
-                icon.removeClass("fas fa-eye-slash").addClass("fas fa-eye");
-            }
-        });
-    </script>
-}
-@*<div class="col-md-6 col-md-offset-2">
-    <section>
-        <h3>Use another service to log in.</h3>
-        <hr />
-        @{
-            if ((Model.ExternalLogins?.Count ?? 0) == 0)
-            {
-                <div>
-                    <p>
-                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                            article
-                            about setting up this ASP.NET application to support logging in via external services
-                        </a>.
-                    </p>
-                </div>
-            }
-            else
-            {
-                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                    <div>
-                        <p>
-                            @foreach (var provider in Model.ExternalLogins!)
-                            {
-                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                            }
-                        </p>
-                    </div>
-                </form>
+                x.type = "password";
             }
         }
-    </section>
-</div>*@
+    </script>
+} 

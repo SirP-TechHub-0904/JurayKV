@@ -22,6 +22,9 @@ using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Application;
+using JurayKV.Application.Caching.Handlers;
+using JurayKV.Persistence.Cache.Handlers;
+using JurayKV.UI.Jobs;
 
 namespace JurayKV.UI
 {
@@ -41,6 +44,7 @@ namespace JurayKV.UI
             string sendGridApiKey = "yourSendGridKey";
             builder.Services.AddSendGrid(sendGridApiKey);
             builder.Services.AddRelationalDbContext(connectionString);
+            builder.Services.AddHostedService<BackgroundTask>();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateDepartmentCommand>());
             builder.Services.AddTransient<IEmployeeCacheRepository, EmployeeCacheRepository>();
@@ -60,7 +64,7 @@ namespace JurayKV.UI
             builder.Services.AddScoped<IDashboardCacheRepository, DashboardCacheRepository>();
             builder.Services.AddScoped<IUserManagerCacheRepository, UserManagerCacheRepository>();
             builder.Services.AddScoped<ISliderCacheRepository, SliderCacheRepository>();
-
+ 
             builder.Services.AddTransient<IExceptionLogger, ExceptionLogger>();
             builder.Services.AddTransient<ViewRenderService>();
             //builder.Services.AddTransient<SendGridConfig>();

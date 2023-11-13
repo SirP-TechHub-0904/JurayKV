@@ -43,5 +43,11 @@ namespace JurayKV.Persistence.Cache.Handlers
             string detailsKey = KvPointCacheKeys.ListBy10UserIdKey(userId);
             await _distributedCache.RemoveAsync(detailsKey);
         }
+
+        public async Task RemoveListByUserAsync(Guid userId)
+        {
+            string kvPointListKey = KvPointCacheKeys.ListUserIdKey(userId);
+            await _distributedCache.RemoveAsync(kvPointListKey);
+        }
     }
 }

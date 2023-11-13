@@ -31,17 +31,32 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             string userId = _userManager.GetUserId(HttpContext.User);
             GetIdentityKvAdByIdQuery command = new GetIdentityKvAdByIdQuery(id);
             IdentityKvAdDetailsDto = await _mediator.Send(command);
+
+
+            DateTime currentDate = DateTime.Now;
+            DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+
+            bool isLinkEnabled = IdentityKvAdDetailsDto.CreatedAtUtc < nextDay6AM;
+            if (!isLinkEnabled)
+            {
+                TempData["error"] = "Time has elapsed";
+                return RedirectToPage("./RunningAds");
+
+            }
+
             return Page();
         }
         [BindProperty]
         public IdentityKvAdDetailsDto IdentityKvAdDetailsDto { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
+
+
             string userId = _userManager.GetUserId(HttpContext.User);
-             
+
             UpdateIdentityKvAdCommand command = new UpdateIdentityKvAdCommand(IdentityKvAdDetailsDto.Id, VideoFile);
             await _mediator.Send(command);
-            return RedirectToPage("./UploadVideoProof", new {id = IdentityKvAdDetailsDto.Id});
+            return RedirectToPage("./UploadVideoProof", new { id = IdentityKvAdDetailsDto.Id });
         }
 
 

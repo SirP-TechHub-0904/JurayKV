@@ -44,6 +44,7 @@ internal class DeleteKvPointCommandHandler : IRequestHandler<DeleteKvPointComman
         await _kvPointCacheHandler.RemoveListAsync();
         await _kvPointCacheHandler.RemoveDetailsByIdAsync(kvPoint.Id);
         await _kvPointCacheHandler.RemoveListBy10ByUserAsync(kvPoint.UserId);
+        await _kvPointCacheHandler.RemoveListByUserAsync(kvPoint.UserId);
         await _kvPointCacheHandler.RemoveGetAsync(kvPoint.Id);
     }
 }

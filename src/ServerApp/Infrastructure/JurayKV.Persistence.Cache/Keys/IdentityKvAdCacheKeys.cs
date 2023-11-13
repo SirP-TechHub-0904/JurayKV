@@ -9,6 +9,7 @@ namespace JurayKV.Persistence.Cache.Keys
     internal static class IdentityKvAdCacheKeys
     {
         public static string ListKey => "IdentityKvAdList";
+        public static string ListActiveKey => "IdentityKvAdActiveList";
 
         public static string GetKey(Guid identityKvAdId)
         {

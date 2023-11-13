@@ -15,6 +15,7 @@ namespace JurayKV.Application.Infrastructures
         Task<S3ResponseDto> UploadFileAsync(S3Object obj, AwsCredentials awsCredentialsValues);
         Task<FileReturnResponseDto> UploadFileReturnUrlAsync(S3Object obj, AwsCredentials awsCredentialsValues, string old_key);
         Task<FileReturnResponseDto> MainUploadFileReturnUrlAsync(string old_key, IFormFile? file);
+        Task<bool> MainDeleteAsync(string old_key);
         Task<FileReturnResponseDto> DeleteObjectAsync(AwsCredentials awsCredentialsValues, string bucket, string key);
         Task<string> DownloadFileAsync(string file, string bucketName, AwsCredentials awsCredentialsValues);
     }

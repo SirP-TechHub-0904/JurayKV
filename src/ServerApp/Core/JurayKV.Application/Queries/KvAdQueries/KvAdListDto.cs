@@ -20,5 +20,7 @@ namespace JurayKV.Application.Queries.KvAdQueries
         public string ImageUrl { get; set; }
         public DataStatus Status { get; set; }
 
+        public bool Exist { get; set; }
+
     }
 }

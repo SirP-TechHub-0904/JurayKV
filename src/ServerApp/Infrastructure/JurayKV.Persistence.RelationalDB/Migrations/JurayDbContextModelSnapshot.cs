@@ -382,6 +382,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("Activity")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("AdsStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 

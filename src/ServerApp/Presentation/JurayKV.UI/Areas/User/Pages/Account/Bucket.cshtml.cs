@@ -25,14 +25,17 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             _mediator = mediator;
             _userManager = userManager;
         }
-
-        public async Task<IActionResult> OnGetAsync()
+        [BindProperty]
+        public Guid kId { get; set; }
+        public async Task<IActionResult> OnGetAsync(string? error, string? success)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
             GetBucketListQuery command = new GetBucketListQuery();
 
             Bucket = await _mediator.Send(command);
 
+            TempData["error"] = error;
+            TempData["success"] = success;
             return Page();
         }
         public List<BucketListDto> Bucket { get; set; }

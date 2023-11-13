@@ -29,7 +29,24 @@
 
             <h3>ADs from @Model.IdentityKvAdDetailsDto.Fullname</h3>
             <p>Kindly upload your whatsapp status proof of views</p>
-            <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
+            @{
+                DateTime currentDate = DateTime.Now;
+                DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+
+                bool isLinkEnabled = Model.IdentityKvAdDetailsDto.CreatedAtUtc < nextDay6AM;
+
+
+            }
+            @if (isLinkEnabled)
+            {
+                <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
+
+            }
+            else
+            {
+                <h4><span class="countdown btn btn-success">--:--</span></h4>
+
+            }
             @if (!String.IsNullOrEmpty(Model.IdentityKvAdDetailsDto.VideoUrl))
             {
                 <video controls>

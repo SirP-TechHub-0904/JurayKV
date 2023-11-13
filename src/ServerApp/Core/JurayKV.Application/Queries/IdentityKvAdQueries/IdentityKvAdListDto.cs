@@ -1,4 +1,6 @@
-﻿namespace JurayKV.Application.Queries.IdentityKvAdQueries
+﻿using static JurayKV.Domain.Primitives.Enum;
+
+namespace JurayKV.Application.Queries.IdentityKvAdQueries
 {
     public class IdentityKvAdListDto
     {
@@ -13,5 +15,7 @@
         public string VideoUrl { get; set; }
         public string ImageUrl { get; set; }
         public bool Active { get; set; }
+        public AdsStatus AdsStatus { get; set; }
+        public int Points { get;set; }
     }
 }

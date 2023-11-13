@@ -142,6 +142,34 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             return list;
         }
+
+        public async Task<List<KvPointListDto>> GetListByUserIdAsync(Guid userId)
+        {
+            string cacheKey = KvPointCacheKeys.ListUserIdKey(userId);
+            List<KvPointListDto> list = await _distributedCache.GetAsync<List<KvPointListDto>>(cacheKey);
+
+            if (list == null)
+            {
+
+                var xlist = await _kvPointRepository.LastByUserId(userId);
+                list = xlist.Select(d => new KvPointListDto
+                {
+                    Id = d.Id,
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    IdentityKvAdId = d.IdentityKvAdId,
+                    Status = d.Status,
+                    Point = d.Point,
+                    LastModifiedAtUtc = d.LastModifiedAtUtc,
+                    PointHash = d.PointHash,
+                    Fullname = d.User.UserName,
+                    UserId = d.UserId,
+                }).ToList();
+
+                await _distributedCache.SetAsync(cacheKey, list);
+            }
+
+            return list;
+        }
     }
 
 }

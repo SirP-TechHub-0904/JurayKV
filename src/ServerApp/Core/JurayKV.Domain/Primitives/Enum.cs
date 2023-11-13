@@ -245,6 +245,21 @@ namespace JurayKV.Domain.Primitives
 
             
         }
+        public enum AdsStatus
+        {
+            [Description("Credited")]
+            Credited = 1,
+
+            [Description("Pending")]
+            Pending = 0,
+
+            [Description("Suspended")]
+            Suspended = 3,
+            [Description("cancelled")]
+            cancelled = 2,
+            
+
+        }
 
         public enum MarketType
         {

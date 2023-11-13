@@ -19,5 +19,6 @@ namespace JurayKV.Domain.Aggregates.KvPointAggregate
         Task DeleteAsync(KvPoint kvPoint);
 
         Task<List<KvPoint>> LastTenByUserId (int toplistcount, Guid userId);
+        Task<List<KvPoint>> LastByUserId (Guid userId);
     }
 }

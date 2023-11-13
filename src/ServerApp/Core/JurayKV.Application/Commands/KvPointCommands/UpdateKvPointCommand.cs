@@ -69,5 +69,6 @@ internal class UpdateKvPointCommandHandler : IRequestHandler<UpdateKvPointComman
         await _kvPointCacheHandler.RemoveListBy10ByUserAsync(kvPointToBeUpdated.UserId);
         await _kvPointCacheHandler.RemoveGetAsync(kvPointToBeUpdated.Id);
 
+        await _kvPointCacheHandler.RemoveListByUserAsync(kvPointToBeUpdated.UserId);
     }
 }

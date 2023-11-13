@@ -84,6 +84,12 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             var data = await _dbContext.kvPoints.FirstOrDefaultAsync(x=> x.IdentityKvAdId == identityKvAd && x.UserId == userId);
             return data;
         }
+
+        public async Task<List<KvPoint>> LastByUserId(Guid userId)
+        {
+            var list = await _dbContext.kvPoints.OrderByDescending(x => x.CreatedAtUtc).ToListAsync();
+            return list;
+        }
     }
 
 }

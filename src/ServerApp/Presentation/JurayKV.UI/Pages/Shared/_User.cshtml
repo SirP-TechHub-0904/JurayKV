@@ -47,6 +47,8 @@
     <!-- dropzonejs -->
     <link rel="stylesheet" href="~/dashboard/plugins/dropzone/min/dropzone.min.css">
     <!-- Theme style -->
+
+
     <link rel="stylesheet" href="~/dashboard/dist/css/adminlte.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="~/dashboard/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -444,14 +446,14 @@
     {
         <script>
 
-            toastr.success('@TempData["error"]')
+            toastr.error('@TempData["error"]')
         </script>
     }
     @if (TempData["info"] != null)
     {
         <script>
 
-            toastr.success('@TempData["info"]')
+            toastr.info('@TempData["info"]')
         </script>
     }
 

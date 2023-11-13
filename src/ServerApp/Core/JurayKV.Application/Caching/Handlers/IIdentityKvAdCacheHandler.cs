@@ -12,6 +12,7 @@ namespace JurayKV.Application.Caching.Handlers
         Task RemoveGetAsync(Guid identityKvAdId);
         Task RemoveGetByUserIdAsync(Guid userId);
         Task RemoveListAsync();
+        Task RemoveListActiveTodayAsync();
         Task RemoveGetActiveByUserIdAsync(Guid userId);
     }
 }

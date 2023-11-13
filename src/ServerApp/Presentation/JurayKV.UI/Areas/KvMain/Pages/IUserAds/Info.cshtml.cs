@@ -81,7 +81,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
 
             UpdateIdentityKvAdPointCommand updatecommand = new UpdateIdentityKvAdPointCommand(updateAds.Id, updateAds.ResultOne, updateAds.ResultTwo, updateAds.ResultThree, updateAds.Activity);
             await _mediator.Send(updatecommand);
-            return RedirectToPage("./UploadVideoProof", new { id = IdentityKvAdDetailsDto.Id });
+            return RedirectToPage("./Info", new { id = IdentityKvAdDetailsDto.Id });
         }
 
         [BindProperty]
@@ -130,7 +130,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
             kp.IdentityKvAdId = updateAds.Id;
             CreateKvPointCommand updatecommand = new CreateKvPointCommand(kp.UserId, kp.IdentityKvAdId, kp.Status, kp.Point, kp.PointHash);
             await _mediator.Send(updatecommand);
-            return RedirectToPage("./UploadVideoProof", new { id = IdentityKvAdDetailsDto.Id });
+            return RedirectToPage("./Info", new { id = IdentityKvAdDetailsDto.Id });
         }
     }
 

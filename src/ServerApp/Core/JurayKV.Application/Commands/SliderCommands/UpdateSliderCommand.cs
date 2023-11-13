@@ -11,16 +11,18 @@ namespace JurayKV.Application.Commands.SliderCommands;
 
 public sealed class UpdateSliderCommand : IRequest
 {
-    public UpdateSliderCommand(SliderDetailsDto slider, IFormFile fileone, IFormFile filetwo)
+    public UpdateSliderCommand(SliderDetailsDto slider, IFormFile fileone, IFormFile filetwo, bool removeImage)
     {
         Slider = slider;
         Fileone = fileone;
         Filetwo = filetwo;
+        RemoveImage = removeImage;
     }
 
     public SliderDetailsDto Slider { get; }
     public IFormFile? Fileone { get; set; }
     public IFormFile? Filetwo { get; set; }
+    public bool RemoveImage { get; set; }
 }
 
 internal class UpdateSliderCommandHandler : IRequestHandler<UpdateSliderCommand>
@@ -47,14 +49,16 @@ internal class UpdateSliderCommandHandler : IRequestHandler<UpdateSliderCommand>
         {
             try
             {
-
-                var xresult = await _storage.MainUploadFileReturnUrlAsync(request.Slider.Key, request.Fileone);
-                // 
-                if (xresult.Message.Contains("200"))
+                if (request.Fileone != null)
                 {
+                    var xresult = await _storage.MainUploadFileReturnUrlAsync(request.Slider.Key, request.Fileone);
+                    // 
+                    if (xresult.Message.Contains("200"))
+                    {
 
-                    getupdate.Url = xresult.Url;
-                    getupdate.Key = xresult.Key;
+                        getupdate.Url = xresult.Url;
+                        getupdate.Key = xresult.Key;
+                    }
                 }
 
             }
@@ -64,14 +68,16 @@ internal class UpdateSliderCommandHandler : IRequestHandler<UpdateSliderCommand>
             }
             try
             {
-
-                var xresult = await _storage.MainUploadFileReturnUrlAsync(request.Slider.SecondKey, request.Filetwo);
-                // 
-                if (xresult.Message.Contains("200"))
+                if (request.Filetwo != null)
                 {
+                    var xresult = await _storage.MainUploadFileReturnUrlAsync(request.Slider.SecondKey, request.Filetwo);
+                    // 
+                    if (xresult.Message.Contains("200"))
+                    {
 
-                    getupdate.SecondKey = xresult.Url;
-                    getupdate.SecondUrl = xresult.Key;
+                        getupdate.SecondKey = xresult.Url;
+                        getupdate.SecondUrl = xresult.Key;
+                    }
                 }
 
             }
@@ -80,7 +86,17 @@ internal class UpdateSliderCommandHandler : IRequestHandler<UpdateSliderCommand>
 
             }
 
+            try
+            {
+                if (request.RemoveImage == true)
+                {
+                    await _storage.MainDeleteAsync(getupdate.SecondKey);
+                }
+            }
+            catch (Exception c)
+            {
 
+            }
 
             getupdate.YoutubeVideo = request.Slider.YoutubeVideo;
             getupdate.IsVideo = request.Slider.IsVideo;

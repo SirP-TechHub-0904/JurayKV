@@ -52,8 +52,8 @@ internal class UpdateIdentityKvAdCommandHandler : IRequestHandler<UpdateIdentity
         }
 
         //run the video upload;
-        var videourl = "url";
-        var videokey = "key";
+        var videourl = String.Empty;
+        var videokey = String.Empty;
         try
         {
 
@@ -61,8 +61,9 @@ internal class UpdateIdentityKvAdCommandHandler : IRequestHandler<UpdateIdentity
             // 
             if (xresult.Message.Contains("200"))
             {
-                videourl = xresult.Url;
-                videokey = xresult.Key;
+                
+                identityKvAdToBeUpdated.VideoUrl = xresult.Url;
+                identityKvAdToBeUpdated.VideoKey = xresult.Key;
             }
 
         }
@@ -70,8 +71,7 @@ internal class UpdateIdentityKvAdCommandHandler : IRequestHandler<UpdateIdentity
         {
 
         }
-        identityKvAdToBeUpdated.VideoUrl = videourl;
-        identityKvAdToBeUpdated.VideoKey = videokey;
+       
 
         identityKvAdToBeUpdated.LastModifiedAtUtc = DateTime.UtcNow;
 

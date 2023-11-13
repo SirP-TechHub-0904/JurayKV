@@ -28,7 +28,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         public async Task<IActionResult> OnGetAsync()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            GetIdentityKvAdByUserIdListQuery command = new GetIdentityKvAdByUserIdListQuery(Guid.Parse(userId));
+            GetIdentityKvAdActiveByUserIdListQuery command = new GetIdentityKvAdActiveByUserIdListQuery(Guid.Parse(userId));
 
             Ads = await _mediator.Send(command);
 

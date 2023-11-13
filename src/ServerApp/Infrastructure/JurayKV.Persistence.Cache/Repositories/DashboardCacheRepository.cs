@@ -22,7 +22,7 @@ namespace JurayKV.Persistence.Cache.Repositories
     {
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
-         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         public DashboardCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, UserManager<ApplicationUser> userManager)
         {
             _distributedCache = distributedCache;
@@ -65,12 +65,15 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             if (count == 0)
             {
-                
-                Expression<Func<KvAd, bool>> statuscondition = data =>
-                    data.Status == Domain.Primitives.Enum.DataStatus.Active;
+                DateTime currentDate = DateTime.Now;
+                DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+                Expression<Func<KvAd, bool>> statusAndDateCondition = ad =>
+     ad.Status == Domain.Primitives.Enum.DataStatus.Active &&
+     ad.CreatedAtUtc >= currentDate &&
+     ad.CreatedAtUtc < nextDay6AM;
                 //
 
-                count = await _repository.GetCountAsync<KvAd>(statuscondition); // Assuming there's a CountAsync method in your repository.
+                count = await _repository.GetCountAsync<KvAd>(statusAndDateCondition); // Assuming there's a CountAsync method in your repository.
 
                 await _distributedCache.SetAsync(cacheKey, count);
             }
@@ -95,7 +98,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 var user = await _repository.GetListAsync<IdentityKvAd>(kvAdCondition);
                 var userIds = user.Select(x => x.UserId);
 
-             
+
                 // Check if there are users with these Ids.
                 count = await _userManager.Users
                     .Where(user => userIds.Contains(user.Id))
@@ -125,8 +128,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                 var outcome = await _repository
                     .GetListAsync<KvPoint>(pointsCondition);
 
-                  sum = outcome.Sum(kvPoint => kvPoint.Point);
-                  
+                sum = outcome.Sum(kvPoint => kvPoint.Point);
+
 
                 await _distributedCache.SetAsync(cacheKey, sum);
             }
@@ -145,7 +148,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 DateTime startOfWeek = currentDate.Date.AddDays(-(int)currentDate.DayOfWeek);
                 DateTime endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
 
-                Expression<Func<KvPoint, bool>> pointsCondition = data => 
+                Expression<Func<KvPoint, bool>> pointsCondition = data =>
                     data.CreatedAtUtc >= startOfWeek && data.CreatedAtUtc <= endOfWeek;
 
 
@@ -174,7 +177,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 DateTime startOfDay = currentDate.Date;
                 DateTime endOfDay = startOfDay.AddDays(1).AddSeconds(-1);
 
-                Expression<Func<KvPoint, bool>> pointsCondition = data => 
+                Expression<Func<KvPoint, bool>> pointsCondition = data =>
                     data.CreatedAtUtc >= startOfDay && data.CreatedAtUtc <= endOfDay;
 
 

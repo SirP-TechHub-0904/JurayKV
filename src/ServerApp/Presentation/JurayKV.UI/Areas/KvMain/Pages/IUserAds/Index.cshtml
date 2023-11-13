@@ -4,8 +4,9 @@
 }
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">USER POSTED ADVERT</h3>
+        <h3 class="card-title">USER POSTED ADVERT (Before 6AM) (@Model.UserKvAds.Count())</h3>
 
+        <a asp-page="./All" class="btn bg-gradient-warning btn-sm" style="float:right;">View Previous</a>
 
     </div>
     <!-- /.card-header -->
@@ -43,7 +44,7 @@
                                 @sn
                             </td>
                             <td>
-                                @item.CreatedAtUtc.ToString("dd/MM/yyyy")
+                                @item.CreatedAtUtc.ToString("dd/MM/yyyy hh:mm tt")
 
                             </td>
                             <td>

@@ -41,33 +41,41 @@
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <a class="navbar-brand" href="#">
-                                <img class="img-fluid logo" src="~/img/Kobo-view-web-logo.png" alt="KoboView">
+                                <img class="img-fluid logo" src="~/img/Kobo-view-web-logo-blue.png" alt="KoboView">
                             </a>
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <div id="gen-menu-contain" class="gen-menu-contain">
                                     <ul id="gen-main-menu" class="navbar-nav ml-auto">
 
 
+                                        
                                         <li class="menu-item">
-                                            <a href="">About</a>
-
-                                        </li>
-
-                                        <li class="menu-item">
-                                            <a href="#">Adverts</a>
+                                            <a href="#">About</a>
                                             <i class="fa fa-chevron-down gen-submenu-icon"></i>
 
                                             <ul class="sub-menu">
-
-
                                                 <li class="menu-item">
-                                                    <a>Company Advert</a>
-
+                                                    <a class="" asp-page="/History">History</a>
                                                 </li>
-
+                                                <li class="menu-item">
+                                                    <a class="" asp-page="/Overview">Overview</a>
+                                                </li>
+                                                
                                             </ul>
                                         </li>
 
+                                        <li class="menu-item">
+                                            <a asp-page="/Advertise">Advertise</a>
+
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-page="/Howitworks">How it Works</a>
+
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-page="/Pricing">Pricing</a>
+
+                                        </li>
                                         <li class="menu-item">
                                             <a href="#">Account</a>
                                             <i class="fa fa-chevron-down gen-submenu-icon"></i>
@@ -80,7 +88,7 @@
                                                 <li class="menu-item">
                                                     <a class="" asp-area="Auth" asp-page="/Account/Login">Login</a>
                                                 </li>
-                                                
+
 
                                             </ul>
                                         </li>
@@ -91,19 +99,7 @@
                                 </div>
                             </div>
 
-                            <div class="gen-header-info-box">
-
-                                <div class="gen-btn-container">
-
-                                    <a href="#" class="gen-button">
-                                        <div class="gen-button-block">
-                                            <span class="gen-button-line-left"></span>
-                                            <span class="gen-button-text">How it Works</span>
-                                        </div>
-                                    </a>
-
-                                </div>
-                            </div>
+                            
 
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

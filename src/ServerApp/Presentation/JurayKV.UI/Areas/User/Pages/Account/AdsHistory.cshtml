@@ -1,0 +1,93 @@
+﻿@page
+@model JurayKV.UI.Areas.User.Pages.Account.AdsHistoryModel
+@{
+}
+
+<div class="row">
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3 class="card-title">ADs History (@Model.Ads.Count())</h3>
+
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Date</th>
+                                <th>ADs</th>
+                                <th>Point</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{ int sn = 0;}
+                        <tbody>
+                            @foreach (var item in Model.Ads)
+                            {
+                                <tr>
+                                    @{
+                                        sn++;
+                                    }
+                                    <td>@sn</td>
+                                    <td><a href="">@item.CreatedAtUtc.ToString("dd/MM/yyyy hh:mm tt")</a></td>
+                                    <td>
+                                        <a href="@item.ImageUrl" target="_blank">
+                                            <img src="@item.ImageUrl" class="img-fluid" style="max-height:50px;" />
+
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if (item.AdsStatus == JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
+                                        {
+                                            @item.Points
+                                        }
+                                        else
+                                        {
+                                            <span>---</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning">
+
+                                            @if (!String.IsNullOrEmpty(item.VideoUrl))
+                                            {
+
+
+                                                <i class="fa fa-check text-success"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-times text-danger"></i>
+
+                                            }
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+@section Scripts {
+
+
+
+
+
+
+}

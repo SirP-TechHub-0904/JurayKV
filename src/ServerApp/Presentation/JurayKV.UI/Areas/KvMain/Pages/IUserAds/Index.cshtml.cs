@@ -21,7 +21,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
         public List<IdentityKvAdListDto> UserKvAds = new List<IdentityKvAdListDto>();
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            GetIdentityKvAdListQuery command = new GetIdentityKvAdListQuery();
+            GetActiveListTpdayIdentityKvAdListQuery command = new GetActiveListTpdayIdentityKvAdListQuery();
             UserKvAds = await _mediator.Send(command);
 
             return Page();

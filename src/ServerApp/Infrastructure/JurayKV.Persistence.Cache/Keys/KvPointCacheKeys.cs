@@ -23,5 +23,11 @@ namespace JurayKV.Persistence.Cache.Keys
         {
             return $"KvPointDetails-{kvPointId}";
         }
+
+        public static string ListUserIdKey(Guid userId)
+        {
+            return $"ListByUserIdKey-{userId}";
+        }
+
     }
 }

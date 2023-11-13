@@ -11,13 +11,17 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
     {
         Task<IdentityKvAd> GetByIdAsync(Guid identityKvAdId);
 
-        Task InsertAsync(IdentityKvAd identityKvAd);
+        Task<Guid> InsertAsync(IdentityKvAd identityKvAd);
 
         Task UpdateAsync(IdentityKvAd identityKvAd);
 
         Task DeleteAsync(IdentityKvAd identityKvAd);
 
-        Task<IQueryable<IdentityKvAd>> GetListByUserId(Guid userId);
+        Task<List<IdentityKvAd>> GetListByUserId(Guid userId);
         Task<IQueryable<IdentityKvAd>> GetActiveListByUserId(Guid userId);
+        Task<IQueryable<IdentityKvAd>> ListActiveToday();
+
+        Task<bool> CheckExist(Guid userId, Guid kvAdId);
+        Task<bool> CheckUserAdvertCountToday(Guid userId);
     }
 }

@@ -15,6 +15,7 @@ namespace JurayKV.Application.Caching.Repositories
         Task<List<KvPointListDto>> GetListAsync();
         Task<List<KvPointListDto>> GetListByWeekAsync(DateTime? date);
         Task<List<KvPointListDto>> GetListByCountAsync(int toplistcount, Guid userId);
+        Task<List<KvPointListDto>> GetListByUserIdAsync(Guid userId);
 
         Task<KvPointDetailsDto> GetByIdAsync(Guid modelId);
 
