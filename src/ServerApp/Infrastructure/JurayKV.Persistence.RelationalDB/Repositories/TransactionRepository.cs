@@ -75,8 +75,15 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId)
         {
-            var list = await _dbContext.Transactions.OrderByDescending(x => x.CreatedAtUtc).Take(toplistcount).ToListAsync();
+            var list = await _dbContext.Transactions
+                .Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAtUtc)
+                .Take(toplistcount).ToListAsync();
             return list;
+        }
+
+        public async Task<int> TransactionCount(Guid userId)
+        {
+           return await _dbContext.Transactions.Where(x=>x.UserId == userId).CountAsync();
         }
     }
 

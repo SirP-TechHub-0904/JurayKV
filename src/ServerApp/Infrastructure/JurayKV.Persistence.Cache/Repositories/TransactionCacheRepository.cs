@@ -29,11 +29,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<TransactionListDto>> GetListAsync()
         {
-            string cacheKey = TransactionCacheKeys.ListKey;
-            List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
+            //string cacheKey = TransactionCacheKeys.ListKey;
+            //List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
 
-            if (list == null)
-            {
+            //if (list == null)
+            //{
                 Expression<Func<Transaction, TransactionListDto>> selectExp = d => new TransactionListDto
                 {
                     Id = d.Id,
@@ -51,21 +51,21 @@ namespace JurayKV.Persistence.Cache.Repositories
                     CreatedAtUtc = d.CreatedAtUtc
                 };
 
-                list = await _repository.GetListAsync(selectExp);
+               var list = await _repository.GetListAsync(selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }
 
         public async Task<TransactionDetailsDto> GetByIdAsync(Guid transactionId)
         {
-            string cacheKey = TransactionCacheKeys.GetKey(transactionId);
-            TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
+            //string cacheKey = TransactionCacheKeys.GetKey(transactionId);
+            //TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
 
-            if (transaction == null)
-            {
+            //if (transaction == null)
+            //{
                 Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
                 {
                     Id = d.Id,
@@ -81,21 +81,21 @@ namespace JurayKV.Persistence.Cache.Repositories
                     CreatedAtUtc = d.CreatedAtUtc
                 };
 
-                transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+                var transaction = await _repository.GetByIdAsync(transactionId, selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, transaction);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, transaction);
+            //}
 
             return transaction;
         }
 
         public async Task<TransactionDetailsDto> GetDetailsByIdAsync(Guid transactionId)
         {
-            string cacheKey = TransactionCacheKeys.GetDetailsKey(transactionId);
-            TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
+            //string cacheKey = TransactionCacheKeys.GetDetailsKey(transactionId);
+            //TransactionDetailsDto transaction = await _distributedCache.GetAsync<TransactionDetailsDto>(cacheKey);
 
-            if (transaction == null)
-            {
+            //if (transaction == null)
+            //{
                 Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
                 {
                     Id = d.Id,
@@ -111,10 +111,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                     CreatedAtUtc = d.CreatedAtUtc
                 };
 
-                transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+              var  transaction = await _repository.GetByIdAsync(transactionId, selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, transaction);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, transaction);
+            //}
 
             return transaction;
         }
@@ -122,14 +122,14 @@ namespace JurayKV.Persistence.Cache.Repositories
        
         public async Task<List<TransactionListDto>> GetListByCountAsync(int toplistcount, Guid userId)
         {
-            string cacheKey = TransactionCacheKeys.ListByCountUserIdKey(userId);
-            List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
+            //string cacheKey = TransactionCacheKeys.ListByCountUserIdKey(userId);
+            //List<TransactionListDto> list = await _distributedCache.GetAsync<List<TransactionListDto>>(cacheKey);
 
-            if (list == null)
-            {
+            //if (list == null)
+            //{
 
                 var xlist = await _transactionRepository.LastListByCountByUserId(toplistcount, userId);
-                list = xlist.Select(d => new TransactionListDto
+               var list = xlist.Select(d => new TransactionListDto
                 {
                     Id = d.Id,
                     Amount = d.Amount,
@@ -146,8 +146,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     CreatedAtUtc = d.CreatedAtUtc
                 }).ToList();
 
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }
@@ -155,6 +155,11 @@ namespace JurayKV.Persistence.Cache.Repositories
         public Task<List<TransactionListDto>> GetListByCountAsync(int latestcount)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> TransactionCount(Guid userId)
+        {
+           return await _transactionRepository.TransactionCount(userId);
         }
     }
 

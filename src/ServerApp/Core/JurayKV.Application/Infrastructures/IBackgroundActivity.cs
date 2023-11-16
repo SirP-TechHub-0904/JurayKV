@@ -10,6 +10,10 @@ namespace JurayKV.Application.Infrastructures
     [SingletonService]
     public interface IBackgroundActivity
     {
-        Task SendEmailToActiveAdsAsync();
+        Task SendEmailToEveningActiveAdsAsync();
+
+        Task SendEmailToMorningReminderAsync();
+
+        Task UpdateAllUserAdsAfterSix();
     }
 }

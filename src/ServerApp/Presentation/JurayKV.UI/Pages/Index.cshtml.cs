@@ -28,7 +28,7 @@ namespace JurayKV.UI.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             //CreateDepartmentCommand command = new CreateDepartmentCommand("sdhjys", "sdiusuhiu jkli kjjkjkj ukj iuiusd");
-
+            _logger.LogInformation("Home get method Starting.");
             //Guid departmentId = await Mediator.Send(command);
             return Page();
          }

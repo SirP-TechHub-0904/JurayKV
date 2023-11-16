@@ -13,12 +13,12 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
+        private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
 
         public SetPasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
+            SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

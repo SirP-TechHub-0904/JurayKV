@@ -35,7 +35,7 @@
                 <div class="col-md-6">
                     <form id="send-code" method="post">
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.Code" class="form-control" autocomplete="off" placeholder="Please enter the code."/>
+                            <input asp-for="Input.Code" class="form-control" autocomplete="off" placeholder="Please enter the code." />
                             <label asp-for="Input.Code" class="control-label form-label">Verification Code</label>
                             <span asp-validation-for="Input.Code" class="text-danger"></span>
                         </div>
@@ -50,4 +50,41 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+ 
+
+<script src="~/lib/qrcodejs/qrcode.js"></script>
+<script type="text/javascript">
+
+    new QRCode(document.getElementById("qrCode"),
+        { text: "@Html.Raw(Model.AuthenticatorUri)", width: 200, height: 200 });
+</script>
+@*<script type="text/javascript" src="~/qr/jquery.min.js"></script>*@
+@*<script src="~/dashboard/jquery.min.js"></script>*@
+
+<script type="text/javascript" src="~/qr/qrcode.js"></script>
+
+<script type="text/javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 100,
+        height: 100
+    });
+
+    function makeCode() {
+        var elText = document.getElementById("text");
+
+        qrcode.makeCode(elText.value);
+    }
+
+    makeCode();
+
+    $("#text").
+        on("blur", function () {
+            makeCode();
+        }).
+        on("keydown", function (e) {
+            if (e.keyCode == 13) {
+                makeCode();
+            }
+        });
+</script>
 }

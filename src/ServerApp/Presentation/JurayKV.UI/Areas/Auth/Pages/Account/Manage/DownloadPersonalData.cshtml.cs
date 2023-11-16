@@ -17,11 +17,11 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class DownloadPersonalDataModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
 
         public DownloadPersonalDataModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
             ILogger<DownloadPersonalDataModel> logger)
         {
             _userManager = userManager;

@@ -20,6 +20,7 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         Task DeleteAsync(Transaction transaction);
 
         Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId);
+        Task<int> TransactionCount(Guid userId);
 
     }
 }

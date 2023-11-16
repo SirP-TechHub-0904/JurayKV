@@ -26,11 +26,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<WalletDetailsDto>> GetListAsync()
         {
-            string cacheKey = WalletCacheKeys.ListKey;
-            List<WalletDetailsDto> list = await _distributedCache.GetAsync<List<WalletDetailsDto>>(cacheKey);
+            //string cacheKey = WalletCacheKeys.ListKey;
+            //List<WalletDetailsDto> list = await _distributedCache.GetAsync<List<WalletDetailsDto>>(cacheKey);
 
-            if (list == null)
-            {
+            //if (list == null)
+            //{
                 Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
                 {
                     Id = d.Id,
@@ -43,21 +43,21 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Fullname = d.User.SurName + " "+ d.User.FirstName + " "+ d.User.LastName,
                 };
 
-                list = await _repository.GetListAsync(selectExp);
+                var list = await _repository.GetListAsync(selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }
 
         public async Task<WalletDetailsDto> GetByIdAsync(Guid walletId)
         {
-            string cacheKey = WalletCacheKeys.GetKey(walletId);
-            WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
+            //string cacheKey = WalletCacheKeys.GetKey(walletId);
+            //WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
 
-            if (wallet == null)
-            {
+            //if (wallet == null)
+            //{
                 Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
                 {
                     Id = d.Id,
@@ -70,10 +70,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
                 };
 
-                wallet = await _repository.GetByIdAsync(walletId, selectExp);
+               var wallet = await _repository.GetByIdAsync(walletId, selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, wallet);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, wallet);
+            //}
 
 
             return wallet;
@@ -81,11 +81,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<WalletDetailsDto> GetDetailsByIdAsync(Guid walletId)
         {
-            string cacheKey = WalletCacheKeys.GetDetailsKey(walletId);
-            WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
+            //string cacheKey = WalletCacheKeys.GetDetailsKey(walletId);
+            //WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
 
-            if (wallet == null)
-            {
+            //if (wallet == null)
+            //{
                 Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
                 {
                     Id = d.Id,
@@ -98,30 +98,30 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
                 };
 
-                wallet = await _repository.GetByIdAsync(walletId, selectExp);
+               var wallet = await _repository.GetByIdAsync(walletId, selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, wallet);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, wallet);
+            //}
 
             return wallet;
         }
 
         public async Task<WalletDetailsDto> GetByUserIdAsync(Guid userId)
         {
-            string cacheKey = WalletCacheKeys.GetUserKey(userId);
-            WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
+            //string cacheKey = WalletCacheKeys.GetUserKey(userId);
+            //WalletDetailsDto wallet = await _distributedCache.GetAsync<WalletDetailsDto>(cacheKey);
 
-            if (wallet == null)
-            { 
+            //if (wallet == null)
+            //{ 
                var userwallet = await _wallet.GetByUserIdAsync(userId);
-                wallet = new WalletDetailsDto
+                var wallet = new WalletDetailsDto
                 {
                     Amount = userwallet.Amount,
                     UserId = userId,
                 };
 
-                await _distributedCache.SetAsync(cacheKey, wallet);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, wallet);
+            //}
 
             return wallet;
         }

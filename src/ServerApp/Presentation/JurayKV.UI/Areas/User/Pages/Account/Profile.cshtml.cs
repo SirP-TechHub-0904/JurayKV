@@ -1,4 +1,5 @@
 using JurayKV.Application;
+using JurayKV.Application.Queries.DashboardQueries;
 using JurayKV.Application.Queries.UserAccountQueries.DashboardQueries;
 using JurayKV.Application.Queries.UserManagerQueries;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
@@ -29,11 +30,14 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             string userId = _userManager.GetUserId(HttpContext.User);
             GetUserManagerByIdQuery command = new GetUserManagerByIdQuery(Guid.Parse(userId));
 
-            UserData = await _mediator.Send(command);
+            UserData = await _mediator.Send(command); 
+            GetUserDashboardQuery dcommand = new GetUserDashboardQuery(Guid.Parse(userId));
 
+            DashboardData = await _mediator.Send(dcommand);
             return Page();
         }
         public UserManagerDetailsDto UserData { get; set; }
+        public UserDashboardDto DashboardData { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

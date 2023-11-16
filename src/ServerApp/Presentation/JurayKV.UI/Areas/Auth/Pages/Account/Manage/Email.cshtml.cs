@@ -3,6 +3,7 @@
 #nullable disable
 
 using JurayKV.Application.Infrastructures;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,13 +16,13 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
+        private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
+            SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -71,7 +72,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(ApplicationUser user)
         {
             var email = await _userManager.GetEmailAsync(user);
             Email = email;

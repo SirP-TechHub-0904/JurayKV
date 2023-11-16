@@ -34,12 +34,39 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<IdentityKvAdListDto>> GetListAsync()
         {
-            string cacheKey = IdentityKvAdCacheKeys.ListKey;
-            List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
 
-            if (list == null)
+
+            //string cacheKey = IdentityKvAdCacheKeys.ListKey;
+            //List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{
+
+            //    var mainlist = await _adRepository.ListNonActive();
+            //    list = mainlist.Select(d => new IdentityKvAdListDto
+            //    {
+            //        Id = d.Id,
+            //        Activity = d.Activity,
+            //        CreatedAtUtc = d.CreatedAtUtc,
+            //        KvAdId = d.KvAdId,
+            //        LastModifiedAtUtc = d.LastModifiedAtUtc,
+            //        UserId = d.UserId,
+            //        VideoUrl = d.VideoUrl,
+            //        Active = d.Active,
+            //        ImageUrl = d.KvAd.ImageUrl,
+            //        Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+
+            //    }).ToList();
+            //    await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
+            //}
+        
+            var mainlist = await _adRepository.ListNonActive();
+
+            var list = new List<IdentityKvAdListDto>();
+
+            foreach (var d in mainlist)
             {
-                Expression<Func<IdentityKvAd, IdentityKvAdListDto>> selectExp = d => new IdentityKvAdListDto
+                var adListDto = new IdentityKvAdListDto
                 {
                     Id = d.Id,
                     Activity = d.Activity,
@@ -49,84 +76,118 @@ namespace JurayKV.Persistence.Cache.Repositories
                     UserId = d.UserId,
                     VideoUrl = d.VideoUrl,
                     Active = d.Active,
-                    KvAdName = d.KvAd.Bucket.Name,
                     ImageUrl = d.KvAd.ImageUrl,
-                    Fullname = d.User.SurName + " " +d.User.FirstName + " " + d.User.LastName
+                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+
+                    Points = await PointByIdentityId(d.Id, d.UserId),
+                    AdsStatus = d.AdsStatus,
+                    Company = d.KvAd.Company.Name,
+                    KvAdName = d.KvAd.Bucket.Name
                 };
 
-                list = await _repository.GetListAsync(selectExp);
-
-                await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x=>x.CreatedAtUtc));
+                list.Add(adListDto);
             }
-
             return list;
         }
 
         public async Task<IdentityKvAdDetailsDto> GetByIdAsync(Guid identityKvAdId)
         {
-            string cacheKey = IdentityKvAdCacheKeys.GetKey(identityKvAdId);
-            IdentityKvAdDetailsDto identityKvAd = await _distributedCache.GetAsync<IdentityKvAdDetailsDto>(cacheKey);
+            //string cacheKey = IdentityKvAdCacheKeys.GetKey(identityKvAdId);
+            //IdentityKvAdDetailsDto identityKvAd = await _distributedCache.GetAsync<IdentityKvAdDetailsDto>(cacheKey);
 
-            if (identityKvAd == null)
+            //if (identityKvAd == null)
+            //{
+
+            //    var mainidentityKvAd = await _adRepository.GetByIdAsync(identityKvAdId);
+            //    identityKvAd = new IdentityKvAdDetailsDto
+            //    {
+            //        Id = mainidentityKvAd.Id,
+            //        Activity = mainidentityKvAd.Activity,
+            //        KvAdId = mainidentityKvAd.KvAdId,
+            //        UserId = mainidentityKvAd.UserId,
+            //        VideoUrl = mainidentityKvAd.VideoUrl,
+            //        CreatedAtUtc = mainidentityKvAd.CreatedAtUtc,
+            //        LastModifiedAtUtc = mainidentityKvAd.LastModifiedAtUtc,
+            //        Active = mainidentityKvAd.Active,
+            //        KvAdImage = mainidentityKvAd.KvAd.ImageUrl,
+            //        Fullname = mainidentityKvAd.User.SurName + " " + mainidentityKvAd.User.FirstName + " " + mainidentityKvAd.User.LastName,
+            //        ResultOne = mainidentityKvAd.ResultOne,
+            //        ResultTwo = mainidentityKvAd.ResultTwo,
+            //        ResultThree = mainidentityKvAd.ResultThree,
+            //        AdsStatus = mainidentityKvAd.AdsStatus
+            //    };
+            //    await _distributedCache.SetAsync(cacheKey, identityKvAd);
+            //}
+            var mainidentityKvAd = await _adRepository.GetByIdAsync(identityKvAdId);
+            var identityKvAd = new IdentityKvAdDetailsDto
             {
- 
-                var mainidentityKvAd = await _adRepository.GetByIdAsync(identityKvAdId);
-                identityKvAd = new IdentityKvAdDetailsDto
-                {
-                    Id = mainidentityKvAd.Id,
-                    Activity = mainidentityKvAd.Activity,
-                    KvAdId = mainidentityKvAd.KvAdId,
-                    UserId = mainidentityKvAd.UserId,
-                    VideoUrl = mainidentityKvAd.VideoUrl,
-                    CreatedAtUtc = mainidentityKvAd.CreatedAtUtc,
-                    LastModifiedAtUtc = mainidentityKvAd.LastModifiedAtUtc,
-                    Active = mainidentityKvAd.Active,
-                    KvAdImage = mainidentityKvAd.KvAd.ImageUrl,
-                    Fullname = mainidentityKvAd.User.SurName + " " + mainidentityKvAd.User.FirstName + " " + mainidentityKvAd.User.LastName
-                };
-                await _distributedCache.SetAsync(cacheKey, identityKvAd);
-            }
-
+                Id = mainidentityKvAd.Id,
+                Activity = mainidentityKvAd.Activity,
+                KvAdId = mainidentityKvAd.KvAdId,
+                UserId = mainidentityKvAd.UserId,
+                VideoUrl = mainidentityKvAd.VideoUrl,
+                CreatedAtUtc = mainidentityKvAd.CreatedAtUtc,
+                LastModifiedAtUtc = mainidentityKvAd.LastModifiedAtUtc,
+                Active = mainidentityKvAd.Active,
+                KvAdImage = mainidentityKvAd.KvAd.ImageUrl,
+                Fullname = mainidentityKvAd.User.SurName + " " + mainidentityKvAd.User.FirstName + " " + mainidentityKvAd.User.LastName,
+                ResultOne = mainidentityKvAd.ResultOne,
+                ResultTwo = mainidentityKvAd.ResultTwo,
+                ResultThree = mainidentityKvAd.ResultThree,
+                AdsStatus = mainidentityKvAd.AdsStatus
+            };
             return identityKvAd;
         }
 
         public async Task<IdentityKvAdDetailsDto> GetDetailsByIdAsync(Guid identityKvAdId)
         {
-            string cacheKey = IdentityKvAdCacheKeys.GetDetailsKey(identityKvAdId);
-            IdentityKvAdDetailsDto identityKvAd = await _distributedCache.GetAsync<IdentityKvAdDetailsDto>(cacheKey);
+            //string cacheKey = IdentityKvAdCacheKeys.GetDetailsKey(identityKvAdId);
+            //IdentityKvAdDetailsDto identityKvAd = await _distributedCache.GetAsync<IdentityKvAdDetailsDto>(cacheKey);
 
-            if (identityKvAd == null)
+            //if (identityKvAd == null)
+            //{
+            //    Expression<Func<IdentityKvAd, IdentityKvAdDetailsDto>> selectExp = d => new IdentityKvAdDetailsDto
+            //    {
+            //        Id = d.Id,
+            //        Activity = d.Activity,
+            //        CreatedAtUtc = d.CreatedAtUtc,
+            //        KvAdId = d.KvAdId,
+            //        LastModifiedAtUtc = d.LastModifiedAtUtc,
+            //        UserId = d.UserId,
+            //        VideoUrl = d.VideoUrl,
+            //        Active = d.Active,
+            //    };
+
+            //    identityKvAd = await _repository.GetByIdAsync(identityKvAdId, selectExp);
+
+            //    await _distributedCache.SetAsync(cacheKey, identityKvAd);
+            //}
+            Expression<Func<IdentityKvAd, IdentityKvAdDetailsDto>> selectExp = d => new IdentityKvAdDetailsDto
             {
-                Expression<Func<IdentityKvAd, IdentityKvAdDetailsDto>> selectExp = d => new IdentityKvAdDetailsDto
-                {
-                    Id = d.Id,
-                    Activity = d.Activity,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    KvAdId = d.KvAdId,
-                    LastModifiedAtUtc = d.LastModifiedAtUtc,
-                    UserId = d.UserId,
-                    VideoUrl = d.VideoUrl,
-                    Active = d.Active,
-                };
+                Id = d.Id,
+                Activity = d.Activity,
+                CreatedAtUtc = d.CreatedAtUtc,
+                KvAdId = d.KvAdId,
+                LastModifiedAtUtc = d.LastModifiedAtUtc,
+                UserId = d.UserId,
+                VideoUrl = d.VideoUrl,
+                Active = d.Active,
+            };
 
-                identityKvAd = await _repository.GetByIdAsync(identityKvAdId, selectExp);
-
-                await _distributedCache.SetAsync(cacheKey, identityKvAd);
-            }
-
+           var identityKvAd = await _repository.GetByIdAsync(identityKvAdId, selectExp);
             return identityKvAd;
         }
 
         public async Task<List<IdentityKvAdListDto>> GetByUserIdAsync(Guid userId)
         {
-            string cacheKey = IdentityKvAdCacheKeys.GetByUserIdKey(userId);
-            List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+            //string cacheKey = IdentityKvAdCacheKeys.GetByUserIdKey(userId);
+            //List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
 
-            if (list == null)
-            {
+            //if (list == null)
+            //{
                 var mainlist = await _adRepository.GetListByUserId(userId);
 
-                list = new List<IdentityKvAdListDto>();
+               var list = new List<IdentityKvAdListDto>();
 
                 foreach (var d in mainlist)
                 {
@@ -148,8 +209,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     list.Add(adListDto);
                 }
 
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }
@@ -166,41 +227,53 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<IdentityKvAdListDto>> GetActiveByUserIdAsync(Guid userId)
         {
-            string cacheKey = IdentityKvAdCacheKeys.GetActiveByUserIdKey(userId);
-            List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+            //string cacheKey = IdentityKvAdCacheKeys.GetActiveByUserIdKey(userId);
+            //List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
 
-            if (list == null)
+            //if (list == null)
+            //{
+
+            //    var mainlist = await _adRepository.GetActiveListByUserId(userId);
+            //    list = mainlist.Select(d => new IdentityKvAdListDto
+            //    {
+            //        Id = d.Id,
+            //        Activity = d.Activity,
+            //        CreatedAtUtc = d.CreatedAtUtc,
+            //        KvAdId = d.KvAdId,
+            //        LastModifiedAtUtc = d.LastModifiedAtUtc,
+            //        UserId = d.UserId,
+            //        VideoUrl = d.VideoUrl,
+            //        Active = d.Active,
+            //        ImageUrl = d.KvAd.ImageUrl
+            //    }).ToList();
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+            var mainlist = await _adRepository.GetActiveListByUserId(userId);
+            var list = mainlist.Select(d => new IdentityKvAdListDto
             {
-
-                var mainlist = await _adRepository.GetActiveListByUserId(userId);
-                list = mainlist.Select(d => new IdentityKvAdListDto
-                {
-                    Id = d.Id,
-                    Activity = d.Activity,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    KvAdId = d.KvAdId,
-                    LastModifiedAtUtc = d.LastModifiedAtUtc,
-                    UserId = d.UserId,
-                    VideoUrl = d.VideoUrl,
-                    Active = d.Active,
-                    ImageUrl = d.KvAd.ImageUrl
-                }).ToList();
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
-
+                Id = d.Id,
+                Activity = d.Activity,
+                CreatedAtUtc = d.CreatedAtUtc,
+                KvAdId = d.KvAdId,
+                LastModifiedAtUtc = d.LastModifiedAtUtc,
+                UserId = d.UserId,
+                VideoUrl = d.VideoUrl,
+                Active = d.Active,
+                ImageUrl = d.KvAd.ImageUrl
+            }).ToList();
             return list;
         }
 
         public async Task<List<IdentityKvAdListDto>> GetListActiveTodayAsync()
         {
-            string cacheKey = IdentityKvAdCacheKeys.ListActiveKey;
-            List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
-             
-            if (list == null)
-            {
-                 
-                 var mainlist = await _adRepository.ListActiveToday();
-                list = mainlist.Select(d => new IdentityKvAdListDto
+            //string cacheKey = IdentityKvAdCacheKeys.ListActiveKey;
+            //List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{
+
+                var mainlist = await _adRepository.ListActiveToday();
+                var list = mainlist.Select(d => new IdentityKvAdListDto
                 {
                     Id = d.Id,
                     Activity = d.Activity,
@@ -210,12 +283,20 @@ namespace JurayKV.Persistence.Cache.Repositories
                     UserId = d.UserId,
                     VideoUrl = d.VideoUrl,
                     Active = d.Active,
-                    ImageUrl = d.KvAd.ImageUrl
+                    ImageUrl = d.KvAd.ImageUrl,
+                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+                    Company = d.KvAd.Company.Name,
+                    KvAdName = d.KvAd.Bucket.Name
                 }).ToList();
-                await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
+            //}
 
             return list;
+        }
+
+        public async Task<int> AdsCount(Guid userId)
+        {
+            return _adRepository.AdsCount(userId).Result;
         }
     }
 

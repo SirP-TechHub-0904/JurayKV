@@ -61,19 +61,19 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
             var userinfo = await _userManager.FindByIdAsync(userId);
             var roles = await _userManager.GetRolesAsync(userinfo);
 
-            if (roles.Contains(Constants.AdminOne) || roles.Contains(Constants.AdminPolicy))
+            if (roles.Contains(Constants.AdminOne) || roles.Contains(Constants.SuperAdminPolicy))
             {
                 updateAds.ResultOne = PointOne;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointOne;
             }
 
-            if (roles.Contains(Constants.AdminTwo) || roles.Contains(Constants.AdminPolicy))
+            if (roles.Contains(Constants.AdminTwo) || roles.Contains(Constants.SuperAdminPolicy))
             {
                 updateAds.ResultTwo = PointTwo;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointTwo;
             }
 
-            if (roles.Contains(Constants.AdminThree) || roles.Contains(Constants.AdminPolicy))
+            if (roles.Contains(Constants.AdminThree) || roles.Contains(Constants.SuperAdminPolicy))
             {
                 updateAds.ResultThree = PointThree;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointThree;

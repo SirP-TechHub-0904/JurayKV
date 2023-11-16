@@ -13,11 +13,11 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class Disable2faModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
         private readonly ILogger<Disable2faModel> _logger;
 
         public Disable2faModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
             ILogger<Disable2faModel> logger)
         {
             _userManager = userManager;

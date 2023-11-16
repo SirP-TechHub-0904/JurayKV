@@ -52,8 +52,8 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
 
                 var checkadsforuser = await _dbContext.IdentityKvAds.AsNoTracking()
-                    .Where(x => x.CreatedAtUtc.Hour > nextDay6AM.Hour)
-                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId);
+                    //.Where(x => x.CreatedAtUtc.Hour > nextDay6AM.Hour)
+                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.Active == true);
                 if (checkadsforuser == null)
                 {
                     await _dbContext.AddAsync(identityKvAd);
@@ -97,12 +97,16 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             DateTime currentDate = DateTime.Now;
             DateTime today6AM = currentDate.Date.AddHours(6);
             var data = await _dbContext.IdentityKvAds.Include(x => x.KvAd)
-                .Where(x => x.UserId == userId)
-                 //.Where(x => x.CreatedAtUtc > today6AM)
+                .Where(x => x.UserId == userId && x.Active == false)
 
 
                 .ToListAsync();
-             
+
+
+            var xxdata = await _dbContext.IdentityKvAds.Include(x => x.KvAd)
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.CreatedAtUtc.Hour < today6AM.Hour);
+
+
             return data.ToList();
         }
 
@@ -118,6 +122,20 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             return data;
         }
+        public async Task<List<IdentityKvAd>> ListNonActive()
+        {
+            DateTime currentDate = DateTime.Now;
+            DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+
+            var data = await _dbContext.IdentityKvAds
+                .Include(x => x.KvAd)
+                .ThenInclude(x => x.Company)
+                .Include(x => x.KvAd.Bucket)
+                 .Include(x => x.User)
+                .Where(x => x.Active == false).ToListAsync();
+
+            return data.ToList();
+        }
 
         public async Task<IQueryable<IdentityKvAd>> ListActiveToday()
         {
@@ -126,7 +144,10 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             var data = _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
-                .Where(x => x.CreatedAtUtc >= currentDate && x.CreatedAtUtc < nextDay6AM);
+                .ThenInclude(x => x.Company)
+                .Include(x=>x.KvAd.Bucket)
+                .Include(x => x.User)
+                .Where(x => x.Active == true);
 
             return data;
         }
@@ -146,6 +167,11 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         public Task<bool> CheckUserAdvertCountToday(Guid userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> AdsCount(Guid userId)
+        {
+           return await  _dbContext.IdentityKvAds.Where(x=>x.UserId ==  userId).CountAsync();
         }
     }
 

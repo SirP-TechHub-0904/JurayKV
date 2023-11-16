@@ -1,4 +1,5 @@
-﻿using JurayKV.Domain.Primitives;
+﻿using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace JurayKV.Domain.Aggregates.CompanyAggregate
 
         public string Name { get; set; }
 
-       
+       public Guid UserId { get;set; }
+        public ApplicationUser User { get; set; }
         public DateTime CreatedAtUtc { get; set; }
 
     }

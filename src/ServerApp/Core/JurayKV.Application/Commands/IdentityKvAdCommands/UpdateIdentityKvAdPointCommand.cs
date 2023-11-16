@@ -71,6 +71,8 @@ namespace JurayKV.Application.Commands.IdentityKvAdCommands
             identityKvAdToBeUpdated.ResultTwo = request.PointTwo;
             identityKvAdToBeUpdated.ResultThree = request.PointThree;
             identityKvAdToBeUpdated.Activity = request.Activity;
+            identityKvAdToBeUpdated.Active = false;
+            
             await _identityKvAdRepository.UpdateAsync(identityKvAdToBeUpdated);
 
             // Remove the cache

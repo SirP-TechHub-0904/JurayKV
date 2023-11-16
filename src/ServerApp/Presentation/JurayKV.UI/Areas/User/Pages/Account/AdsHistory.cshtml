@@ -42,30 +42,45 @@
                                         </a>
                                     </td>
                                     <td>
+                                        @item.Points
+
+                                    </td>
+                                    <td>
                                         @if (item.AdsStatus == JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
                                         {
-                                            @item.Points
+                                            <a class="btn btn-success">
+                                                @Html.DisplayFor(model => item.AdsStatus)
+                                                @if (!String.IsNullOrEmpty(item.VideoUrl))
+                                                {
+
+
+                                                    <i class="fa fa-check text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-times text-danger"></i>
+
+                                                }
+                                            </a>
                                         }
                                         else
                                         {
-                                            <span>---</span>
+                                            <a class="btn btn-warning">
+                                                @Html.DisplayFor(model => item.AdsStatus)
+                                                @if (!String.IsNullOrEmpty(item.VideoUrl))
+                                                {
+
+
+                                                    <i class="fa fa-check text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-times text-danger"></i>
+
+                                                }
+                                            </a>
                                         }
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-warning">
 
-                                            @if (!String.IsNullOrEmpty(item.VideoUrl))
-                                            {
-
-
-                                                <i class="fa fa-check text-success"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="fa fa-times text-danger"></i>
-
-                                            }
-                                        </a>
                                     </td>
                                 </tr>
                             }

@@ -15,10 +15,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
+        private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager, SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

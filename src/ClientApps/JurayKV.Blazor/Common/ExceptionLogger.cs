@@ -12,6 +12,7 @@ public class ExceptionLogger
         if (exception != null)
         {
             Console.WriteLine(exception);
+
         }
 
         await Task.CompletedTask;

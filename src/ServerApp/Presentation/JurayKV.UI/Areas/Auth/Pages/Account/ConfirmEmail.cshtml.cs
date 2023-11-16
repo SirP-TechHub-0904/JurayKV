@@ -16,9 +16,9 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

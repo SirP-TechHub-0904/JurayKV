@@ -21,6 +21,8 @@
                         <th>
                             User
                         </th>
+                        <th>Bucket</th>
+                        <th>Company</th>
                         <th>Advert</th>
                         <th>Video Proof</th>
                         <th>Status </th>
@@ -50,6 +52,14 @@
                                 @Html.DisplayFor(modelItem => item.Fullname)
 
                             </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KvAdName)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Company)
+
+                            </td>
 
                             <td>
                                 <a href="@item.ImageUrl" target="_blank">
@@ -72,7 +82,23 @@
 
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Active)
+                                @if (item.AdsStatus == JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
+                                {
+                                    <span class="btn btn-success">
+                                        @Html.DisplayFor(modelItem => item.AdsStatus)
+                                    </span>
+                                    <span class="btn btn-primary">
+                                        @item.Points
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger">
+                                        @Html.DisplayFor(modelItem => item.AdsStatus)
+                                    </span>
+                                }
+
+
                             </td>
 
                             <td>

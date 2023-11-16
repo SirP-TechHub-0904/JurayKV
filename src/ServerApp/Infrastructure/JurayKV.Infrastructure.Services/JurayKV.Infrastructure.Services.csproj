@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Core\JurayKV.Application\JurayKV.Application.csproj" />
+		<ProjectReference Include="..\JurayKV.Persistence.RelationalDB\JurayKV.Persistence.RelationalDB.csproj" />
 	</ItemGroup>
 
 </Project>

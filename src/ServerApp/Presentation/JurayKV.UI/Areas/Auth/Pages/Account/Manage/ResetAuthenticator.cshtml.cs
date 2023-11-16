@@ -13,13 +13,13 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
+        private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
         private readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
+            SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

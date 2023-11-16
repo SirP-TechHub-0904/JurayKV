@@ -114,15 +114,16 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                     Xvalue = verificationCode.ToString(),
                     XvalueDate = DateTime.UtcNow.AddHours(1).AddMinutes(20),
                     XtxtGuid = newGuid.ToString(),
-                   CreationUTC = DateTime.UtcNow.AddHours(1)
+                   CreationUTC = DateTime.UtcNow.AddHours(1),
+                   EmailConfirmed = request.Data.Comfirm
                 };
 
                 IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, request.Data.Password);
 
                 if (identityResult.Succeeded == true)
                 {
-                    await _userManager.AddToRoleAsync(applicationUser, "User");
-
+                    await _userManager.AddToRoleAsync(applicationUser, request.Data.Role);
+                    response.Id = applicationUser.Id;
                     response.Succeeded = true;
                 }
                 else

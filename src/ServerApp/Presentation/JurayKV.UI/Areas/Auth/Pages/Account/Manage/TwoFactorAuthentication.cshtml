@@ -6,6 +6,18 @@
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
+<div style="margin-bottom:15px;">
+    <div class="btn-group">
+        <a class="btn btn-default" asp-area="User" asp-page="/Account/Settings">Security Center</a>
+        <a class="btn btn-default" asp-area="User" asp-page="/Account/KYC">K Y C</a>
+        <a class="btn btn-default" asp-area="Auth" asp-page="/Account/Manage/TwoFactorAuthentication">Two Factor Authentication</a>
+        <a class="btn btn-default">Activities</a>
+        <a class="btn btn-default" asp-area="Auth" asp-page="/Account/Manage/ChangePassword">Change Password</a>
+
+    </div>
+</div>
+
+
 <partial name="_StatusMessage" for="StatusMessage" />
 <h3>@ViewData["Title"]</h3>
 @{

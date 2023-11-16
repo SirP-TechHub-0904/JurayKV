@@ -5278,7 +5278,7 @@ Banner
     background-repeat: no-repeat !important;
 }
 
-.gen-banner-movies .item:before {
+/*.gen-banner-movies .item:before {
     content: "";
     position: absolute;
     top: 0;
@@ -5291,7 +5291,7 @@ Banner
     background: -webkit-linear-gradient(left, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
     background: linear-gradient(to right, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#221f1f', endColorstr='#66221f1f',GradientType=1 );
-}
+}*/
 
 .gen-banner-movies .gen-movie-contain .gen-tag-line {
     text-transform: uppercase;
@@ -5552,7 +5552,7 @@ Banner
 /*================================================
 Banner 2
 ===============================================*/
-.gen-banner-movies.banner-style-2 .item:before {
+/*.gen-banner-movies.banner-style-2 .item:before {
     content: "";
     position: absolute;
     top: 0;
@@ -5564,7 +5564,7 @@ Banner 2
     background: -webkit-linear-gradient(left, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
     background: linear-gradient(to right, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#221f1f', endColorstr='#66221f1f',GradientType=1 );
-}
+}*/
 
 .gen-movie-contain-style-2 .gen-tag-line {
     text-transform: uppercase;

@@ -97,6 +97,9 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     CreatedAtUtc = x.CreatedAtUtc,
                     TransactionType = x.TransactionType
                 }).ToList();
+
+                userdto.TransactionsCount = await _transactionCacheRepository.TransactionCount(request.UserId);
+                userdto.AdsCount = await _identityKvAdCacheRepository.AdsCount(request.UserId);
                 return userdto;
             }
         }

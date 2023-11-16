@@ -9,6 +9,7 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
         public string Fullname { get;  set; }
         public Guid KvAdId { get;  set; }
         public string KvAdName { get; set; }
+        public string Company { get; set; }
         public string Activity { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? LastModifiedAtUtc { get; set; }

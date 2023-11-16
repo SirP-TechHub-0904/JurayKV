@@ -20,6 +20,8 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         public ICollection<LastTenTransactions> LastTenTransactions { get;set; }
         public ICollection<ListRunningAds> ListRunningAds { get;set; }
 
+        public int TransactionsCount { get;set; }
+        public int AdsCount { get;set; }
 
     }
     public class ListRunningAds

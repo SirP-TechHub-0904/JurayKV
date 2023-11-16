@@ -12,7 +12,7 @@ namespace JurayKV.Domain.Aggregates.KvPointAggregate
         Task<KvPoint> GetByIdAsync(Guid kvPointId);
         Task<KvPoint> GetByIdentityIdByUserAsync(Guid identityKvAd, Guid userId);
 
-        Task InsertAsync(KvPoint kvPoint);
+        Task<Guid> InsertAsync(KvPoint kvPoint);
 
         Task UpdateAsync(KvPoint kvPoint);
 

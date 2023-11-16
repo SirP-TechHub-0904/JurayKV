@@ -23,5 +23,9 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
 
         Task<bool> CheckExist(Guid userId, Guid kvAdId);
         Task<bool> CheckUserAdvertCountToday(Guid userId);
+
+        Task<List<IdentityKvAd>> ListNonActive();
+        Task<int> AdsCount(Guid userId);
+
     }
 }

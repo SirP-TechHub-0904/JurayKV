@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.Queries.IdentityKvAdQueries
 {
@@ -19,8 +20,8 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
         public DateTime? LastModifiedAtUtc { get; set; }
         public string VideoUrl { get; set; }
         public bool Active { get; set; }
+        public AdsStatus AdsStatus { get; set; }
 
-        
         public int ResultOne { get; set; }
         public int ResultTwo { get; set; }
         public int ResultThree { get; set; }

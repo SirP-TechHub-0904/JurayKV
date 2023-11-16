@@ -32,7 +32,7 @@
                 <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
                 <div class="form-group">
                     <label asp-for="VideoFile" class="control-label">Video Proof</label>
-                    <input asp-for="VideoFile" class="form-control" accept="video/*"/>
+                    <input asp-for="VideoFile" class="form-control" accept="video/*" />
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Submit" class="btn btn-xs btn-primary" />
@@ -46,7 +46,7 @@
 
 
         <div class="col-md-4"></div>
-        <div class="col-md-4" >
+        <div class="col-md-4">
             <div class="service-simple" style="margin-top: 15px; padding: 10px;">
                 <a href="@Model.IdentityKvAdDetailsDto.KvAdImage">
                     <div class="position-relative">
@@ -63,38 +63,60 @@
 
 
 @section Scripts {
+
+
     <script>
-        // Function to update countdown for all items with the "countdown" class
-        function updateCountdowns() {
-            var now = new Date();
+        jQuery(function ($) {
+            $(document).ajaxSend(function () {
+                $("#overlay").fadeIn(300);
+            });
+
+            //$('#button').click(function () {
+            //    $.ajax({
+            //        type: 'GET',
+            //        success: function (data) {
+            //            console.log(data);
+            //        }
+            //    }).done(function () {
+            //        //setTimeout(function () {
+            //        //    $("#overlay").fadeOut(300);
+            //        //}, 500);
+            //    });
+            //});
+        });
+        </script>
+        <script>
+            // Function to update countdown for all items with the "countdown" class
+            function updateCountdowns() {
+                var now = new Date();
             var countdownElements = document.getElementsByClassName("countdown");
 
             for (var i = 0; i < countdownElements.length; i++) {
-                var element = countdownElements[i];
-                var targetTime = new Date(now);
-                var targetTimeString = element.getAttribute("data-target-time").split(":");
-                targetTime.setHours(targetTimeString[0], targetTimeString[1], targetTimeString[2], 0); // Set the target time for the current item
+                    var element = countdownElements[i];
+            var targetTime = new Date(now);
+            var targetTimeString = element.getAttribute("data-target-time").split(":");
+            targetTime.setHours(targetTimeString[0], targetTimeString[1], targetTimeString[2], 0); // Set the target time for the current item
 
-                if (now >= targetTime) {
-                    // If it's already past the target time, set the target time to the next day
-                    targetTime.setDate(targetTime.getDate() + 1);
+                    if (now >= targetTime) {
+                // If it's already past the target time, set the target time to the next day
+                targetTime.setDate(targetTime.getDate() + 1);
+                    }
+
+            var timeDifference = targetTime - now; // Calculate the time difference in milliseconds
+            var hoursRemaining = Math.floor(timeDifference / 3600000); // Convert to hours
+            var minutesRemaining = Math.floor((timeDifference % 3600000) / 60000); // Convert to minutes
+            var secondsRemaining = Math.floor((timeDifference % 60000) / 1000); // Convert to seconds
+
+            element.textContent = hoursRemaining + "h " + minutesRemaining + "m " + secondsRemaining + "s";
                 }
-
-                var timeDifference = targetTime - now; // Calculate the time difference in milliseconds
-                var hoursRemaining = Math.floor(timeDifference / 3600000); // Convert to hours
-                var minutesRemaining = Math.floor((timeDifference % 3600000) / 60000); // Convert to minutes
-                var secondsRemaining = Math.floor((timeDifference % 60000) / 1000); // Convert to seconds
-
-                element.textContent = hoursRemaining + "h " + minutesRemaining + "m " + secondsRemaining + "s";
             }
-        }
 
-        // Update the countdown for all items every second (1,000 milliseconds)
-        setInterval(updateCountdowns, 1000);
+            // Update the countdown for all items every second (1,000 milliseconds)
+            setInterval(updateCountdowns, 1000);
 
-        // Initial call to set the initial countdown
-        updateCountdowns();
+            // Initial call to set the initial countdown
+            updateCountdowns();
     </script>
 
-     
+
 }

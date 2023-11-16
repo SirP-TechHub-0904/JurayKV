@@ -109,7 +109,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     create.Email = Input.Email;
                     create.Password = Input.Password;
                     create.PhoneNumber = Input.PhoneNumber;
-
+                    create.Role = "User";
                     CreateUserManagerCommand command = new CreateUserManagerCommand(create);
                     ResponseCreateUserDto Result = await _mediator.Send(command);
                     if(Result.Succeeded == false)

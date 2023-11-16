@@ -31,11 +31,11 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             string userId = _userManager.GetUserId(HttpContext.User);
             GetKvPointListByUserIdQuery command = new GetKvPointListByUserIdQuery(Guid.Parse(userId));
 
-            Ads = await _mediator.Send(command);
+            Points = await _mediator.Send(command);
 
             return Page();
         }
-        public List<KvPointListDto> Ads { get; set; }
+        public List<KvPointListDto> Points { get; set; }
 
 
     }

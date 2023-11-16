@@ -16,14 +16,14 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
+        private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
+        private readonly IUserStore<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IUserStore<IdentityUser> userStore)
+            UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
+            SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager,
+            IUserStore<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -69,7 +69,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<IdentityUser> userPasswordStore)
+            if (_userStore is IUserPasswordStore<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }

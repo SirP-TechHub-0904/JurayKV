@@ -107,6 +107,7 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
                 numbercode = getexistingVcode.Code;
             }
             DataResponseDto responseDto = new DataResponseDto();
+            responseDto.Code = numbercode;
             if (request.NotificationType == NotificationType.SMS)
             {
                 result = await _smsSender.SendAsync(vcode, request.UserId.ToString());

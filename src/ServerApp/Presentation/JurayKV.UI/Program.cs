@@ -25,6 +25,7 @@ using JurayKV.Application;
 using JurayKV.Application.Caching.Handlers;
 using JurayKV.Persistence.Cache.Handlers;
 using JurayKV.UI.Jobs;
+using Serilog;
 
 namespace JurayKV.UI
 {
@@ -33,7 +34,7 @@ namespace JurayKV.UI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+       
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -45,6 +46,7 @@ namespace JurayKV.UI
             builder.Services.AddSendGrid(sendGridApiKey);
             builder.Services.AddRelationalDbContext(connectionString);
             builder.Services.AddHostedService<BackgroundTask>();
+            builder.Services.AddScoped<BackgroundActivity>();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateDepartmentCommand>());
             builder.Services.AddTransient<IEmployeeCacheRepository, EmployeeCacheRepository>();
@@ -72,6 +74,11 @@ namespace JurayKV.UI
             builder.Services.AddTransient<ISmsSender, SmsSender>();
             builder.Services.AddTransient<IVoiceSender, VoiceSender>();
             builder.Services.AddTransient<IStorageService, StorageService>();
+            builder.Services.AddTransient<IBackgroundActivity, BackgroundActivity>();
+            //
+            // Add services to the container.
+            builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 
             builder.Services.AddAuthorization(options =>
             {
@@ -190,7 +197,7 @@ namespace JurayKV.UI
             app.UseCors("AllowKoboView");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSerilogRequestLogging();
             app.UseRouting();
 
             app.UseAuthorization();

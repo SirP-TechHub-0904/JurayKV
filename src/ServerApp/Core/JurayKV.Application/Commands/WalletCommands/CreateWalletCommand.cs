@@ -3,6 +3,7 @@ using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Domain.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using TanvirArjel.ArgumentChecker;
 
 namespace JurayKV.Application.Commands.WalletCommands;
@@ -52,7 +53,10 @@ internal class CreateWalletCommandHandler : IRequestHandler<CreateWalletCommand,
 
         // Remove the cache
         await _walletCacheHandler.RemoveListAsync();
-
+         
+        await _walletCacheHandler.RemoveDetailsByIdAsync(wallet.Id);
+        await _walletCacheHandler.RemoveDetailsByUserIdAsync(wallet.UserId);
+        await _walletCacheHandler.RemoveGetAsync(wallet.Id);
         return wallet.Id;
     }
 }

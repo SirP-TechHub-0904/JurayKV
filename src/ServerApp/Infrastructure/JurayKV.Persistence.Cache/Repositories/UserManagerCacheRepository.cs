@@ -37,14 +37,14 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<UserManagerListDto>> GetListAsync()
         {
-            string cacheKey = UserManagerCacheKeys.ListKey;
-            List<UserManagerListDto> list = await _distributedCache.GetAsync<List<UserManagerListDto>>(cacheKey);
+            //string cacheKey = UserManagerCacheKeys.ListKey;
+            //List<UserManagerListDto> list = await _distributedCache.GetAsync<List<UserManagerListDto>>(cacheKey);
 
-            if (list == null)
-            {
+            //if (list == null)
+            //{
                 var userlist = await _userManager.Users.ToListAsync();
                 // Manual mapping from entities to DTOs
-                list = userlist.Select(entity => new UserManagerListDto
+               var list = userlist.Select(entity => new UserManagerListDto
                 {
                     Id = entity.Id,
                     Date = entity.CreationUTC,
@@ -55,20 +55,21 @@ namespace JurayKV.Persistence.Cache.Repositories
                     LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
                     // Map other properties as needed
                 }).ToList();
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }
 
         public async Task<UserManagerDetailsDto> GetByIdAsync(Guid userManagerId)
         {
-            string cacheKey = UserManagerCacheKeys.GetDetailsKey(userManagerId);
-            UserManagerDetailsDto userManager = await _distributedCache.GetAsync<UserManagerDetailsDto>(cacheKey);
+            //string cacheKey = UserManagerCacheKeys.GetDetailsKey(userManagerId);
+            //UserManagerDetailsDto userManager = await _distributedCache.GetAsync<UserManagerDetailsDto>(cacheKey);
+            UserManagerDetailsDto userManager = new UserManagerDetailsDto();
 
-            if (userManager == null)
-            {
-                var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
+            //if (userManager == null)
+            //{
+            var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
                 if (entity != null)
                 {
                     userManager = new UserManagerDetailsDto
@@ -87,20 +88,20 @@ namespace JurayKV.Persistence.Cache.Repositories
                     };
                 }
 
-                await _distributedCache.SetAsync(cacheKey, userManager);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, userManager);
+            //}
 
             return userManager;
         }
 
         public async Task<UserManagerDetailsDto> GetDetailsByIdAsync(Guid userManagerId)
         {
-            string cacheKey = UserManagerCacheKeys.GetDetailsKey(userManagerId);
-            UserManagerDetailsDto userManager = await _distributedCache.GetAsync<UserManagerDetailsDto>(cacheKey);
-
-            if (userManager == null)
-            {
-                var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
+            //string cacheKey = UserManagerCacheKeys.GetDetailsKey(userManagerId);
+            //UserManagerDetailsDto userManager = await _distributedCache.GetAsync<UserManagerDetailsDto>(cacheKey);
+            UserManagerDetailsDto userManager = new UserManagerDetailsDto();
+            //if (userManager == null)
+            //{
+            var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
                 if (entity != null)
                 {
                     userManager = new UserManagerDetailsDto
@@ -115,8 +116,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     };
                 }
 
-                await _distributedCache.SetAsync(cacheKey, userManager);
-            }
+            //    await _distributedCache.SetAsync(cacheKey, userManager);
+            //}
 
             return userManager;
         }

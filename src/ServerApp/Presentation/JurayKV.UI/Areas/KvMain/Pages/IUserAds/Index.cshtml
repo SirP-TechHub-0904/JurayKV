@@ -22,9 +22,10 @@
                         <th>
                             User
                         </th>
+                        <th>Bucket</th>
+                        <th>Company</th>
                         <th>Advert</th>
                         <th>Video Proof</th>
-                        <th>Status </th>
 
                         <th> </th>
 
@@ -51,6 +52,14 @@
                                 @Html.DisplayFor(modelItem => item.Fullname)
 
                             </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KvAdName)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Company)
+
+                            </td>
 
                             <td>
                                 <a href="@item.ImageUrl" target="_blank">
@@ -70,11 +79,9 @@
                                         Nill <i class="fa fa-times"></i>
                                     </a>
                                 }
-                                 
+
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Active)
-                            </td>
+
 
                             <td>
                                 <div class="btn-group">
@@ -86,7 +93,7 @@
                                         <div class="dropdown-menu" style="">
 
                                             <a class="dropdown-item" asp-page="./Info" asp-route-id="@item.Id">Details</a>
-                                           
+
                                         </div>
                                     </div>
                                 </div>

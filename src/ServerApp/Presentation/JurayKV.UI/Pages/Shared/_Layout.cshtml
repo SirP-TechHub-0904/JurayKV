@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - KoboView - Unlock Earnings by Sharing - KoboView Makes It Happen</title>
-    <link rel="shortcut icon" href="~/img/KV-Icon.jpg" type="image/x-icon" />
+    <link rel="shortcut icon" href="~/img/Koboview-Icon.png" type="image/x-icon" />
 
 
     <meta property="og:site_name" content="@ViewData["Title"]">
@@ -23,25 +23,76 @@
     <!--  Responsive -->
     <link rel="stylesheet" href="~/css/responsive.css" />
     <link href="~/css/site.css" rel="stylesheet" />
+
+    <style>
+        #gen-loading {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            display: flex;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+        }
+        header#gen-header {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            clear: both;
+            background: #ffffff;
+            border: 1px solid #1509bb;
+            z-index: 99;
+        }
+            header#gen-header .gen-bottom-header .navbar .navbar-nav li a {
+                font-weight: 800;
+                color: #1509bb;
+                font-family: var(--title-fonts);
+            }
+            header#gen-header.gen-header-style-1 .gen-bottom-header .navbar .navbar-nav li i {
+                color: #1509bb;
+            }
+
+
+
+       /* .gen-banner-movies.banner-style-2 .item:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            background: -webkit-linear-gradient(left, rgb(34 31 31 / 7%) 0%,rgba(34,31,31,0.4) 100%) background: -webkit-linear-gradient(left, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
+            background: linear-gradient(to right, rgb(255 255 255 / 0%) 0%,rgba(34,31,31,0.4) 100%) filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#221f1f', endColorstr='#66221f1f',GradientType=1 );
+        }*/
+    </style>
+
+
 </head>
 
 <body>
     <div id="gen-loading">
         <div id="gen-loading-center">
 
-            <img src="~/img/KV-Icon.jpg" alt="loading">
+            <img src="~/img/Koboview-Icon.png" alt="loading">
 
         </div>
     </div>
     <!-- Preloader End -->
-    <header id="gen-header" class="gen-header-style-1 gen-has-sticky">
+    <header id="gen-header" class="gen-header-style-1">
         <div class="gen-bottom-header">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <a class="navbar-brand" href="#">
-                                <img class="img-fluid logo" src="~/img/Kobo-view-web-logo-blue.png" alt="KoboView">
+                                <img class="img-fluid logo" src="~/img/Koboview-logo-main.png" alt="KoboView">
                             </a>
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <div id="gen-menu-contain" class="gen-menu-contain">
@@ -127,7 +178,7 @@
                             <div class="widget">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <img src="~/img/Kobo-view-web-logo.png" class="gen-footer-logo" alt="gen-footer-logo">
+                                        <img src="~/img/Koboview-logo-main.png" class="gen-footer-logo" alt="gen-footer-logo">
                                         <p>KoboView: Redefining Digital Advertising with Integrity and Innovation. Join us to experience advertising that respects users, enhances brands, and delivers exceptional results.</p>
                                         <ul class="social-link">
                                             <li><a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a></li>
@@ -142,33 +193,31 @@
                         
                         <div class="col-xl-3 col-md-6">
                             <div class="widget">
-                                <h4 class="footer-title">Company</h4>
+                                <h4 class="footer-title">Quick Links</h4>
                                 <div class="menu-about-container">
                                     <ul class="menu">
+                                        
                                         <li class="menu-item">
-                                            <a href="contact-us.html">Company</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="contact-us.html">
+                                            <a href="">
                                                 Privacy
                                                 Policy
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="contact-us.html">
+                                            <a href="">
                                                 Terms Of
                                                 Use
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="contact-us.html">
+                                            <a href="">
                                                 Help
                                                 Center
                                             </a>
                                         </li>
-                                        <li class="menu-item"><a href="contact-us.html">contact us</a></li>
-                                        <li class="menu-item"><a href="pricing-style-1.html">Subscribe</a></li>
-                                        <li class="menu-item"><a href="contact-us.html">Faq</a></li>
+                                        <li class="menu-item"><a href="contact-us">contact us</a></li>
+                                        <li class="menu-item"><a href="pricing-style-1">Subscribe</a></li>
+                                        <li class="menu-item"><a href="contact-us">Faq</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -178,8 +227,7 @@
                                 <h4 class="footer-title">Downlaod App</h4>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                        <a href="#">
+                                         <a href="#">
                                             <img src="images/asset-35.png" class="gen-playstore-logo" alt="playstore">
                                         </a>
                                         <a href="#">

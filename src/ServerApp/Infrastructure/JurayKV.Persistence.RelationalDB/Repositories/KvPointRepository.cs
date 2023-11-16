@@ -42,12 +42,13 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             return kvPoint;
         }
 
-        public async Task InsertAsync(KvPoint kvPoint)
+        public async Task<Guid> InsertAsync(KvPoint kvPoint)
         {
             kvPoint.ThrowIfNull(nameof(kvPoint));
 
             await _dbContext.AddAsync(kvPoint);
             await _dbContext.SaveChangesAsync();
+            return kvPoint.Id;
         }
 
         public async Task UpdateAsync(KvPoint kvPoint)
@@ -75,19 +76,24 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<List<KvPoint>> LastTenByUserId(int toplistcount, Guid userId)
         {
-            var list = await _dbContext.kvPoints.OrderByDescending(x=>x.CreatedAtUtc).Take(toplistcount).ToListAsync();
+            var list = await _dbContext.kvPoints
+                .Include(x=>x.User)
+                .OrderByDescending(x => x.CreatedAtUtc).Where(x=>x.UserId == userId).Take(toplistcount).ToListAsync();
             return list;
         }
 
         public async Task<KvPoint> GetByIdentityIdByUserAsync(Guid identityKvAd, Guid userId)
         {
-            var data = await _dbContext.kvPoints.FirstOrDefaultAsync(x=> x.IdentityKvAdId == identityKvAd && x.UserId == userId);
+            var data = await _dbContext.kvPoints.FirstOrDefaultAsync(x => x.IdentityKvAdId == identityKvAd && x.UserId == userId);
             return data;
         }
 
         public async Task<List<KvPoint>> LastByUserId(Guid userId)
         {
-            var list = await _dbContext.kvPoints.OrderByDescending(x => x.CreatedAtUtc).ToListAsync();
+            var list = await _dbContext.kvPoints
+                .Include(x => x.User)
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.CreatedAtUtc).ToListAsync();
             return list;
         }
     }

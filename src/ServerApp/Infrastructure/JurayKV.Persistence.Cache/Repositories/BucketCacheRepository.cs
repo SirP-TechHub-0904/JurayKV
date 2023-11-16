@@ -25,50 +25,70 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<BucketListDto>> GetListAsync()
         {
-            string cacheKey = BucketCacheKeys.ListKey;
-            List<BucketListDto> list = await _distributedCache.GetAsync<List<BucketListDto>>(cacheKey);
+            //string cacheKey = BucketCacheKeys.ListKey;
+            //List<BucketListDto> list = await _distributedCache.GetAsync<List<BucketListDto>>(cacheKey);
 
-            if (list == null)
+            //if (list == null)
+            //{
+            //    Expression<Func<Bucket, BucketListDto>> selectExp = d => new BucketListDto
+            //    {
+            //        Id = d.Id,
+            //        Name = d.Name,
+            //        Date = d.CreatedAtUtc,
+            //        AdminActive = d.AdminActive,
+            //        Disable = d.Disable,
+            //        UserActive = d.UserActive,
+            //    };
+
+            //    list = await _repository.GetListAsync(selectExp);
+
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+
+            Expression<Func<Bucket, BucketListDto>> selectExp = d => new BucketListDto
             {
-                Expression<Func<Bucket, BucketListDto>> selectExp = d => new BucketListDto
-                {
-                    Id = d.Id,
-                    Name = d.Name,
-                    Date = d.CreatedAtUtc,
-                    AdminActive = d.AdminActive,
-                    Disable = d.Disable,
-                    UserActive = d.UserActive,
-                };
-
-                list = await _repository.GetListAsync(selectExp);
-
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
-
+                Id = d.Id,
+                Name = d.Name,
+                Date = d.CreatedAtUtc,
+                AdminActive = d.AdminActive,
+                Disable = d.Disable,
+                UserActive = d.UserActive,
+            };
+            var list = await _repository.GetListAsync(selectExp);
             return list;
         }
 
         public async Task<BucketDetailsDto> GetByIdAsync(Guid bucketId)
         {
-            string cacheKey = BucketCacheKeys.GetKey(bucketId);
-            BucketDetailsDto bucket = await _distributedCache.GetAsync<BucketDetailsDto>(cacheKey);
-            if (bucket == null)
+            //string cacheKey = BucketCacheKeys.GetKey(bucketId);
+            //BucketDetailsDto bucket = await _distributedCache.GetAsync<BucketDetailsDto>(cacheKey);
+            //if (bucket == null)
+            //{
+            //    Expression<Func<Bucket, BucketDetailsDto>> selectExp = d => new BucketDetailsDto
+            //    {
+            //        Id = d.Id,
+            //        Name = d.Name,
+            //        Date = d.CreatedAtUtc,
+            //        AdminActive = d.AdminActive,
+            //        Disable = d.Disable,
+            //        UserActive = d.UserActive
+            //    };
+
+            //    bucket = await _repository.GetByIdAsync(bucketId, selectExp);
+
+            //    await _distributedCache.SetAsync(cacheKey, bucket);
+            //}
+            Expression<Func<Bucket, BucketDetailsDto>> selectExp = d => new BucketDetailsDto
             {
-                Expression<Func<Bucket, BucketDetailsDto>> selectExp = d => new BucketDetailsDto
-                {
-                    Id = d.Id,
-                    Name = d.Name,
-                    Date = d.CreatedAtUtc,
-                    AdminActive = d.AdminActive,
-                    Disable = d.Disable,
-                    UserActive = d.UserActive
-                };
+                Id = d.Id,
+                Name = d.Name,
+                Date = d.CreatedAtUtc,
+                AdminActive = d.AdminActive,
+                Disable = d.Disable,
+                UserActive = d.UserActive
+            };
 
-                bucket = await _repository.GetByIdAsync(bucketId, selectExp);
-
-                await _distributedCache.SetAsync(cacheKey, bucket);
-            }
-
+           var bucket = await _repository.GetByIdAsync(bucketId, selectExp);
             return bucket;
              
         }

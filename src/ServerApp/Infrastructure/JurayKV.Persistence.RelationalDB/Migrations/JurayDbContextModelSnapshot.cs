@@ -60,7 +60,12 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Companies");
                 });
@@ -768,6 +773,17 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.CompanyAggregate.Company", b =>
+                {
+                    b.HasOne("JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("JurayKV.Domain.Aggregates.EmployeeAggregate.Employee", b =>

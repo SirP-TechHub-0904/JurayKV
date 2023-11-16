@@ -58,5 +58,7 @@ internal class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand>
         await _walletCacheHandler.RemoveListAsync();
         await _walletCacheHandler.RemoveDetailsByUserIdAsync(walletToBeUpdated.UserId);
         await _walletCacheHandler.RemoveDetailsByIdAsync(walletToBeUpdated.Id);
+         
+        await _walletCacheHandler.RemoveGetAsync(walletToBeUpdated.Id);
     }
 }
