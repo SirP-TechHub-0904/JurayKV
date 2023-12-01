@@ -1,7 +1,9 @@
 ﻿using JurayKV.Domain.Aggregates.DepartmentAggregate;
+using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Domain.Primitives;
 using JurayKV.Domain.ValueObjects;
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 
 namespace JurayKV.Domain.Aggregates.BucketAggregate
@@ -30,7 +32,6 @@ namespace JurayKV.Domain.Aggregates.BucketAggregate
 
         public bool UserActive { get; set; }
 
-        public DateTime CreatedAtUtc { get; set; }
- 
+        public DateTime CreatedAtUtc { get; set; } 
     }
 }

@@ -24,7 +24,6 @@
                     <div class="form-group">
                         <label for="BucketId">Select Company</label>
                         <select asp-for="Command.CompanyId" class="form-control" id="myDropdown" asp-items="Model.ListCompanies"></select>
-
                     </div>
                     <div class="form-group">
                         <label asp-for="Command.Status" class="control-label"></label>
@@ -32,9 +31,18 @@
                         <span asp-validation-for="Command.Status" class="text-danger"></span>
                     </div>
 
+                    @if (Model.Command.ImageUrl != null)
+                    {
+                        <a href="@Model.Command.ImageUrl" target="_blank">
+                            <img src="@Model.Command.ImageUrl" class="img-fluid" style="height:100px" />
+                        </a>
+                    }
+
                     <div class="form-group">
-                        <label asp-for="imageFile" class="control-label">Image</label>
-                        <input asp-for="imageFile" type="file" class="form-control" />
+                        <label asp-for="Command.ImageId" class="control-label"></label>
+                        <select asp-for="Command.ImageId" class="form-control" id="myDropdownw" asp-items="Model.ListImages">
+                            <option value="">Choose Image</option>
+                        </select>
                     </div>
 
                     <div class="form-group">

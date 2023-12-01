@@ -198,6 +198,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<DateTime>("CreationUTC")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("DisableEmailNotification")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -429,16 +432,10 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.ToTable("IdentityKvAds");
                 });
 
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.KvAdAggregate.KvAd", b =>
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.ImageAggregate.ImageFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BucketId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -449,6 +446,41 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ShowInDropdown")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImageFiles");
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.KvAdAggregate.KvAd", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("BucketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DateId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ImageFileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -461,6 +493,8 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.HasIndex("BucketId");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("ImageFileId");
 
                     b.HasIndex("UserId");
 
@@ -852,6 +886,10 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JurayKV.Domain.Aggregates.ImageAggregate.ImageFile", "ImageFile")
+                        .WithMany("KvAds")
+                        .HasForeignKey("ImageFileId");
+
                     b.HasOne("JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -861,6 +899,8 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Navigation("Bucket");
 
                     b.Navigation("Company");
+
+                    b.Navigation("ImageFile");
 
                     b.Navigation("User");
                 });
@@ -974,6 +1014,11 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.ImageAggregate.ImageFile", b =>
+                {
+                    b.Navigation("KvAds");
                 });
 #pragma warning restore 612, 618
         }

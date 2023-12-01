@@ -7,6 +7,7 @@ using JurayKV.Domain.Aggregates.ExchangeRateAggregate;
 using JurayKV.Domain.Aggregates.IdentityActivityAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
+using JurayKV.Domain.Aggregates.ImageAggregate;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
@@ -97,6 +98,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWalletRepository, WalletRepository>();
         services.AddScoped<IDashboardRepository, DashboardRepository>();
         services.AddScoped<ISliderRepository, SliderRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
         services.AddGenericRepository<JurayDbContext>();
         services.AddQueryRepository<JurayDbContext>();
     }

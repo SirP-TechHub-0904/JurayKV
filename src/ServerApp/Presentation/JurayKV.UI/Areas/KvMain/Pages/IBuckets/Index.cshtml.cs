@@ -1,6 +1,8 @@
 using JurayKV.Application;
+using JurayKV.Application.Commands.BucketCommands;
 using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Application.Queries.IdentityQueries.PermissionQueries;
+using JurayKV.Application.Queries.KvAdQueries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +27,22 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
             Buckets = await _mediator.Send(command);
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+
+            try
+            {
+                ClearActiveAdsQuery xcommand = new ClearActiveAdsQuery();
+              await _mediator.Send(xcommand);
+                TempData["success"] = "Added Successfully";
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "error. adding new bucket";
+            }
+            return RedirectToPage("./Index");
         }
     }
 }

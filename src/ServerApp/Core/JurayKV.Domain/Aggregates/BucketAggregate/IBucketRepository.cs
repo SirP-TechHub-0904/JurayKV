@@ -18,5 +18,7 @@ namespace JurayKV.Domain.Aggregates.BucketAggregate
         Task UpdateAsync(Bucket bucket);
 
         Task DeleteAsync(Bucket bucket);
+
+        Task<List<Bucket>> GetBucketAndAdsAsync();
     }
 }

@@ -27,7 +27,7 @@
 
         <div class="col-md-4"></div>
         <div class="col-md-4 service-simple" style="margin-top: 15px; padding: 10px;">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" id="form">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
                 <div class="form-group">
@@ -60,11 +60,36 @@
 
 
 </div>
+<style>
+    #loadingModal {
+        background: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for darkness */
+    }
+
+        /*#loadingModal .modal-content {
+            background: none;*/ /* Remove the default white background */
+        /*}*/
+</style>
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Please wait, the upload is in progress. Do not close or refresh the page.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
 
-
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                // Show the loading modal
+                $('#loadingModal').modal('show');
+            });
+        });
+    </script>
     <script>
         jQuery(function ($) {
             $(document).ajaxSend(function () {
@@ -84,38 +109,38 @@
             //    });
             //});
         });
-        </script>
-        <script>
-            // Function to update countdown for all items with the "countdown" class
-            function updateCountdowns() {
-                var now = new Date();
+    </script>
+    <script>
+        // Function to update countdown for all items with the "countdown" class
+        function updateCountdowns() {
+            var now = new Date();
             var countdownElements = document.getElementsByClassName("countdown");
 
             for (var i = 0; i < countdownElements.length; i++) {
-                    var element = countdownElements[i];
-            var targetTime = new Date(now);
-            var targetTimeString = element.getAttribute("data-target-time").split(":");
-            targetTime.setHours(targetTimeString[0], targetTimeString[1], targetTimeString[2], 0); // Set the target time for the current item
+                var element = countdownElements[i];
+                var targetTime = new Date(now);
+                var targetTimeString = element.getAttribute("data-target-time").split(":");
+                targetTime.setHours(targetTimeString[0], targetTimeString[1], targetTimeString[2], 0); // Set the target time for the current item
 
-                    if (now >= targetTime) {
-                // If it's already past the target time, set the target time to the next day
-                targetTime.setDate(targetTime.getDate() + 1);
-                    }
-
-            var timeDifference = targetTime - now; // Calculate the time difference in milliseconds
-            var hoursRemaining = Math.floor(timeDifference / 3600000); // Convert to hours
-            var minutesRemaining = Math.floor((timeDifference % 3600000) / 60000); // Convert to minutes
-            var secondsRemaining = Math.floor((timeDifference % 60000) / 1000); // Convert to seconds
-
-            element.textContent = hoursRemaining + "h " + minutesRemaining + "m " + secondsRemaining + "s";
+                if (now >= targetTime) {
+                    // If it's already past the target time, set the target time to the next day
+                    targetTime.setDate(targetTime.getDate() + 1);
                 }
+
+                var timeDifference = targetTime - now; // Calculate the time difference in milliseconds
+                var hoursRemaining = Math.floor(timeDifference / 3600000); // Convert to hours
+                var minutesRemaining = Math.floor((timeDifference % 3600000) / 60000); // Convert to minutes
+                var secondsRemaining = Math.floor((timeDifference % 60000) / 1000); // Convert to seconds
+
+                element.textContent = hoursRemaining + "h " + minutesRemaining + "m " + secondsRemaining + "s";
             }
+        }
 
-            // Update the countdown for all items every second (1,000 milliseconds)
-            setInterval(updateCountdowns, 1000);
+        // Update the countdown for all items every second (1,000 milliseconds)
+        setInterval(updateCountdowns, 1000);
 
-            // Initial call to set the initial countdown
-            updateCountdowns();
+        // Initial call to set the initial countdown
+        updateCountdowns();
     </script>
 
 

@@ -18,5 +18,7 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         public DateTime CreationUTC { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-     }
+        public bool DisableEmailNotification { get; set; }
+
+    }
 }

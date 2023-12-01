@@ -83,6 +83,11 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             _dbContext.Remove(bucket);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<Bucket>> GetBucketAndAdsAsync()
+        {
+            return null;
+        }
     }
 
 }

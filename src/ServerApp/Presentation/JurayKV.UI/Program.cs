@@ -26,6 +26,9 @@ using JurayKV.Application.Caching.Handlers;
 using JurayKV.Persistence.Cache.Handlers;
 using JurayKV.UI.Jobs;
 using Serilog;
+using Microsoft.Extensions.Options;
+using System.Configuration;
+using Rave;
 
 namespace JurayKV.UI
 {
@@ -66,7 +69,8 @@ namespace JurayKV.UI
             builder.Services.AddScoped<IDashboardCacheRepository, DashboardCacheRepository>();
             builder.Services.AddScoped<IUserManagerCacheRepository, UserManagerCacheRepository>();
             builder.Services.AddScoped<ISliderCacheRepository, SliderCacheRepository>();
- 
+            builder.Services.AddScoped<IImageCacheRepository, ImageCacheRepository>();
+
             builder.Services.AddTransient<IExceptionLogger, ExceptionLogger>();
             builder.Services.AddTransient<ViewRenderService>();
             //builder.Services.AddTransient<SendGridConfig>();
@@ -76,6 +80,14 @@ namespace JurayKV.UI
             builder.Services.AddTransient<IStorageService, StorageService>();
             builder.Services.AddTransient<IBackgroundActivity, BackgroundActivity>();
             //
+            //builder.Services.Configure<RaveConfig>(Configuration.GetSection("RaveConfig"));
+            // Access the configuration using builder.Configuration
+            var raveConfigSection = builder.Configuration.GetSection("RaveConfig");
+            builder.Services.Configure<RaveConfig>(raveConfigSection);
+
+            // Add RaveConfig as a singleton
+            builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<RaveConfig>>());
+
             // Add services to the container.
             builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 

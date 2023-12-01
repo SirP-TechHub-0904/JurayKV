@@ -21,6 +21,7 @@ namespace JurayKV.Application.Queries.KvAdQueries
         public DataStatus Status { get; set; }
 
         public bool Exist { get; set; }
-
+        public bool Active {  get; set; }
+        public bool MyActiveAdvert {  get; set; }
     }
 }

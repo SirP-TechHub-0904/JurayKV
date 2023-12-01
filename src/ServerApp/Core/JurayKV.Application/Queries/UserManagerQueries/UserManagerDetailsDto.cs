@@ -15,5 +15,7 @@
         public DateTime? LastLoggedInAtUtc { get; set; }
 
         public decimal WalletBalance { get;set; }
+        public bool DisableEmailNotification { get; set; }
+
     }
 }

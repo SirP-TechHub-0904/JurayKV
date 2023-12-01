@@ -48,6 +48,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.SurName = UpdateUserManager.Surname;
                 update.FirstName = UpdateUserManager.Firstname;
                     update.LastName = UpdateUserManager.Lastname;
+                update.DisableEmailNotification = UpdateUserManager.DisableEmailNotification;
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfully";

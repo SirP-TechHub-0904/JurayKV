@@ -39,12 +39,9 @@ namespace JurayKV.Application.Queries.DashboardQueries
                 data.TotalUserCount = await _dashboardCacheRepository.TotalUsersCount();
                 data.TotalUser = "Total Users";
 
-
-                data.RunningAdsCount = await _dashboardCacheRepository.RunningAdsCount();
-                data.RunningAds = "Running Ads";
-
+                 
                 data.ActiveAdsCount = await _dashboardCacheRepository.ActiveAdsCount();
-                data.ActiveAds = "Active Ads";
+                data.ActiveAds = "Running Ads Today";
 
                 data.ActiveUserCount = await _dashboardCacheRepository.TotalActiveUsersCount();
                 data.ActiveUser = "Active User";

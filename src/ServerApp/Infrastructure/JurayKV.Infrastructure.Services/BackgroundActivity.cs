@@ -43,39 +43,38 @@ namespace JurayKV.Infrastructure.Services
             //.Where(x => x.CreatedAtUtc < nextDay6AM)
             //.Where(x => x.Active == true);
 
-            var user = await _userManager.Users.ToListAsync();
+            var user = await _userManager.Users.Where(x=>x.DisableEmailNotification == true).ToListAsync();
 
             string msg = "Kindly Upload the proof of your status before 6am tomorrow, or upload it now <br> if you are yet to upload status. Kindly do so before the todays advert end by 6am.";
             foreach ( var item in user )
             {
-                await _email.SendAsync(msg, item.Id.ToString(), "Advert Notification");
+                await _email.SendAsync(msg, item.Id.ToString(), "Upload Status Proof before 6am");
             }
         }
 
         public async Task SendEmailToMorningReminderAsync()
         {
              
-            //var data = _dbContext.IdentityKvAds.Include(x => x.KvAd)
-            //.Where(x => x.CreatedAtUtc < nextDay6AM)
-            //.Where(x => x.Active == true);
-
-            var user = await _userManager.Users.ToListAsync();
+            
+            var user = await _userManager.Users.Where(x => x.DisableEmailNotification == true).ToListAsync();
 
             string msg = "Kindly Upload the proof of your status before 6am tomorrow, or upload it now. <br> Be ready to pick the new advert for today";
             foreach (var item in user)
             {
-                await _email.SendAsync(msg, item.Id.ToString(), "Advert Notification");
+                await _email.SendAsync(msg, item.Id.ToString(), "Upload Status Proof before 6am");
             }
         }
 
         public async Task UpdateAllUserAdsAfterSix()
         {
+            DateTime cutoffTime = DateTime.Now.Date.AddHours(6);
             var data = await _dbContext.IdentityKvAds.AsNoTracking()
-                //.Where(x => x.CreatedAtUtc > DateTime.Today.AddHours(6))
-                .Where(x => x.Active == true).ToListAsync();
+                .Where(msg => msg.CreatedAtUtc < cutoffTime && msg.Active == true) 
+                .Where(x => x.Active == true).Take(50).ToListAsync();
             foreach (var item in data)
             {
                 item.Active = false;
+                item.AdsStatus = Domain.Primitives.Enum.AdsStatus.Void;
                 _dbContext.Attach(item).State = EntityState.Modified;
             }
             await _dbContext.SaveChangesAsync();

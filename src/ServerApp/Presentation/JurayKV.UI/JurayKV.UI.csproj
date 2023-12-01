@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\JurayKV.Application\JurayKV.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.PaymentGate\JurayKV.Infrastructure.PaymentGate.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.Services\JurayKV.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Persistence.Cache\JurayKV.Persistence.Cache.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Persistence.RelationalDB\JurayKV.Persistence.RelationalDB.csproj" />

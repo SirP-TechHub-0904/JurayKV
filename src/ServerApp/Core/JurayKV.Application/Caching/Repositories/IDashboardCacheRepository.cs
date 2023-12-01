@@ -8,7 +8,7 @@ namespace JurayKV.Application.Caching.Repositories
     public interface IDashboardCacheRepository
     {
 
-        Task<int> RunningAdsCount();
+        //Task<int> RunningAdsCount();
         Task<int> ActiveAdsCount();
         Task<int> TotalUsersPostTodayCount();
         Task<int> TotalUsersCount();

@@ -18,7 +18,10 @@ namespace JurayKV.Application.Queries.KvAdQueries
         public string CompanyName { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public string ImageUrl { get; set; }
+        public Guid? ImageId { get; set; }
         public DataStatus Status { get; set; }
-
+        public bool Active { get; set; }
+        public string AdvertImage {  get; set; }
+        public bool PostedByUser { get; set; }
     }
 }

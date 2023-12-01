@@ -2,6 +2,7 @@ using JurayKV.Application;
 using JurayKV.Application.Commands.KvAdCommands;
 using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Application.Queries.CompanyQueries;
+using JurayKV.Application.Queries.ImageQueries;
 using JurayKV.Application.Queries.KvAdQueries;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using MediatR;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IAds
 {
@@ -28,20 +30,23 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
         public CommandDto Command { get; set; }
         public class CommandDto
         {
-            public IFormFile File { get; set; }
+            public Guid ImageId { get; set; }
             public Guid UserId { get; set; }
             public Guid BucketId { get; set; }
             public Guid CompanyId { get; set; }
+            public DateTime Date { get; set; }
+            public DataStatus Status { get; set; }
         } 
 
         public List<SelectListItem> ListBuckets { get; set; }
         public List<SelectListItem> ListCompanies { get; set; }
+        public List<SelectListItem> ListImages { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             GetBucketDropdownListQuery commandbucket = new GetBucketDropdownListQuery();
             List<BucketDropdownListDto> ListBucket = await _mediator.Send(commandbucket);
             // Map CompanyDropdownListDto to SelectListItem
-            ListBuckets = ListBucket.Select(bucket =>
+            ListBuckets = ListBucket.Where(x=>x.Disable == false).Select(bucket =>
                 new SelectListItem
                 {
                     Value = bucket.Id.ToString(), // Assuming Id is an integer
@@ -59,7 +64,18 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                 }).ToList();
 
             //
-            
+            //
+            GetImageDropDownListQuery commandImages = new GetImageDropDownListQuery();
+            List<ImageDto> ImagesList = await _mediator.Send(commandImages);
+            // Map CompanyDropdownListDto to SelectListItem
+            ListImages = ImagesList.Select(img =>
+                new SelectListItem
+                {
+                    Value = img.Id.ToString(), // Assuming Id is an integer
+                    Text = img.Name
+                }).ToList();
+
+            //
             return Page();
         }
 
@@ -73,9 +89,17 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                 if (userIdClaim != null)
                 {
                     string userId = userIdClaim.Value;
-                    CreateKvAdCommand command = new CreateKvAdCommand(Command.File, Guid.Parse(userId), Command.BucketId, Command.CompanyId);
+                    CreateKvAdCommand command = new CreateKvAdCommand(Command.ImageId, Guid.Parse(userId), Command.BucketId, Command.CompanyId, Command.Date, Command.Status);
                     Guid Result = await _mediator.Send(command);
+                    if(Result == Guid.Empty)
+                    {
+                        TempData["error"] = "Advert with Date Already Found. Kindly Update the Existing one";
+                        return RedirectToPage("./Index");
+
+                    }
                     TempData["success"] = "Added Successfully";
+                    return RedirectToPage("./Index");
+
                 }
                 else
                 {

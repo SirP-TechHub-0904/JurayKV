@@ -9,6 +9,7 @@ namespace JurayKV.Application.Caching.Repositories
     public interface IBucketCacheRepository
     {
         Task<List<BucketListDto>> GetListAsync();
+        Task<List<BucketListDto>> GetListAndAdsAsync();
         Task<List<BucketDropdownListDto>> GetDropdownListAsync();
 
         Task<BucketDetailsDto> GetByIdAsync(Guid modelId);

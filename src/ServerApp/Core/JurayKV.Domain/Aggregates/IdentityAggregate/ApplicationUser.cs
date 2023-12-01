@@ -19,4 +19,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public string Xvalue { get; set; }
     public string XtxtGuid { get; set; }
     public DateTime XvalueDate { get; set; }
+
+    public bool DisableEmailNotification { get; set; }
 }

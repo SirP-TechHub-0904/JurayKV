@@ -17,16 +17,16 @@
                 <thead>
                     <tr>
                         <th>S/N</th>
+                        <th>Date</th>
                         <th>
                             Bucket
                         </th>
                         <th>
                             Company
                         </th>
-                        <th>Date</th>
+
                         <th>Image</th>
                         <th>Status </th>
-
                         <th> </th>
 
                     </tr>
@@ -35,7 +35,7 @@
                     int sn = 0;
                 }
                 <tbody>
-                    @foreach (var item in Model.KvAds)
+                    @foreach (var item in Model.KvAds.OrderByDescending(x=>x.CreatedAtUtc))
                     {
                         <tr>
                             <td>
@@ -43,6 +43,9 @@
                                     sn++;
                                 }
                                 @sn
+                            </td>
+                            <td>
+                                @item.CreatedAtUtc.ToString("dd/MM/yyyy")
                             </td>
                             <td>
                                 <a asp-page="./Details" asp-route-id="@item.Id">
@@ -54,18 +57,17 @@
                                     @Html.DisplayFor(modelItem => item.CompanyName)
                                 </a>
                             </td>
-                            <td>
-                                @item.CreatedAtUtc.ToString("dd/MM/yyyy")
-                            </td>
+
 
                             <td>
                                 <a href="@item.ImageUrl" target="_blank">
                                     <img src="@item.ImageUrl" class="img-fluid" style="height:100px" />
-                                </a> 
+                                </a>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Status)
                             </td>
+
 
                             <td>
                                 <div class="btn-group">

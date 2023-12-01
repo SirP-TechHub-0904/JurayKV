@@ -255,9 +255,11 @@ namespace JurayKV.Domain.Primitives
 
             [Description("Suspended")]
             Suspended = 3,
-            [Description("cancelled")]
-            cancelled = 2,
-            
+            [Description("Cancelled")]
+            Cancelled = 2,
+            [Description("Void")]
+            Void = 4,
+
 
         }
 

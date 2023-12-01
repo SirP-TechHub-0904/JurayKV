@@ -6,6 +6,7 @@ using JurayKV.Domain.Aggregates.ExchangeRateAggregate;
 using JurayKV.Domain.Aggregates.IdentityActivityAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
+using JurayKV.Domain.Aggregates.ImageAggregate;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
@@ -44,6 +45,7 @@ public sealed class JurayDbContext : IdentityDbContext<ApplicationUser, Applicat
     public DbSet<UserData> UserDatas { get;set; }
     public DbSet<UserOldPassword> UserOldPassword { get;set; }
     public DbSet<Slider> Sliders { get;set; }
+    public DbSet<ImageFile> ImageFiles { get;set; }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ////ChangeTracker.ApplyValueGenerationOnUpdate();

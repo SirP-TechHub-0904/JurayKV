@@ -1,14 +1,14 @@
 ﻿@page
 @model JurayKV.UI.Areas.User.Pages.Account.BucketModel
 @{
-//Guid idd = Guid.NewGuid();
-//ViewData["datavalidate"] = idd.ToString();
+    //Guid idd = Guid.NewGuid();
+    //ViewData["datavalidate"] = idd.ToString();
 }
 <div class="row">
     <div class="col-md-12">
-        <h3>ADVERT BUCKET FOR YOUR STATUS</h3>
-        <p>Kindl Make Sure You Pick Your Advert From Any of the Bucket Below</p>
-
+        <h3 style="text-align:center;">ADVERT BUCKET FOR YOUR STATUS</h3>
+        <p style="text-align:center;">Kindl Make Sure You Pick Your Advert From Any of the Bucket Below</p>
+        @TempData["error"]
         @if (TempData["error"] != null)
         {
             <div class="alert alert-danger">
@@ -21,28 +21,35 @@
             </div>
         }
     </div>
-    @foreach (var item in Model.Bucket)
+    @foreach (var item in Model.KvAds)
     {
-        
-            <div class="col-sm-4">
-                <div class="service-simple">
-                    <form method="get" asp-page="Ads">
 
-                        <input type="hidden" name="kvId" value="@item.Id" />
+        <div class="col-sm-4">
+            <div class="service-simple">
 
 
-                        <div class="position-relative">
-                            <input type="image" src="~/img/photo3.jpg" alt="Submit" class="img-fluid">
-                             <div class="ribbon-wrapper ribbon-xl">
-                                <div class="ribbon bg-warning text-lg">
-                                    @item.Name
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                   
+                <h4 style="text-align:center;">@item.BucketName</h4>
+                <div class="position-relative">
+                    <input type="image" src="@item.ImageUrl" alt="Submit" class="img-fluid">
+
                 </div>
+                <form method="post">
+                    @if (item.MyActiveAdvert == false)
+                    {
+                        <input type="hidden" name="kId" value="@item.Id" />
+                        <input type="hidden" asp-for="Date" value="@item.CreatedAtUtc" />
+
+
+                        <input type="submit" value="Post These Advert" class="btn btn-primary btn-block" style="border-radius:0;" />
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-success btn-block" style="border-radius:0;" disabled>Already a Running ADs</button>
+                    }
+                </form>
+
             </div>
-        
+        </div>
+
     }
 </div>

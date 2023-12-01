@@ -42,7 +42,7 @@
                                         @Html.DisplayFor(model => item.Status)
                                     </td>
                                     <td>
-                                        <a class="btn btn-warning">
+                                        <a class="btn btn-warning" asp-page="./Details" asp-route-id="@item.IdentityKvAdId">
  Details
                                         </a>
                                     </td>

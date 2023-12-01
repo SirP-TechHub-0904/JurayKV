@@ -41,6 +41,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.Email = request.Data.Email;
             user.PhoneNumber = request.Data.PhoneNumber;
             user.IsDisabled = request.Data.IsDisabled;
+            user.DisableEmailNotification = request.Data.DisableEmailNotification;
             await _userManager.UpdateAsync(user);
 
             //remove catch

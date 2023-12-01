@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing.Printing;
 
 namespace JurayKV.UI.Areas.User.Pages.Account
 {
@@ -49,7 +50,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             // Your existing logic when kvId is present
             if (kvId != Guid.Empty)
             {
-                GetKvAdListByBucketIdQuery command = new GetKvAdListByBucketIdQuery(kvId);
+                GetActiveAdsQuery command = new GetActiveAdsQuery(kvId);
 
                 Ads = await _mediator.Send(command);
 
@@ -74,16 +75,18 @@ namespace JurayKV.UI.Areas.User.Pages.Account
                 return RedirectToPage("./Bucket");
             }
         }
-        public List<KvAdListDto> Ads { get; set; }
+        public KvAdDetailsDto Ads { get; set; }
         public BucketDetailsDto Bucket { get; set; }
         [BindProperty]
         public Guid kId { get; set; }
+        [BindProperty]
+        public DateTime Date {  get; set; }
         //public Guid kId { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            CreateIdentityKvAdCommand command = new CreateIdentityKvAdCommand(null, Guid.Parse(userId), kId);
+            CreateIdentityKvAdCommand command = new CreateIdentityKvAdCommand(null, Guid.Parse(userId), kId, Date);
 
             var outcome = await _mediator.Send(command);
             if (outcome != Guid.Empty)

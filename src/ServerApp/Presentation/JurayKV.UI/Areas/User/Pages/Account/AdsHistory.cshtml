@@ -21,7 +21,6 @@
                                 <th>S/N</th>
                                 <th>Date</th>
                                 <th>ADs</th>
-                                <th>Point</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -34,21 +33,22 @@
                                         sn++;
                                     }
                                     <td>@sn</td>
-                                    <td><a href="">@item.CreatedAtUtc.ToString("dd/MM/yyyy hh:mm tt")</a></td>
+                                    <td>
+                                        <a href="">@item.CreatedAtUtc.ToString("dd/MM/yyyy")</a>
+                                        <br style="margin-top: 0; padding-top: 0;" />
+                                        <a href="" style="font-size:10px;">@item.CreatedAtUtc.ToString("hh:mm tt")</a>
+                                    </td>
                                     <td>
                                         <a href="@item.ImageUrl" target="_blank">
                                             <img src="@item.ImageUrl" class="img-fluid" style="max-height:50px;" />
-
                                         </a>
                                     </td>
-                                    <td>
-                                        @item.Points
 
-                                    </td>
                                     <td>
                                         @if (item.AdsStatus == JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
                                         {
                                             <a class="btn btn-success">
+                                                <span class="" style="margin-right:2px;">(@item.Points)</span>
                                                 @Html.DisplayFor(model => item.AdsStatus)
                                                 @if (!String.IsNullOrEmpty(item.VideoUrl))
                                                 {

@@ -1,5 +1,6 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using MediatR;
+using System.Linq;
 using TanvirArjel.ArgumentChecker;
 
 namespace JurayKV.Application.Queries.KvAdQueries;
@@ -20,7 +21,7 @@ public sealed class GetKvAdListQuery : IRequest<List<KvAdListDto>>
             request.ThrowIfNull(nameof(request));
 
             List<KvAdListDto> kvAdDtos = await _kvAdCacheRepository.GetListAsync();
-            return kvAdDtos;
+            return kvAdDtos.OrderByDescending(x=>x.CreatedAtUtc).ToList();
         }
     }
 }

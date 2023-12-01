@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityActivityCacheHandler, IdentityActivityCacheHandler>();
         services.AddScoped<IIdentityKvAdCacheHandler, IdentityKvAdCacheHandler>();
         services.AddScoped<IUserManagerCacheHandler, UserManagerCacheHandler>();
+        services.AddScoped<IImageCacheHandler, ImageCacheHandler>();
 
         services.AddScoped<IKvAdCacheHandler, KvAdCacheHandler>();
         services.AddScoped<IKvPointCacheHandler, KvPointCacheHandler>();

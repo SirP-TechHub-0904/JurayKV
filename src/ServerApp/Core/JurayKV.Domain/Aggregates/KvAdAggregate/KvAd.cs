@@ -1,6 +1,7 @@
 ﻿using JurayKV.Domain.Aggregates.BucketAggregate;
 using JurayKV.Domain.Aggregates.CompanyAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.Aggregates.ImageAggregate;
 using JurayKV.Domain.Primitives;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,10 @@ namespace JurayKV.Domain.Aggregates.KvAdAggregate
         public Guid CompanyId { get; set; }
         public Company Company { get; set; }
         public DateTime CreatedAtUtc { get; set; }
-        public string ImageUrl { get; set; }
-        public string ImageKey { get; set; }
+        public Guid? ImageFileId { get; set; }
+        public ImageFile ImageFile { get; set; }
         public DataStatus Status { get;set; }
+        public bool Active { get; set; }
+        public string DateId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Domain.Aggregates.BucketAggregate;
+using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Persistence.Cache.Keys;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -16,11 +17,12 @@ namespace JurayKV.Persistence.Cache.Repositories
     {
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
-
-        public BucketCacheRepository(IDistributedCache distributedCache, IQueryRepository repository)
+        private readonly IBucketRepository _bucketRepository;
+        public BucketCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IBucketRepository bucketRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
+            _bucketRepository = bucketRepository;
         }
 
         public async Task<List<BucketListDto>> GetListAsync()
@@ -125,11 +127,13 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             if (list == null)
             {
+                Expression<Func<Bucket, bool>> condition = d => !d.Disable; 
+
                 Expression<Func<Bucket, BucketDropdownListDto>> selectExp = d => new BucketDropdownListDto
                 {
                     Id = d.Id,
                     Name = d.Name,
-                    
+                    Disable = d.Disable
                 };
 
                 list = await _repository.GetListAsync(selectExp);
@@ -138,6 +142,11 @@ namespace JurayKV.Persistence.Cache.Repositories
             }
 
             return list;
+        }
+
+        public async Task<List<BucketListDto>> GetListAndAdsAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -8,23 +8,28 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using TanvirArjel.ArgumentChecker;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.Commands.KvAdCommands;
 
 public sealed class CreateKvAdCommand : IRequest<Guid>
 {
-    public CreateKvAdCommand(IFormFile file, Guid userId, Guid bucketId, Guid companyId)
+    public CreateKvAdCommand(Guid imageId, Guid userId, Guid bucketId, Guid companyId, DateTime date, DataStatus status)
     {
-        ImageFile = file;
+        ImageId = imageId;
         UserId = userId;
         BucketId = bucketId;
         CompanyId = companyId;
+        Date = date;
+        Status = status;
     }
 
-    public IFormFile ImageFile { get; set; }
+    public Guid ImageId { get; set; }
     public Guid UserId { get; private set; }
     public Guid BucketId { get; private set; }
     public Guid CompanyId { get; private set; }
+    public DateTime Date { get; private set; }
+    public DataStatus Status { get; private set; }
 }
 
 internal class CreateKvAdCommandHandler : IRequestHandler<CreateKvAdCommand, Guid>
@@ -45,33 +50,22 @@ internal class CreateKvAdCommandHandler : IRequestHandler<CreateKvAdCommand, Gui
     public async Task<Guid> Handle(CreateKvAdCommand request, CancellationToken cancellationToken)
     {
         _ = request.ThrowIfNull(nameof(request));
-        //run the video upload;
-        var imageurl = "url";
-        var imagekey = "key";
-        try
-        {
-          
-            var xresult = await _storage.MainUploadFileReturnUrlAsync("", request.ImageFile);
-            // 
-            if (xresult.Message.Contains("200"))
-            {
-                imageurl  = xresult.Url;
-                imagekey = xresult.Key;
-            }
-             
-        }
-        catch (Exception c)
-        {
-
-        }
+       
      
-       KvAd create = new KvAd(Guid.NewGuid());
+        var check = await _kvAdRepository.ExistsAsync(ad => ad.DateId == request.Date.ToString("ddMMyyyy") && ad.BucketId == request.BucketId);
+        if(check == true)
+        {
+            return Guid.Empty;
+        }
+        KvAd create = new KvAd(Guid.NewGuid());
         create.BucketId = request.BucketId;
         create.UserId = request.UserId;
         create.CompanyId = request.CompanyId;
-        create.ImageUrl = imageurl;
-        create.ImageKey = imagekey;
-        create.Status = Domain.Primitives.Enum.DataStatus.Active;
+        create.ImageFileId = request.ImageId;
+         create.Status = Domain.Primitives.Enum.DataStatus.Active;
+        create.CreatedAtUtc = request.Date;
+        create.DateId = request.Date.ToString("ddMMyyyy");
+        create.Status = request.Status;
         // Persist to the database
 
         await _kvAdRepository.InsertAsync(create);

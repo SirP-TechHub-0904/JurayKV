@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TanvirArjel.ArgumentChecker;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories.GenericRepositories;
+using JurayKV.Domain.Aggregates.BucketAggregate;
 
 namespace JurayKV.Persistence.RelationalDB.Repositories
 {
@@ -45,7 +46,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         public async Task InsertAsync(KvAd kvAd)
         {
             kvAd.ThrowIfNull(nameof(kvAd));
-
+           
             await _dbContext.AddAsync(kvAd);
             await _dbContext.SaveChangesAsync();
         }
@@ -78,10 +79,78 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             var data = await _dbContext.kvAds
                 .Include(x=>x.Bucket)
                 .Include(x=>x.Company)
+                .Include(x=>x.ImageFile)
                 .Where(x=>x.BucketId == bucketId && x.Status == Domain.Primitives.Enum.DataStatus.Active)
+                .Where(x=>x.ImageFile != null)
                 .ToListAsync();
 
             return data;
+        }
+        public async Task<List<KvAd>> AdsForAllBucket(DateTime date)
+        {
+
+            DateTime sixAMDateTime = new DateTime(date.Year, date.Month, date.Day, 6, 0, 0);
+            DateTime sixAMDateTimec = sixAMDateTime.AddDays(1);
+
+            var data = await _dbContext.kvAds
+                .Include(x => x.Bucket)
+                .Include(x => x.Company)
+                .Include(x => x.ImageFile)
+                .Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active && sixAMDateTime <= x.CreatedAtUtc && x.CreatedAtUtc <= sixAMDateTimec)
+                .Where(x => x.ImageFile != null)
+                .ToListAsync();
+
+            return data;
+        }
+        public async Task<KvAd> GetByActiveAsync(Guid bucketId)
+        {
+            return await _dbContext.kvAds.Include(x=>x.Bucket).Include(x => x.ImageFile).Include(x=>x.Company).FirstOrDefaultAsync(x=>x.Active == true && x.BucketId == bucketId && x.ImageFile != null);
+        }
+
+        public async Task<KvAd> MakeActiveAsync(Guid id, Guid bucketId, bool active)
+        {
+            var getallactive = _dbContext.kvAds.Where(x => x.BucketId == bucketId && x.Active == true).AsQueryable();
+            foreach(var kvAd in getallactive)
+            {
+                kvAd.Active = false;
+                _dbContext.Attach(kvAd).State = EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync();
+            var item = await _dbContext.kvAds.FirstOrDefaultAsync(x=>x.Id == id && x.BucketId == bucketId);
+            item.Active = active;
+            _dbContext.Attach(item).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task AdsClearAllActive()
+        {
+            var item = _dbContext.kvAds.AsNoTracking().Where(x => x.Active == true).AsQueryable();
+            foreach(var x in item)
+            {
+                x.Active = false;
+                _dbContext.Attach(x).State = EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+
+        //public async Task<List<KvAd>> GetByActiveAsync()
+        //{
+        //    return await _dbContext.kvAds.Include(x => x.Bucket).Include(x => x.ImageFile).Include(x => x.Company).Where(x => x.Active == true ).ToListAsync();
+        //}
+
+        public async Task<List<KvAd>> GetByActiveAsync()
+        {
+            DateTime createdAtUtc = DateTime.Now;
+            DateTime sixAMDateTime = new DateTime(createdAtUtc.Year, createdAtUtc.Month, createdAtUtc.Day, 6, 0, 0);
+            DateTime sixAMDateTimec = sixAMDateTime.AddDays(1);
+
+            return await _dbContext.kvAds
+                .Include(x => x.Bucket)
+                .Include(x => x.ImageFile)
+                .Include(x => x.Company)
+                .Where(x => x.Active == true && sixAMDateTime <= DateTime.Now && DateTime.Now <= sixAMDateTimec)
+                .ToListAsync();
         }
     }
 

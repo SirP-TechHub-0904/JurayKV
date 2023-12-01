@@ -4,11 +4,20 @@
 }
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">KV BUCKETS</h3>
+        <h3 class="card-title">ACTIVE KV BUCKETS</h3>
 
+        <a asp-page="./AllBucket" class="btn bg-gradient-warning btn-sm" style="float:right;">All Bucket</a>
+        <a asp-page="./AllActiveADs" class="btn bg-gradient-warning btn-sm" style="float:right;">All ADs By Date</a>
 
         <a asp-page="./Add" class="btn bg-gradient-warning btn-sm" style="float:right;">Add New</a>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            @*<div class="form-group">
+                <input type="submit" value="Clear All Active" style="float:right;" class="btn btn-primary" />
+
+            </div>*@
+        </form>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -45,7 +54,7 @@
                                 @sn
                             </td>
                             <td>
-                                <a asp-page="./Details" asp-route-id="@item.Id">
+                                <a asp-page="./AdsInBucket" asp-route-id="@item.Id">
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </a>
                             </td>

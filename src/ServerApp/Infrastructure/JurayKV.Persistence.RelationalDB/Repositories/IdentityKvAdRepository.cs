@@ -38,7 +38,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         {
             identityKvAdId.ThrowIfEmpty(nameof(identityKvAdId));
 
-            IdentityKvAd identityKvAd = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.User).FirstOrDefaultAsync(y => y.Id == identityKvAdId);
+            IdentityKvAd identityKvAd = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.Bucket).Include(x => x.KvAd.ImageFile).Include(x => x.User).FirstOrDefaultAsync(y => y.Id == identityKvAdId);
             return identityKvAd;
         }
 
@@ -47,13 +47,10 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             try
             {
                 identityKvAd.ThrowIfNull(nameof(identityKvAd));
-                DateTime currentDate = DateTime.Now;
-                DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
-
-
+                
                 var checkadsforuser = await _dbContext.IdentityKvAds.AsNoTracking()
                     //.Where(x => x.CreatedAtUtc.Hour > nextDay6AM.Hour)
-                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.Active == true);
+                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.KvAdHash == identityKvAd.KvAdHash);
                 if (checkadsforuser == null)
                 {
                     await _dbContext.AddAsync(identityKvAd);
@@ -96,14 +93,14 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         {
             DateTime currentDate = DateTime.Now;
             DateTime today6AM = currentDate.Date.AddHours(6);
-            var data = await _dbContext.IdentityKvAds.Include(x => x.KvAd)
+            var data = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
                 .Where(x => x.UserId == userId && x.Active == false)
 
 
                 .ToListAsync();
 
 
-            var xxdata = await _dbContext.IdentityKvAds.Include(x => x.KvAd)
+            var xxdata = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.CreatedAtUtc.Hour < today6AM.Hour);
 
 
@@ -115,7 +112,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             DateTime currentDate = DateTime.Now;
             DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
 
-            var data = _dbContext.IdentityKvAds.Include(x => x.KvAd)
+            var data = _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
             .Where(x => x.CreatedAtUtc < nextDay6AM)
             .Where(x => x.UserId == userId && x.Active == true);
 
@@ -129,8 +126,9 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             var data = await _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
-                .ThenInclude(x => x.Company)
+                .ThenInclude(x => x.Company).Include(x => x.KvAd.ImageFile)
                 .Include(x => x.KvAd.Bucket)
+                .Include(x => x.KvAd.ImageFile)
                  .Include(x => x.User)
                 .Where(x => x.Active == false).ToListAsync();
 
@@ -144,8 +142,9 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             var data = _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
-                .ThenInclude(x => x.Company)
-                .Include(x=>x.KvAd.Bucket)
+                .ThenInclude(x => x.Company).Include(x => x.KvAd.ImageFile)
+                .Include(x=>x.KvAd.Bucket) 
+
                 .Include(x => x.User)
                 .Where(x => x.Active == true);
 

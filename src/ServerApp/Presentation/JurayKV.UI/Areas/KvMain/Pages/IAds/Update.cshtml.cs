@@ -2,6 +2,7 @@ using JurayKV.Application;
 using JurayKV.Application.Commands.KvAdCommands;
 using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Application.Queries.CompanyQueries;
+using JurayKV.Application.Queries.ImageQueries;
 using JurayKV.Application.Queries.KvAdQueries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
 
         public List<SelectListItem> ListBuckets { get; set; }
         public List<SelectListItem> ListCompanies { get; set; }
+        public List<SelectListItem> ListImages { get; set; }
+
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             try
@@ -56,6 +59,17 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                         Text = company.Name
                     }).ToList();
 
+                // //
+                GetImageDropDownListQuery commandImages = new GetImageDropDownListQuery();
+                List<ImageDto> ImagesList = await _mediator.Send(commandImages);
+                // Map CompanyDropdownListDto to SelectListItem
+                ListImages = ImagesList.Select(img =>
+                    new SelectListItem
+                    {
+                        Value = img.Id.ToString(), // Assuming Id is an integer
+                        Text = img.Name
+                    }).ToList();
+
                 //
                 return Page();
             }
@@ -75,7 +89,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                 if (userIdClaim != null)
                 {
                     string userId = userIdClaim.Value;
-                    UpdateKvAdCommand command = new UpdateKvAdCommand(Command.Id, imageFile, Guid.Parse(userId), Command.BucketId, Command.CompanyId, Command.Status);
+                    UpdateKvAdCommand command = new UpdateKvAdCommand(Command.Id, Command.ImageId, Guid.Parse(userId), Command.BucketId, Command.CompanyId, Command.Status);
 
                     await _mediator.Send(command);
                     TempData["success"] = "Updated Successfully";
