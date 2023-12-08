@@ -16,6 +16,6 @@
 
         public decimal WalletBalance { get;set; }
         public bool DisableEmailNotification { get; set; }
-
+        public bool IsCompany {  get; set; }
     }
 }

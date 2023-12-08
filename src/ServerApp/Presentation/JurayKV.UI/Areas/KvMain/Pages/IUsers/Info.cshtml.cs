@@ -1,4 +1,5 @@
 using JurayKV.Application;
+using JurayKV.Application.Queries.CompanyQueries;
 using JurayKV.Application.Queries.UserManagerQueries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 
         [BindProperty]
         public UserManagerDetailsDto UpdateUserManager { get; set; }
+        public CompanyDetailsDto UpdateCompany { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -27,6 +29,12 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 GetUserManagerByIdQuery command = new GetUserManagerByIdQuery(id);
                 UpdateUserManager = await _mediator.Send(command);
 
+
+                if (UpdateUserManager.IsCompany == true)
+                {
+                    GetCompanyByUserIdQuery xcommand = new GetCompanyByUserIdQuery(id);
+                    UpdateCompany = await _mediator.Send(xcommand);
+                }
                 return Page();
             }
             catch (Exception ex)

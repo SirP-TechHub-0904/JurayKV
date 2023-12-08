@@ -25,7 +25,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
         private readonly IUserManagerCacheRepository _userManager;
         private readonly IQueryRepository _repository;
         private readonly IMediator _mediator;
-
+ 
 
 
         public GetUserManagerByIdQueryHandler(IUserManagerCacheRepository userManager, IQueryRepository repository, IMediator mediator)
@@ -33,7 +33,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
             _userManager = userManager;
             _repository = repository;
             _mediator = mediator;
-        }
+         }
 
         public async Task<UserManagerDetailsDto> Handle(GetUserManagerByIdQuery request, CancellationToken cancellationToken)
         {
@@ -52,9 +52,10 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 LastLoggedInAtUtc = user.LastLoggedInAtUtc,
                 Surname = user.Surname,
                 Firstname = user.Firstname, Lastname = user.Lastname,
+                IsCompany = user.IsCompany,
             };
 
-
+            
 
             return outcome;
         }

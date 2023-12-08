@@ -3,6 +3,7 @@ using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
+using JurayKV.Domain.ValueObjects;
 using JurayKV.Persistence.Cache.Keys;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,41 +24,22 @@ namespace JurayKV.Persistence.Cache.Repositories
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-        public DashboardCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, UserManager<ApplicationUser> userManager)
+        private readonly IIdentityKvAdRepository _adRepository;
+
+        public DashboardCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, UserManager<ApplicationUser> userManager, IIdentityKvAdRepository adRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
             _userManager = userManager;
+            _adRepository = adRepository;
         }
         public async Task<int> ActiveAdsCount()
         {
-            //string cacheKey = DashboardCacheKeys.ActiveAdsCountKey;
-            //int count = await _distributedCache.GetAsync<int>(cacheKey);
-
-            //if (count == 0)
-            //{
-            // Define the start time (6:00 AM) and end time (5:59 AM the next day)
-            var startTime = new TimeSpan(6, 0, 0); // 6:00 AM
-            var endTime = new TimeSpan(5, 59, 59); // 5:59 AM the next day
-
-            // Define the current date and the date for the next day
-            var currentDate = DateTime.UtcNow.Date;
-            var nextDayDate = DateTime.UtcNow.Date.AddDays(1);
-
-            // Define the condition to check if CreatedAtUtc is within the specified time frame
-            Expression<Func<IdentityKvAd, bool>> withinTimeFrameCondition = data =>
-                data.Active == true;
-            //
-
-            int count = await _repository.GetCountAsync<IdentityKvAd>(withinTimeFrameCondition); // Assuming there's a CountAsync method in your repository.
-
-            //    await _distributedCache.SetAsync(cacheKey, count);
-            //}
-
-            return count;
+            var count = await _adRepository.ListActiveToday();
+            return count.Count();
         }
 
-        
+
 
         public async Task<int> TotalActiveUsersCount()
         {
@@ -189,21 +171,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<int> TotalUsersPostTodayCount()
         {
-            //string cacheKey = DashboardCacheKeys.TotalActiveUsersCountKey;
-            //int count = await _distributedCache.GetAsync<int>(cacheKey);
+            DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
 
-            //if (count == 0)
-            //{
-            // Calculate the start and end dates for the current day.
-            DateTime currentDate = DateTime.UtcNow;
-            DateTime startOfDay = currentDate.Date;
-            DateTime endOfDay = startOfDay.AddDays(1).AddSeconds(-1);
+            var user = await _adRepository.ListActiveToday();
 
-            Expression<Func<IdentityKvAd, bool>> pointsCondition = data =>
-                data.Active == true;
 
-            // Get the Ids of users who meet the kvAdCondition criteria.
-            var user = await _repository.GetListAsync<IdentityKvAd>(pointsCondition);
             var userIds = user.Select(x => x.UserId);
 
 

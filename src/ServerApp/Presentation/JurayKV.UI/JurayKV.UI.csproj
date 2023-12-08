@@ -47,10 +47,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\JurayKV.Application\JurayKV.Application.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.PaymentGate\JurayKV.Infrastructure.PaymentGate.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.Services\JurayKV.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Persistence.Cache\JurayKV.Persistence.Cache.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Persistence.RelationalDB\JurayKV.Persistence.RelationalDB.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\JurayKvV.Infrastructure.Interswitch\JurayKvV.Infrastructure.Interswitch.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +94,22 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="Areas\KvMain\Pages\ISettings\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\KvMain\Pages\ISettings\Info.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\KvMain\Pages\ISettings\Remove.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\KvMain\Pages\ISettings\Update.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Areas\KvMain\Pages\IUsers\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -117,12 +133,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Client\Controllers\" />
-    <Folder Include="Areas\Client\Data\" />
-    <Folder Include="Areas\Client\Models\" />
-    <Folder Include="Areas\Client\Views\" />
     <Folder Include="logs\" />
     <Folder Include="wwwroot\logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\KvMain\Pages\ISettings\Add.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\KvMain\Pages\ISettings\Add.cshtml" />
   </ItemGroup>
 
 </Project>

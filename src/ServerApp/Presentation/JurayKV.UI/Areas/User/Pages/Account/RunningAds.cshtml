@@ -25,7 +25,18 @@
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header bg-info">
                                     <h3 class="widget-user-username" style="font-size: 17px; font-weight: 800;">@item.CreatedAtUtc.ToString("dd/MM/yyyy hh:mm tt")</h3>
-                                    <h5 class="widget-user-desc"><span class="countdown btn btn-xs btn-danger" data-target-time="6:00:00"></span></h5>
+
+                                    @{
+
+                                        DateTime sixAMDateTimec = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0).AddDays(1);
+                                    }
+
+                                    @if (sixAMDateTimec < DateTime.UtcNow.AddHours(1))
+                                    {
+                                        <h5 class="widget-user-desc"><span class="countdown btn btn-xs btn-danger" data-target-time="6:00:00"></span></h5>
+
+                                    }
+
                                 </div>
                                 <div class="widget-user-image" style="left: auto; margin-left: 0px; position: unset; top: 80px; text-align: center; margin: -50px auto;">
                                     <div style="height:100px;width:100px;text-align:center;">
@@ -46,7 +57,7 @@
                                         <div class="col-sm-12">
                                             <div class="description-block">
                                                 @{
-                                                    DateTime currentDate = DateTime.Now;
+                                                    DateTime currentDate = DateTime.UtcNow.AddHours(1);
                                                     DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
 
                                                     bool isLinkEnabled = item.CreatedAtUtc < nextDay6AM;

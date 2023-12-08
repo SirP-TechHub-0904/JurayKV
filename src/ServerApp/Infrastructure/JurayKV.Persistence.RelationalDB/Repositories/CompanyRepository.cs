@@ -42,6 +42,14 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             return company;
         }
 
+        public async Task<Company> GetByUserIdAsync(Guid userId)
+        {
+            userId.ThrowIfEmpty(nameof(userId));
+
+            Company company = await _dbContext.Companies.Include(c=>c.User).FirstOrDefaultAsync(x=>x.UserId == userId);
+            return company;
+        }
+
         public async Task InsertAsync(Company company)
         {
             company.ThrowIfNull(nameof(company));

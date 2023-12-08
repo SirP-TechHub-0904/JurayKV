@@ -43,8 +43,19 @@ public sealed class GetWalletUserByIdQuery : IRequest<WalletDetailsDto>
             //};
             
             var walletDetailsDto = await _repository.GetAsync(filterExpression);
+
+            var outcome = new WalletDetailsDto
+            {
+                CreatedAtUtc = walletDetailsDto.CreatedAtUtc,
+                Amount = walletDetailsDto.Amount,
+                LastUpdateAtUtc = walletDetailsDto.LastUpdateAtUtc,
+                Id = walletDetailsDto.Id,
+                Log = walletDetailsDto.Log,
+                Note = walletDetailsDto.Note,
+                UserId = walletDetailsDto.UserId,
+            };
             WalletDetailsDto c = new WalletDetailsDto();
-            return c;
+            return outcome;
         }
     }
 }

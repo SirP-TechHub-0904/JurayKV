@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Api", "src\ServerAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.UI", "src\ServerApp\Presentation\JurayKV.UI\JurayKV.UI.csproj", "{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.RavePayment", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.RavePayment\JurayKV.Infrastructure.RavePayment.csproj", "{518C7FAC-94C0-446B-9634-7314FFA2C31E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.Flutterwave", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.Flutterwave\JurayKV.Infrastructure.Flutterwave.csproj", "{02C3065A-4D8B-4A32-85B5-68B0E77C066F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.PaymentGate", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.PaymentGate\JurayKV.Infrastructure.PaymentGate.csproj", "{FC364AE5-44B0-42BC-A924-562DA4C9A679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKvV.Infrastructure.Interswitch", "src\ServerApp\Infrastructure\JurayKvV.Infrastructure.Interswitch\JurayKvV.Infrastructure.Interswitch.csproj", "{7630D82A-4709-479C-8DFE-904BA9BE8CE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,14 +77,14 @@ Global
 		{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{518C7FAC-94C0-446B-9634-7314FFA2C31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{518C7FAC-94C0-446B-9634-7314FFA2C31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{518C7FAC-94C0-446B-9634-7314FFA2C31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{518C7FAC-94C0-446B-9634-7314FFA2C31E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC364AE5-44B0-42BC-A924-562DA4C9A679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC364AE5-44B0-42BC-A924-562DA4C9A679}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC364AE5-44B0-42BC-A924-562DA4C9A679}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC364AE5-44B0-42BC-A924-562DA4C9A679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C3065A-4D8B-4A32-85B5-68B0E77C066F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C3065A-4D8B-4A32-85B5-68B0E77C066F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C3065A-4D8B-4A32-85B5-68B0E77C066F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C3065A-4D8B-4A32-85B5-68B0E77C066F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,8 +103,8 @@ Global
 		{A61843B0-55EA-432A-9F6F-53CE5BFD9ECF} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
 		{EA4DEAB8-832D-43AE-8BBC-DBCBBFB013CA} = {E1D1A568-3BD0-429C-A717-18B329D75120}
 		{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6} = {E1D1A568-3BD0-429C-A717-18B329D75120}
-		{518C7FAC-94C0-446B-9634-7314FFA2C31E} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
-		{FC364AE5-44B0-42BC-A924-562DA4C9A679} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
+		{02C3065A-4D8B-4A32-85B5-68B0E77C066F} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
+		{7630D82A-4709-479C-8DFE-904BA9BE8CE1} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C622411-9649-4977-93A0-2C624539C0EE}

@@ -36,3 +36,32 @@ public sealed class DateOfBirth : ValueObject
         Value = value;
     }
 }
+
+public class DateForSix
+{
+    public static DateTime GetTheDateBySix(DateTime date)
+    {
+        DateTime targetTime = new DateTime(date.Year, date.Month, date.Day, 6, 0, 0);
+
+        DateTime resultDate = date;
+        // Check if the current time is before 6am on the target date
+        if (date < targetTime)
+        {
+            resultDate = date.Date.AddDays(-1);
+        }
+        return resultDate.Date;
+    }
+
+    //public static DateDto GetTheDateBySix(DateTime date)
+    //{
+    //    DateDto.
+    //    DateTime today6AM = currentDate.Date.AddHours(6);
+    //    return resultDate.Date;
+    //}
+}
+
+//public class DateDto
+//{
+//    public DateTime CurrentSixAm { get;set;}
+//    public DateTime NexSixAm { get;set; }
+//}

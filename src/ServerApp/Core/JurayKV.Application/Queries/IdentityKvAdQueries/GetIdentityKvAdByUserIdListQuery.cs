@@ -1,5 +1,6 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using MediatR;
+using System.Linq;
 using TanvirArjel.ArgumentChecker;
 
 namespace JurayKV.Application.Queries.IdentityKvAdQueries;
@@ -27,7 +28,7 @@ public sealed class GetIdentityKvAdByUserIdListQuery : IRequest<List<IdentityKvA
             request.ThrowIfNull(nameof(request));
 
             List<IdentityKvAdListDto> departmentDtos = await _departmentCacheRepository.GetByUserIdAsync(request.UserId);
-            return departmentDtos;
+            return departmentDtos.OrderByDescending(x=>x.CreatedAtUtc).ToList();
         }
     }
 }

@@ -35,6 +35,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
         [BindProperty]
         public string CompanyName { get; set; }
 
+        [BindProperty]
+        public decimal AmountPerPoint { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -111,7 +113,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
             }
             try
             {
-                CreateCompanyCommand command = new CreateCompanyCommand(CompanyName, UserId);
+                CreateCompanyCommand command = new CreateCompanyCommand(CompanyName, UserId, AmountPerPoint);
                 Guid Result = await _mediator.Send(command);
                 TempData["success"] = "Added Successfully";
             }

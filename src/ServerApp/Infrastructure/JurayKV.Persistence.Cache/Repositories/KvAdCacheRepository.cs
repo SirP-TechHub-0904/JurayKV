@@ -112,6 +112,65 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             return bucket;
         }
+        public async Task<List<KvAdListDto>> GetListAllBucketByCompanyAsync(Guid companyId)
+        {
+
+            //string cacheKey = KvAdCacheKeys.ListByBucketIdKey(bucketId);
+            //List<KvAdListDto> list = await _distributedCache.GetAsync<List<KvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{ 
+            var mainlist = await _kvAdRepository.AdsByCompanyId(companyId);
+            var list = mainlist.Select(d => new KvAdListDto
+            {
+                Id = d.Id,
+                CreatedAtUtc = d.CreatedAtUtc,
+                BucketId = d.BucketId,
+                BucketName = d.Bucket.Name,
+                CompanyName = d.Company.Name,
+                CompanyId = d.CompanyId,
+                ImageUrl = d.ImageFile.ImageUrl,
+                UserId = d.UserId,
+                Status = d.Status,
+                Active = d.Active,
+                IdentityKvAdListDtos = d.IdentityKvAds.Select(x => new Application.Queries.IdentityKvAdQueries.IdentityKvAdListDto { Id = x.Id, Points = x.ResultOne }).ToList(),
+            }).ToList();
+
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+
+            return list;
+        }
+        public async Task<List<KvAdListDto>> GetActiveListAllBucketByCompanyAsync(DateTime date, Guid companyId)
+        {
+
+            //string cacheKey = KvAdCacheKeys.ListByBucketIdKey(bucketId);
+            //List<KvAdListDto> list = await _distributedCache.GetAsync<List<KvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{ 
+            var mainlist = await _kvAdRepository.AdsForAllBucketByCompanyId(date, companyId);
+            var list = mainlist.Select(d => new KvAdListDto
+            {
+                Id = d.Id,
+                CreatedAtUtc = d.CreatedAtUtc,
+                BucketId = d.BucketId,
+                BucketName = d.Bucket.Name,
+                CompanyName = d.Company.Name,
+                CompanyId = d.CompanyId,
+                ImageUrl = d.ImageFile.ImageUrl,
+                UserId = d.UserId,
+                Status = d.Status,
+                Active = d.Active,
+                IdentityKvAdListDtos = d.IdentityKvAds.Select(x=> new Application.Queries.IdentityKvAdQueries.IdentityKvAdListDto { Id = x.Id, Points = x.ResultOne }).ToList(),
+            }).ToList();
+
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+
+            return list;
+        }
+
         public async Task<List<KvAdListDto>> GetActiveListAllBucketAsync(DateTime date)
         {
 
@@ -121,6 +180,34 @@ namespace JurayKV.Persistence.Cache.Repositories
             //if (list == null)
             //{ 
             var mainlist = await _kvAdRepository.AdsForAllBucket(date);
+            var list = mainlist.Select(d => new KvAdListDto
+            {
+                Id = d.Id,
+                CreatedAtUtc = d.CreatedAtUtc,
+                BucketId = d.BucketId,
+                BucketName = d.Bucket.Name,
+                CompanyName = d.Company.Name,
+                CompanyId = d.CompanyId,
+                ImageUrl = d.ImageFile.ImageUrl,
+                UserId = d.UserId,
+                Status = d.Status,
+                Active = d.Active,
+            }).ToList();
+
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+
+            return list;
+        }
+        public async Task<List<KvAdListDto>> GetListByCompanyIdAsync(Guid companyId)
+        {
+
+            //string cacheKey = KvAdCacheKeys.ListByBucketIdKey(bucketId);
+            //List<KvAdListDto> list = await _distributedCache.GetAsync<List<KvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{ 
+            var mainlist = await _kvAdRepository.AdsByCompanyIdList(companyId);
             var list = mainlist.Select(d => new KvAdListDto
             {
                 Id = d.Id,

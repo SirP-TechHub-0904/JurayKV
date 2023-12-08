@@ -14,12 +14,13 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         Task<Transaction> GetByIdAsync(Guid transactionId);
 
         Task InsertAsync(Transaction transaction);
-
+        Task<Guid> InsertReturnIdAsync(Transaction transaction);
         Task UpdateAsync(Transaction transaction);
 
         Task DeleteAsync(Transaction transaction);
 
         Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId);
+        Task<List<Transaction>> GetListByUserId(Guid userId);
         Task<int> TransactionCount(Guid userId);
 
     }

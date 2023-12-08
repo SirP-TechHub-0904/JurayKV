@@ -12,16 +12,20 @@ public sealed class UpdateCompanyCommand : IRequest
 {
     public UpdateCompanyCommand(
         Guid id,
-        string name
+        string name,
+        decimal amountPerPoint
         )
     {
         Id = id;
         Name = name;
+        AmountPerPoint = amountPerPoint;
     }
 
     public Guid Id { get; }
 
     public string Name { get; }
+    public decimal AmountPerPoint { get; set; }
+
 }
 
 internal class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
@@ -49,7 +53,7 @@ internal class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyComman
         }
 
         companyToBeUpdated.Name = request.Name;
-
+        companyToBeUpdated.AmountPerPoint = request.AmountPerPoint;
         await _companyRepository.UpdateAsync(companyToBeUpdated);
 
         // Remove the cache

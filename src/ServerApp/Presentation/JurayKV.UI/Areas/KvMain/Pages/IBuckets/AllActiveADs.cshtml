@@ -11,25 +11,25 @@
     </div>
     <div class="card-body ">
         <div class="boxed-div">
-             <div class="card-header">
-                 <form method="get">
-                      
-                     <div class="row">
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                 <label class="control-label">Date </label>
-                                 <input name="date" type="date" class="form-control" id="upper" />
-                              </div>
-                         </div>
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                 <label class="control-label">(@TempData["date"])</label>
-                                 <input type="submit" value="Submit" class="btn btn-primary" style="width:100%;" />
-                             </div>
-                         </div>
-                     </div>
-                 </form>
-             </div>
+            <div class="card-header">
+                <form method="get">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Date </label>
+                                <input name="date" type="date" class="form-control" id="upper" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">(@TempData["date"])</label>
+                                <input type="submit" value="Submit" class="btn btn-primary" style="width:100%;" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="table-responsive">
@@ -84,20 +84,27 @@
                                         </a>
                                     </td>
                                     <td>
+                                        @*@DateTime.UtcNow.AddHours(1)*@
                                         @{
                                             DateTime sixAMDateTime = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0);
                                             DateTime sixAMDateTimec = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0).AddDays(1);
                                         }
 
-                                        @if (sixAMDateTime <= DateTime.Now && DateTime.Now <= sixAMDateTimec)
+                                        @if (sixAMDateTime <= DateTime.UtcNow.AddHours(1) && DateTime.UtcNow.AddHours(1) <= sixAMDateTimec)
                                         {
 
 
-                                            <span class="btn btn-success">ACTIVE</span>
+                                            <span class="btn btn-success btn-xs">ACTIVE</span>
+                                        }
+                                        else if (DateTime.UtcNow.AddHours(1) < sixAMDateTime)
+                                        {
+
+
+                                            <span class="btn btn-primary btn-xs">UPCOMING</span>
                                         }
                                         else
                                         {
-                                            <span class="btn btn-warning">UPCOMING</span>
+                                            <span class="btn btn-danger btn-xs">Expired</span>
 
                                         }
                                     </td>

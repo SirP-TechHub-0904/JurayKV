@@ -30,6 +30,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<INotificationCacheHandler, NotificationCacheHandler>();
         services.AddTransient<IDashboardCacheHandler, DashboardCacheHandler>();
         services.AddTransient<ISliderCacheHandler, SliderCacheHandler>();
+        services.AddTransient<ISettingCacheHandler, SettingCacheHandler>();
+        services.AddTransient<IAdvertRequestCacheHandler, AdvertRequestCacheHandler>();
         services.AddTransient<IClearAllCacheHandler, ClearAllCacheHandler>();
     }
 }

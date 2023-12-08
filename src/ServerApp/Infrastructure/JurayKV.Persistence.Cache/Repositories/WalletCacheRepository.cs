@@ -118,6 +118,9 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Amount = userwallet.Amount,
                     UserId = userId,
+                    Id = userwallet.Id,
+                    Fullname = userwallet.User.FirstName,
+
                 };
 
             //    await _distributedCache.SetAsync(cacheKey, wallet);

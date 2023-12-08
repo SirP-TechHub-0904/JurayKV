@@ -21,7 +21,7 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
         public string VideoUrl { get; set; }
         public bool Active { get; set; }
         public AdsStatus AdsStatus { get; set; }
-
+        public Guid CompanyId { get; set; }
         public int ResultOne { get; set; }
         public int ResultTwo { get; set; }
         public int ResultThree { get; set; }

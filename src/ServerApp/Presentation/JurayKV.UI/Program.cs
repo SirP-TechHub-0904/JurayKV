@@ -1,34 +1,20 @@
+using JurayKV.Application;
 using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Commands.DepartmentCommands;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Services;
-using JurayKV.Domain.Aggregates.EmployeeAggregate;
+using JurayKV.Infrastructure.Flutterwave.Repositories;
 using JurayKV.Infrastructure.Services;
-using JurayKV.Infrastructure.Services.Configs;
 using JurayKV.Persistence.Cache;
 using JurayKV.Persistence.Cache.Repositories;
 using JurayKV.Persistence.RelationalDB.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using JurayKV.Persistence.RelationalDB;
-using JurayKV.Domain.Aggregates.BucketAggregate;
-using JurayKV.Domain.Aggregates.CompanyAggregate;
-using JurayKV.Domain.Aggregates.ExchangeRateAggregate;
-using JurayKV.Domain.Aggregates.IdentityActivityAggregate;
-using JurayKV.Domain.Aggregates.KvAdAggregate;
-using JurayKV.Domain.Aggregates.KvPointAggregate;
-using JurayKV.Domain.Aggregates.TransactionAggregate;
-using JurayKV.Domain.Aggregates.WalletAggregate;
-using JurayKV.Application;
-using JurayKV.Application.Caching.Handlers;
-using JurayKV.Persistence.Cache.Handlers;
 using JurayKV.UI.Jobs;
-using Serilog;
+using JurayKvV.Infrastructure.Interswitch.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Serilog;
 using System.Configuration;
-using Rave;
+using System.Reflection;
 
 namespace JurayKV.UI
 {
@@ -70,6 +56,8 @@ namespace JurayKV.UI
             builder.Services.AddScoped<IUserManagerCacheRepository, UserManagerCacheRepository>();
             builder.Services.AddScoped<ISliderCacheRepository, SliderCacheRepository>();
             builder.Services.AddScoped<IImageCacheRepository, ImageCacheRepository>();
+            builder.Services.AddScoped<ISettingCacheRepository, SettingCacheRepository>();
+            builder.Services.AddScoped<IAdvertRequestCacheRepository, AdvertRequestCacheRepository>();
 
             builder.Services.AddTransient<IExceptionLogger, ExceptionLogger>();
             builder.Services.AddTransient<ViewRenderService>();
@@ -78,15 +66,15 @@ namespace JurayKV.UI
             builder.Services.AddTransient<ISmsSender, SmsSender>();
             builder.Services.AddTransient<IVoiceSender, VoiceSender>();
             builder.Services.AddTransient<IStorageService, StorageService>();
+            builder.Services.AddTransient<IFlutterTransactionService, FlutterTransactionService>();
+            builder.Services.AddTransient<ISwitchRepository, SwitchRepository>();
             builder.Services.AddTransient<IBackgroundActivity, BackgroundActivity>();
-            //
+            // 
+            //builder.Services.AddInterswitch(configuration);
             //builder.Services.Configure<RaveConfig>(Configuration.GetSection("RaveConfig"));
             // Access the configuration using builder.Configuration
             var raveConfigSection = builder.Configuration.GetSection("RaveConfig");
-            builder.Services.Configure<RaveConfig>(raveConfigSection);
-
-            // Add RaveConfig as a singleton
-            builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<RaveConfig>>());
+             
 
             // Add services to the container.
             builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
@@ -173,6 +161,7 @@ namespace JurayKV.UI
 
                 // Add more policies as needed
             });
+            builder.Services.AddHttpClient();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowKoboView",

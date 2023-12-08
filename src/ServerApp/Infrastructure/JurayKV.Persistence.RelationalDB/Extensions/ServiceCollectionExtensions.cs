@@ -1,4 +1,5 @@
-﻿using JurayKV.Domain.Aggregates.BucketAggregate;
+﻿using JurayKV.Domain.Aggregates.AdvertRequestAggregate;
+using JurayKV.Domain.Aggregates.BucketAggregate;
 using JurayKV.Domain.Aggregates.CompanyAggregate;
 using JurayKV.Domain.Aggregates.DashboardAggregate;
 using JurayKV.Domain.Aggregates.DepartmentAggregate;
@@ -11,6 +12,7 @@ using JurayKV.Domain.Aggregates.ImageAggregate;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
+using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.SliderAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
@@ -99,6 +101,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDashboardRepository, DashboardRepository>();
         services.AddScoped<ISliderRepository, SliderRepository>();
         services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
+        services.AddScoped<IAdvertRequestRepository, AdvertRequestRepository>();
         services.AddGenericRepository<JurayDbContext>();
         services.AddQueryRepository<JurayDbContext>();
     }

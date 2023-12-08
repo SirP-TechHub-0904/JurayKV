@@ -10,8 +10,11 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
     public class UserDashboardDto
     {
         public string Fullname { get;set; }
+        public string Company { get;set; }
         public string Status { get; set; }
         public decimal Points { get;set;}
+        public decimal Balance { get;set; }
+        public int TotalViews { get;set; }
         public int AdsRunning { get;set; }
         public decimal ExchangeRate { get;set; }
      
@@ -19,7 +22,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         public ICollection<LastTenPoints> LastTenPoints { get;set; }
         public ICollection<LastTenTransactions> LastTenTransactions { get;set; }
         public ICollection<ListRunningAds> ListRunningAds { get;set; }
-
+        public ICollection<LastTenAds> LastTenAds { get;set; }
         public int TransactionsCount { get;set; }
         public int AdsCount { get;set; }
 
@@ -41,6 +44,15 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         public EntityStatus Status { get; set; }
 
         public int Point { get; set; }
+
+        public DateTime CreatedAtUtc { get; set; }
+    }
+    public class LastTenAds
+    {
+        public Guid Id { get; set; } 
+        public string Image { get; set; }
+
+        public int Views { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
     }

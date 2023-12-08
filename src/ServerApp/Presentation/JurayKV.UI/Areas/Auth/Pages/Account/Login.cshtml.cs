@@ -132,6 +132,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         {
                             return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
                         }
+                        else if (roles.Contains(Constants.CompanyPolicy))
+                        {
+                            return RedirectToPage("/Account/Index", new { area = "Client" });
+                        }
                         else if (roles.Contains(Constants.Dashboard))
                         {
                             return RedirectToPage("/Account/Index", new { area = "User" });

@@ -1,45 +1,53 @@
-using JurayKV.Infrastructure.PaymentGateModels.Account;
-using JurayKV.Infrastructure.PaymentGateModels.Charge;
+using Azure.Core;
+using JurayKV.Application.Flutterwaves;
+using JurayKV.Application.Interswitch;
+using JurayKV.Application.Queries.SliderQueries;
+using JurayKV.Domain.Aggregates.SliderAggregate;
+using JurayKV.Infrastructure.Flutterwave.Models;
+using JurayKvV.Infrastructure.Interswitch.RequestModel;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Options;
-using Rave;
 
 namespace JurayKV.UI.Pages
 {
     public class PayModel : PageModel
     {
-        private readonly RaveConfig _raveConfig;
+        private readonly ILogger<IndexModel> _logger;
+        private readonly IMediator _mediator;
 
-        public PayModel(RaveConfig raveConfig)
+        public PayModel(ILogger<IndexModel> logger, IMediator mediator)
         {
-            _raveConfig = raveConfig;
+            _logger = logger;
+            _mediator = mediator;
         }
-
-        public void OnGet()
+        public string Outcome { get; set; } 
+        public async Task<IActionResult> OnGetAsync()
         {
-        }
+            try
+            {
+                //    //CreateTransactionTransferQuery command = new CreateTransactionTransferQuery();
+                //    BillPaymentModel model = new BillPaymentModel();
+                //    model.country = "NG";
+                //    model.customer = "+2348165680904";
+                //    model.amount = "100";
+                //    //model.recurrence = "ONCE";
+                //    model.type = "MTN 50 MB";
+                //    model.reference = Guid.NewGuid().ToString();
+                //    //model.biller_name = "MTN VTU";
 
-        [HttpPost]
-        public IActionResult OnPost([FromBody] PaymentDetails paymentDetails)
-        {
-            // Now you can access _raveConfig in your code
-            var accountc = new ChargeAccount(_raveConfig);
+                PaymentRequest model = new PaymentRequest();
+                CreateInterswitchTransactionQuery command = new CreateInterswitchTransactionQuery();
+                Outcome = await _mediator.Send(command);
+                 
 
-            var payload = new AccountParams(_raveConfig.PbfPubKey, _raveConfig.SecretKey, "customer", "customer", "user@example.com", "0690000031", 1000, "044", "NGN", "MC-0292920");
-            var chargeResponse = accountc.Charge(payload).Result;
+                return Page();
 
-            // Process the chargeResponse as needed
-
-            return Page();
-        }
-
-
-
-        // You can create a class to represent the payment details if needed
-        public class PaymentDetails
-        {
-            // Add properties as needed for your payment details
+            }
+            catch (Exception c)
+            {
+                return Page();
+            }
         }
     }
 }

@@ -81,7 +81,7 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
     }
     static string GenerateUniqueIdForDay()
     {
-        DateTime currentDateTime = DateTime.Now.AddHours(22);
+        DateTime currentDateTime = DateTime.UtcNow.AddHours(1).AddHours(22);
 
         // Check if it's a new day
         if (currentDateTime.Hour < 6)

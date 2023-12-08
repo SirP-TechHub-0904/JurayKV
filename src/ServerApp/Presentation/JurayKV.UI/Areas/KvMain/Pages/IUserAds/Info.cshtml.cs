@@ -1,8 +1,10 @@
 using JurayKV.Application;
 using JurayKV.Application.Commands.IdentityKvAdCommands;
 using JurayKV.Application.Commands.KvPointCommands;
+using JurayKV.Application.Queries.CompanyQueries;
 using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Application.Queries.KvAdQueries;
+using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
 using MediatR;
@@ -35,12 +37,22 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
 
         [BindProperty]
         public int PointThree { get; set; }
+
+        public CompanyDetailsDto CompanyDetailsDto { get; set; }
+        public WalletDetailsDto WalletDetailsDto { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             try
             {
                 GetIdentityKvAdByIdQuery command = new GetIdentityKvAdByIdQuery(id);
                 IdentityKvAdDetailsDto = await _mediator.Send(command);
+
+
+                GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(CompanyDetailsDto.UserId);
+                WalletDetailsDto = await _mediator.Send(walletcommand);
 
                 return Page();
             }
@@ -57,24 +69,90 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
             GetIdentityKvAdByIdQuery command = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
             var updateAds = await _mediator.Send(command);
 
+
+            //check if amount in the company wllet can fund the advert
+            GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(CompanyUserId);
+            WalletDetailsDto = await _mediator.Send(walletcommand);
+
+
+
             string userId = _userManager.GetUserId(HttpContext.User);
             var userinfo = await _userManager.FindByIdAsync(userId);
             var roles = await _userManager.GetRolesAsync(userinfo);
 
             if (roles.Contains(Constants.AdminOne) || roles.Contains(Constants.SuperAdminPolicy))
             {
+                if (WalletDetailsDto.Amount < PointOne)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+ 
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
                 updateAds.ResultOne = PointOne;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointOne;
             }
 
             if (roles.Contains(Constants.AdminTwo) || roles.Contains(Constants.SuperAdminPolicy))
             {
+                if (WalletDetailsDto.Amount < PointTwo)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                         
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
                 updateAds.ResultTwo = PointTwo;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointTwo;
             }
 
             if (roles.Contains(Constants.AdminThree) || roles.Contains(Constants.SuperAdminPolicy))
             {
+                if (WalletDetailsDto.Amount < PointThree)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                         
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
                 updateAds.ResultThree = PointThree;
                 updateAds.Activity = updateAds.Activity + "<br> admin: " + userinfo.SurName + " " + userinfo.FirstName + "update result one with " + PointThree;
             }
@@ -86,28 +164,89 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
 
         [BindProperty]
         public string PointChoose { get; set; }
+
+        [BindProperty]
+        public Guid CompanyUserId { get; set; }
         public async Task<IActionResult> OnPostUpdatePoint()
         {
 
             GetIdentityKvAdByIdQuery command = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
             var updateAds = await _mediator.Send(command);
 
+            //check if amount in the company wllet can fund the advert
+            GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(CompanyUserId);
+            WalletDetailsDto = await _mediator.Send(walletcommand);
 
-           
             KvPoint kp = new KvPoint();
             kp.UserId = updateAds.UserId;
             if (PointChoose == "First")
             {
                 kp.Point = updateAds.ResultOne;
+                if (WalletDetailsDto.Amount < updateAds.ResultOne)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
 
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
             }
             else if (PointChoose == "Second")
             {
                 kp.Point = updateAds.ResultTwo;
+                if (WalletDetailsDto.Amount < updateAds.ResultTwo)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
             }
             else if (PointChoose == "Third")
             {
                 kp.Point = updateAds.ResultThree;
+                if (WalletDetailsDto.Amount < updateAds.ResultThree)
+                {
+                    try
+                    {
+                        GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
+                        IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                        GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                        CompanyDetailsDto = await _mediator.Send(companycomand);
+
+                        TempData["error"] = "Point Exceed Balance";
+                        return Page();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "unable to fetch users";
+                        return RedirectToPage("/Index");
+                    }
+                }
             }
             else
             {
@@ -115,6 +254,10 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
                 {
                     GetIdentityKvAdByIdQuery xcommand = new GetIdentityKvAdByIdQuery(IdentityKvAdDetailsDto.Id);
                     IdentityKvAdDetailsDto = await _mediator.Send(xcommand);
+
+                    GetCompanyByIdQuery companycomand = new GetCompanyByIdQuery(IdentityKvAdDetailsDto.CompanyId);
+                    CompanyDetailsDto = await _mediator.Send(companycomand);
+
                     TempData["error"] = "kindly choose an option";
                     return Page();
                 }

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿
+@using JurayKV.Application;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -162,44 +165,82 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+                        @if (User.IsInRole(Constants.CompanyPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/Account/Index" asp-area="Client" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/Account/Index" asp-area="User" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a asp-page="/Account/Index" asp-area="User" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
+
+                        @if (User.IsInRole(Constants.CompanyPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/Account/Adverts" asp-area="Client" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        My Adverts
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/Account/AdvertRequestHistory" asp-area="Client" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Advert Request
+                                    </p>
+                                </a>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/Account/RunningAds" asp-area="User" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Running Ads
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/Account/Bucket" asp-area="User" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Bucket
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/Account/Points" asp-area="User" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Points
+                                    </p>
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a asp-page="/Account/Profile" asp-area="User" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p class="uppercase">
                                     Profile
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/Account/RunningAds" asp-area="User" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Running Ads
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/Account/Bucket" asp-area="User" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Bucket
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/Account/Points" asp-area="User" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Points
                                 </p>
                             </a>
                         </li>

@@ -26,5 +26,7 @@ namespace JurayKV.Application.Queries.TransactionQueries
         public string TransactionReference { get; set; }
         public string Description { get; set; }
         public string TrackCode { get; set; }
+
+        public string TransactionVerificationId { get; set; }
     }
 }

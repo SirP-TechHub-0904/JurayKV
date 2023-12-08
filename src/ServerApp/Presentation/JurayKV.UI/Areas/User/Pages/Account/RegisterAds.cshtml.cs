@@ -30,7 +30,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            CreateIdentityKvAdCommand command = new CreateIdentityKvAdCommand(null, Guid.Parse(userId), id, DateTime.Now);
+            CreateIdentityKvAdCommand command = new CreateIdentityKvAdCommand(null, Guid.Parse(userId), id, DateTime.UtcNow.AddHours(1));
 
             var outcome = await _mediator.Send(command);
             return new JsonResult("Successfully");

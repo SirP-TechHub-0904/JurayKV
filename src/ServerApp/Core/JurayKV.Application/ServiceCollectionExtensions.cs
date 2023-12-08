@@ -1,6 +1,7 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,11 @@ namespace JurayKV.Application
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddApplicationCustomServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IEmailSender>();
-            //services.AddTransient<IDepartmentCacheRepository, DepartmentCacheRepository>();
-            //services.AddTransient<ViewRenderService>();
+            
+            //services.AddInterswitch(configuration);
             return services;
         }
     }

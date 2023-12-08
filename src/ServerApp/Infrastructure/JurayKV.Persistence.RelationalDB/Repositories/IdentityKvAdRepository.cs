@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TanvirArjel.ArgumentChecker;
 using JurayKV.Domain.Aggregates.IdentityActivityAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories.GenericRepositories;
+using JurayKV.Domain.ValueObjects;
 
 namespace JurayKV.Persistence.RelationalDB.Repositories
 {
@@ -38,7 +39,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         {
             identityKvAdId.ThrowIfEmpty(nameof(identityKvAdId));
 
-            IdentityKvAd identityKvAd = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.Bucket).Include(x => x.KvAd.ImageFile).Include(x => x.User).FirstOrDefaultAsync(y => y.Id == identityKvAdId);
+            IdentityKvAd identityKvAd = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.Company).Include(x => x.KvAd.Bucket).Include(x => x.KvAd.ImageFile).Include(x => x.User).FirstOrDefaultAsync(y => y.Id == identityKvAdId);
             return identityKvAd;
         }
 
@@ -50,7 +51,8 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                 
                 var checkadsforuser = await _dbContext.IdentityKvAds.AsNoTracking()
                     //.Where(x => x.CreatedAtUtc.Hour > nextDay6AM.Hour)
-                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.KvAdHash == identityKvAd.KvAdHash);
+                    .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.KvAdHash == identityKvAd.KvAdHash &&
+                    x.Active == true);
                 if (checkadsforuser == null)
                 {
                     await _dbContext.AddAsync(identityKvAd);
@@ -91,7 +93,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<List<IdentityKvAd>> GetListByUserId(Guid userId)
         {
-            DateTime currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.UtcNow.AddHours(1);
             DateTime today6AM = currentDate.Date.AddHours(6);
             var data = await _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
                 .Where(x => x.UserId == userId && x.Active == false)
@@ -106,23 +108,39 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             return data.ToList();
         }
-
-        public async Task<IQueryable<IdentityKvAd>> GetActiveListByUserId(Guid userId)
+        public async Task<IQueryable<IdentityKvAd>> GetActiveListByCompanyId(Guid companyId)
         {
-            DateTime currentDate = DateTime.Now;
-            DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+            //DateTime currentDate = DateTime.UtcNow.AddHours(1);
+            //DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+
+            DateTime mdate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
+
 
             var data = _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
-            .Where(x => x.CreatedAtUtc < nextDay6AM)
-            .Where(x => x.UserId == userId && x.Active == true);
+            .Where(x => x.KvAdHash == mdate.Date.ToString("ddMMyyyy"))
+            .Where(x => x.KvAd.CompanyId == companyId && x.Active == true);
+
+
+            return data;
+        }
+        public async Task<IQueryable<IdentityKvAd>> GetActiveListByUserId(Guid userId)
+        {
+            //DateTime currentDate = DateTime.UtcNow.AddHours(1);
+            //DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+
+            DateTime mdate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
+
+
+            var data = _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
+            .Where(x => x.KvAdHash == mdate.Date.ToString("ddMMyyyy"))
+            .Where(x => x.UserId == userId && x.Active == true); 
 
 
             return data;
         }
         public async Task<List<IdentityKvAd>> ListNonActive()
         {
-            DateTime currentDate = DateTime.Now;
-            DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+            DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
 
             var data = await _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
@@ -130,15 +148,14 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                 .Include(x => x.KvAd.Bucket)
                 .Include(x => x.KvAd.ImageFile)
                  .Include(x => x.User)
-                .Where(x => x.Active == false).ToListAsync();
+                .Where(x => x.KvAdHash != currentDate.ToString("ddMMyyyy")).ToListAsync();
 
             return data.ToList();
         }
 
         public async Task<IQueryable<IdentityKvAd>> ListActiveToday()
         {
-            DateTime currentDate = DateTime.Now;
-            DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
+            DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
 
             var data = _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
@@ -146,7 +163,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                 .Include(x=>x.KvAd.Bucket) 
 
                 .Include(x => x.User)
-                .Where(x => x.Active == true);
+                .Where(x => x.Active == true && x.KvAdHash == currentDate.ToString("ddMMyyyy"));
 
             return data;
         }

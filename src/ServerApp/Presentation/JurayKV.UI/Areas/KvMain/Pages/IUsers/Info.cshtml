@@ -57,6 +57,23 @@
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.UpdateUserManager.WalletBalance)
                     </dd>
+
+                    @if (Model.UpdateCompany != null)
+                    {
+                      <hr />
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.UpdateCompany.Name)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.UpdateCompany.Name)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.UpdateCompany.CreatedAtUtc)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.UpdateCompany.CreatedAtUtc)
+                        </dd>
+                    }
                 </dl>
             </div>
         </div>

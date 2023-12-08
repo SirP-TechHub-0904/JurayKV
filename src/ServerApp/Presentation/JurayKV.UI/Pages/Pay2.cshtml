@@ -1,0 +1,30 @@
+﻿@page
+@model JurayKV.UI.Pages.Pay2Model
+@{
+}
+<form id="form1"
+      name="form1"
+      action="https://newwebpay.qa.interswitchng.com/collections/w/pay"
+      method="post">
+    <input name="merchant_code" id="merchant_code" value="VNA" />
+    <input name="pay_item_id" id="pay_item_id" value="103" />
+    <input name="txn_ref" id="txn_ref" value="cbw4wE90iRTmbtIK" />
+    <input name="amount" id="amount" value="5600" />
+    <input name="currency" id="currency" value="566" />
+    <input name="cust_name" id="cust_name" value="Puneet Malik" />
+    <input name="cust_email"
+           id="cust_email"
+           value="Puneetmalik2015@gmail.com" />
+    <input name="cust_id"
+           id="cust_id"
+           value="effd53fc-4cc7-44e4-9d07-52b8b4197468"
+           placeholder="you@example.com" />
+    <input name="pay_item_name"
+           id="pay_item_name"
+           value="flight"
+           placeholder="you@example.com" />
+    <input name="site_redirect_url"
+           value="https://www.google.com/" />
+
+    <input type="submit" value="submit" />
+</form>

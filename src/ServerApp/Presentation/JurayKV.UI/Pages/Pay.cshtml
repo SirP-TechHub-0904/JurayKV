@@ -4,6 +4,7 @@
 } 
 @{
     ViewData["Title"] = "Payment";
+    Layout = null;
 }
 
 <h2>Payment</h2>
@@ -15,3 +16,5 @@
 
     <button type="submit" class="btn btn-primary">Make Payment</button>
 </form>
+
+@Html.Raw(Model.Outcome)

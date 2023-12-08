@@ -1,6 +1,7 @@
 ﻿using JurayKV.Application.Caching.Handlers;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
+using JurayKV.Domain.Aggregates.TransactionAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,8 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
     private readonly IWalletCacheHandler _walletCacheHandler;
     private readonly IIdentityKvAdCacheHandler _identityKvAdCacheHandler;
     private readonly IRepository _repository;
+    private readonly ITransactionRepository _transactionRepository;
+    private readonly ITransactionCacheHandler _transactionCacheHandler;
 
     public CreateKvPointCommandHandler(
             IKvPointRepository kvPointRepository,
@@ -52,7 +55,9 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
             IWalletCacheHandler walletCacheHandler,
             IIdentityKvAdRepository identityKvAdRepository,
             IIdentityKvAdCacheHandler identityKvAdCacheHandler,
-            IRepository repository)
+            IRepository repository,
+            ITransactionRepository transactionRepository,
+            ITransactionCacheHandler transactionCacheHandler)
     {
         _kvPointRepository = kvPointRepository;
         _kvPointCacheHandler = kvPointCacheHandler;
@@ -62,6 +67,8 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
         _identityKvAdRepository = identityKvAdRepository;
         _identityKvAdCacheHandler = identityKvAdCacheHandler;
         _repository = repository;
+        _transactionRepository = transactionRepository;
+        _transactionCacheHandler = transactionCacheHandler;
     }
 
     public async Task<Guid> Handle(CreateKvPointCommand request, CancellationToken cancellationToken)
@@ -91,7 +98,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     //update wallet
                     var getwallet = await _walletRepository.GetByUserIdAsync(request.UserId);
                     getwallet.Amount += Convert.ToDecimal(request.Point);
-                    getwallet.LastUpdateAtUtc = DateTime.Now;
+                    getwallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
                     var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
                     getwallet.Log = "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
 
@@ -110,6 +117,8 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                         getidentitykvads.AdsStatus = AdsStatus.Credited;
                         await _identityKvAdRepository.UpdateAsync(getidentitykvads);
                     }
+
+
                     // Remove the cache
                     await _identityKvAdCacheHandler.RemoveListAsync();
                     await _identityKvAdCacheHandler.RemoveListActiveTodayAsync();
@@ -117,6 +126,38 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     await _identityKvAdCacheHandler.RemoveGetActiveByUserIdAsync(create.UserId);
                     await _identityKvAdCacheHandler.RemoveDetailsByIdAsync(create.Id);
                     await _identityKvAdCacheHandler.RemoveGetAsync(create.Id);
+
+                    //get the company by identitykvid
+                    var identityKvAdsInfo = await _identityKvAdRepository.GetByIdAsync(request.IdentityKvAdId);
+
+
+                    //debit wallet from company
+                    var companywallet = await _walletRepository.GetByUserIdAsync(identityKvAdsInfo.KvAd.Company.UserId);
+                    companywallet.Amount -= Convert.ToDecimal(request.Point);
+                    companywallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
+                    companywallet.Log = "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + companywallet.Amount + " :: Date: " + companywallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+
+                    await _walletRepository.UpdateAsync(companywallet);
+
+                    //create debit transaction for company
+                    Transaction Companytransaction = new Transaction(Guid.NewGuid());
+                    Companytransaction.WalletId = companywallet.Id;
+                    Companytransaction.TransactionType = TransactionTypeEnum.Debit;
+                    Companytransaction.TransactionReference = Guid.NewGuid().ToString();
+                    Companytransaction.Description = "Advert Debit";
+                    Companytransaction.Status = EntityStatus.Successfull;
+                    Companytransaction.UserId = companywallet.UserId;
+                    Companytransaction.Amount = request.Point * identityKvAdsInfo.KvAd.Company.AmountPerPoint;
+                    Companytransaction.Note = "ADs";
+
+                    // Persist to the database
+                    await _transactionRepository.InsertAsync(Companytransaction);
+                    // Remove the cache
+                    await _transactionCacheHandler.RemoveListAsync();
+                    await _transactionCacheHandler.RemoveGetAsync(Companytransaction.Id);
+                    await _transactionCacheHandler.RemoveDetailsByIdAsync(Companytransaction.Id);
+                    await _transactionCacheHandler.RemoveList10ByUserAsync(Companytransaction.UserId);
+
                 }
 
 

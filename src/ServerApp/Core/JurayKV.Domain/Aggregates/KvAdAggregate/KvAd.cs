@@ -1,6 +1,7 @@
 ﻿using JurayKV.Domain.Aggregates.BucketAggregate;
 using JurayKV.Domain.Aggregates.CompanyAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.Aggregates.ImageAggregate;
 using JurayKV.Domain.Primitives;
 using System;
@@ -37,5 +38,7 @@ namespace JurayKV.Domain.Aggregates.KvAdAggregate
         public DataStatus Status { get;set; }
         public bool Active { get; set; }
         public string DateId { get; set; }
+
+        public ICollection<IdentityKvAd> IdentityKvAds { get; set; }
     }
 }

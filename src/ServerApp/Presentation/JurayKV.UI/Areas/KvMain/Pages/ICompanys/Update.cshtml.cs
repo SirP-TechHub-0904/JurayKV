@@ -41,7 +41,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
         {
             try
             {
-                UpdateCompanyCommand command = new UpdateCompanyCommand(UpdateCompany.Id, UpdateCompany.Name);
+                UpdateCompanyCommand command = new UpdateCompanyCommand(UpdateCompany.Id, UpdateCompany.Name, UpdateCompany.AmountPerPoint);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfully";
             }

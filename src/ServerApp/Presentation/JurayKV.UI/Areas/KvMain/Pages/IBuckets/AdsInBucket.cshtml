@@ -32,7 +32,7 @@
                                 <th>Status </th>
                                 @*<th>Active </th>*@
 
-                                <th> </th>
+                                @*<th> </th>*@
 
                             </tr>
                         </thead>
@@ -66,11 +66,12 @@
                                     </td>
                                     <td>
                                         @{
+ 
                                             DateTime sixAMDateTime = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0);
                                             DateTime sixAMDateTimec = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0).AddDays(1);
                                         }
                                          
-                                        @if (sixAMDateTime <= DateTime.Now && DateTime.Now <= sixAMDateTimec)
+                                        @if (sixAMDateTime <= DateTime.UtcNow.AddHours(1) && DateTime.UtcNow.AddHours(1) <= sixAMDateTimec)
                                         {
 
 
@@ -107,7 +108,7 @@
                                             </form>
                                         </td>*@
 
-                                    <td>
+                                    @*<td>
                                         <div class="btn-group">
 
                                             <div class="btn-group">
@@ -123,7 +124,7 @@
                                             </div>
                                         </div>
 
-                                    </td>
+                                    </td>*@
 
                                 </tr>
                             }
@@ -153,8 +154,7 @@
                                 </th>
                                 <th>Date</th>
                                 <th>Image</th>
-
-                                <th> </th>
+ 
 
                             </tr>
                         </thead>
@@ -187,25 +187,7 @@
                                         </a>
                                     </td>
 
-
-
-                                    <td>
-                                        <div class="btn-group">
-
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu" style="">
-
-                                                    <a class="dropdown-item" asp-page="./Info" asp-route-id="@item.Id">Details</a>
-                                                    <a class="dropdown-item" asp-page="./Update" asp-route-id="@item.Id">Update</a>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
+                                     
 
                                 </tr>
                             }

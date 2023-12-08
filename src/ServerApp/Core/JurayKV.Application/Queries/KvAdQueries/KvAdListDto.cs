@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JurayKV.Application.Queries.IdentityKvAdQueries;
+using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +25,7 @@ namespace JurayKV.Application.Queries.KvAdQueries
         public bool Exist { get; set; }
         public bool Active {  get; set; }
         public bool MyActiveAdvert {  get; set; }
+        public ICollection<IdentityKvAdListDto> IdentityKvAdListDtos { get; set; }
+
     }
 }

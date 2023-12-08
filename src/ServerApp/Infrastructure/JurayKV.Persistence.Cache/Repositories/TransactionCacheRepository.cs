@@ -1,4 +1,5 @@
 ﻿using JurayKV.Application.Caching.Repositories;
+using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Application.Queries.KvPointQueries;
 using JurayKV.Application.Queries.TransactionQueries;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
@@ -78,7 +79,9 @@ namespace JurayKV.Persistence.Cache.Repositories
                     TransactionType = d.TransactionType,
                     UserId = d.UserId,
                     WalletId = d.WalletId,
-                    CreatedAtUtc = d.CreatedAtUtc
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    TransactionVerificationId = d.TransactionVerificationId,
+                    
                 };
 
                 var transaction = await _repository.GetByIdAsync(transactionId, selectExp);
@@ -160,6 +163,29 @@ namespace JurayKV.Persistence.Cache.Repositories
         public async Task<int> TransactionCount(Guid userId)
         {
            return await _transactionRepository.TransactionCount(userId);
+        }
+
+        public async Task<List<TransactionListDto>> GetListByUserIdAsync(Guid userId)
+        {
+            var mainlist = await _transactionRepository.GetListByUserId(userId);
+            var list = mainlist.Select(d => new TransactionListDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                Note = d.Note,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.SurName,
+                WalletId = d.WalletId,
+                WalletBalance = d.Wallet.Amount,
+                CreatedAtUtc = d.CreatedAtUtc
+            }).ToList();
+
+            return list;
         }
     }
 

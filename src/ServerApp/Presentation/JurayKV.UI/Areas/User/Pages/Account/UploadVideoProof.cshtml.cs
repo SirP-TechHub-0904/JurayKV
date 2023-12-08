@@ -33,7 +33,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             IdentityKvAdDetailsDto = await _mediator.Send(command);
 
 
-            DateTime currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.UtcNow.AddHours(1);
             DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
 
             bool isLinkEnabled = IdentityKvAdDetailsDto.CreatedAtUtc < nextDay6AM;

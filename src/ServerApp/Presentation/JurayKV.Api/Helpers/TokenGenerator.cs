@@ -58,7 +58,7 @@ public class TokenManager
             }
         }
 
-        DateTime utcNow = DateTime.Now;
+        DateTime utcNow = DateTime.UtcNow.AddHours(1);
 
         string fullName = string.IsNullOrWhiteSpace(user.SurName) ? user.UserName : user.SurName;
 

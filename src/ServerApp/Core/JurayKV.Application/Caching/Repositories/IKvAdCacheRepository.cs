@@ -12,11 +12,12 @@ namespace JurayKV.Application.Caching.Repositories
         Task<KvAdDetailsDto> GetByActiveAsync(Guid bucketId);
         Task<List<KvAdDetailsDto>> GetByActiveAsync();
         Task<KvAdDetailsDto> GetByIdAsync(Guid modelId);
-
+        Task<List<KvAdListDto>> GetListAllBucketByCompanyAsync(Guid companyId);
         Task<KvAdDetailsDto> GetDetailsByIdAsync(Guid modelId);
         Task<List<KvAdListDto>> GetActiveListAllBucketAsync(DateTime date);
         Task ClearAllActive();
-
+        Task<List<KvAdListDto>> GetActiveListAllBucketByCompanyAsync(DateTime date, Guid companyId);
         Task MakeActiveAsync(Guid id, Guid bucketId, bool active);
+        Task<List<KvAdListDto>> GetListByCompanyIdAsync(Guid companyId);
     }
 }

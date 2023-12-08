@@ -15,7 +15,7 @@ namespace JurayKV.Application.Caching.Repositories
         Task<List<IdentityKvAdListDto>> GetActiveByUserIdAsync(Guid userId);
 
         Task<IdentityKvAdDetailsDto> GetDetailsByIdAsync(Guid modelId);
-
+        Task<List<IdentityKvAdListDto>> GetActiveByCompanyIdAsync(Guid companyId);
         Task<int> AdsCount(Guid userId);
     }
 }

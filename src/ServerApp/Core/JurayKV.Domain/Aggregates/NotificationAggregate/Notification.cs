@@ -27,5 +27,6 @@ namespace JurayKV.Domain.Aggregates.NotificationAggregate
         public DateTime? ResentAtUtc { get; set; }
 
         public string Message { get;set; }
+        public string Subject { get;set; }
     }
 }

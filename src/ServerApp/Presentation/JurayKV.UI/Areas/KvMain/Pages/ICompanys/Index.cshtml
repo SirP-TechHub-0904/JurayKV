@@ -23,6 +23,7 @@
 
                         <th>Date </th>
 
+                        <th>Amount Per Point </th>
                         <th> </th>
 
                     </tr>
@@ -41,13 +42,16 @@
                                 @sn
                             </td>
                             <td>
-                                <a asp-page="./Details" asp-route-id="@item.Id">
+                                <a asp-page="/IUsers/Info" asp-route-id="@item.UserId">
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </a>
                             </td>
 
                             <td>
                                 @item.CreatedAtUtc.ToString("dd/MM/yyyy")
+                            </td>
+                            <td>
+                                @item.AmountPerPoint
                             </td>
                             <td>
                                 <div class="btn-group">

@@ -17,6 +17,7 @@ namespace JurayKV.Application.Caching.Repositories
         Task<List<CompanyDropdownListDto>> GetDropdownListAsync();
 
         Task<CompanyDetailsDto> GetByIdAsync(Guid modelId);
+        Task<CompanyDetailsDto> GetByUserIdAsync(Guid userId);
 
         Task<CompanyDetailsDto> GetDetailsByIdAsync(Guid modelId);
     }

@@ -8,15 +8,17 @@ namespace JurayKV.Application.Commands.CompanyCommands;
 
 public sealed class CreateCompanyCommand : IRequest<Guid>
 {
-    public CreateCompanyCommand(string name, Guid userId)
+    public CreateCompanyCommand(string name, Guid userId, decimal amountPerPoint)
     {
         Name = name; 
         UserId = userId;
+        AmountPerPoint = amountPerPoint;
     }
 
     public string Name { get; }
     public Guid UserId { get;}
-     
+    public decimal AmountPerPoint { get; set; }
+
 }
 
 internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, Guid>
@@ -40,6 +42,7 @@ internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyComman
         Company company = new Company(Guid.NewGuid());
         company.Name = request.Name;
         company.UserId = request.UserId;
+        company.AmountPerPoint = request.AmountPerPoint;
         // Persist to the database
         await _companyRepository.InsertAsync(company);
 

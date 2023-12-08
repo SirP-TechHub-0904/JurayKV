@@ -20,7 +20,7 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
         Task<List<IdentityKvAd>> GetListByUserId(Guid userId);
         Task<IQueryable<IdentityKvAd>> GetActiveListByUserId(Guid userId);
         Task<IQueryable<IdentityKvAd>> ListActiveToday();
-
+        Task<IQueryable<IdentityKvAd>> GetActiveListByCompanyId(Guid companyId);
         Task<bool> CheckExist(Guid userId, Guid kvAdId);
         Task<bool> CheckUserAdvertCountToday(Guid userId);
 

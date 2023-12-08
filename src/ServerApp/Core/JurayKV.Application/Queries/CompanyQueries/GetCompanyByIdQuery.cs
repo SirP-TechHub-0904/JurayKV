@@ -35,7 +35,7 @@ public sealed class GetCompanyByIdQuery : IRequest<CompanyDetailsDto>
                 Id = d.Id,
                Name= d.Name,
                CreatedAtUtc = d.CreatedAtUtc,
-               
+               AmountPerPoint = d.AmountPerPoint,
             };
 
             CompanyDetailsDto companyDetailsDto = await _companyCacheRepository.GetByIdAsync(request.Id);

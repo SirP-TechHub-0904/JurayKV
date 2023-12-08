@@ -16,6 +16,7 @@ namespace JurayKV.Application.Caching.Repositories
         Task<TransactionDetailsDto> GetDetailsByIdAsync(Guid modelId);
 
         Task<List<TransactionListDto>> GetListByCountAsync(int toplistcount, Guid userId);
+        Task<List<TransactionListDto>> GetListByUserIdAsync(Guid userId);
 
         Task<int> TransactionCount(Guid userId);
 

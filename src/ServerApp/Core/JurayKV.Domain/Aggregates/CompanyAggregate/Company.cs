@@ -27,6 +27,6 @@ namespace JurayKV.Domain.Aggregates.CompanyAggregate
        public Guid UserId { get;set; }
         public ApplicationUser User { get; set; }
         public DateTime CreatedAtUtc { get; set; }
-
+        public decimal AmountPerPoint { get; set; }
     }
 }

@@ -22,6 +22,43 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.AdvertRequestAggregate.AdvertRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionReference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("AdvertRequests");
+                });
+
             modelBuilder.Entity("JurayKV.Domain.Aggregates.BucketAggregate.Bucket", b =>
                 {
                     b.Property<Guid>("Id")
@@ -53,6 +90,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AmountPerPoint")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
@@ -561,6 +601,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<DateTime?>("SentAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -569,6 +612,23 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.SettingAggregate.Setting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("DefaultAmountPerView")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinimumAmountBudget")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("JurayKV.Domain.Aggregates.SliderAggregate.Slider", b =>
@@ -659,6 +719,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
+
+                    b.Property<string>("TransactionVerificationId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -809,6 +872,17 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.AdvertRequestAggregate.AdvertRequest", b =>
+                {
+                    b.HasOne("JurayKV.Domain.Aggregates.CompanyAggregate.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("JurayKV.Domain.Aggregates.CompanyAggregate.Company", b =>
                 {
                     b.HasOne("JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser", "User")
@@ -856,7 +930,7 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
             modelBuilder.Entity("JurayKV.Domain.Aggregates.IdentityKvAdAggregate.IdentityKvAd", b =>
                 {
                     b.HasOne("JurayKV.Domain.Aggregates.KvAdAggregate.KvAd", "KvAd")
-                        .WithMany()
+                        .WithMany("IdentityKvAds")
                         .HasForeignKey("KvAdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1019,6 +1093,11 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
             modelBuilder.Entity("JurayKV.Domain.Aggregates.ImageAggregate.ImageFile", b =>
                 {
                     b.Navigation("KvAds");
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.KvAdAggregate.KvAd", b =>
+                {
+                    b.Navigation("IdentityKvAds");
                 });
 #pragma warning restore 612, 618
         }

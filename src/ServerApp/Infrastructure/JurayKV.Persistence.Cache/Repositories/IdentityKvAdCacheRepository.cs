@@ -128,6 +128,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 UserId = mainidentityKvAd.UserId,
                 VideoUrl = mainidentityKvAd.VideoUrl,
                 CreatedAtUtc = mainidentityKvAd.CreatedAtUtc,
+                CompanyId = mainidentityKvAd.KvAd.CompanyId,
                 LastModifiedAtUtc = mainidentityKvAd.LastModifiedAtUtc,
                 Active = mainidentityKvAd.Active,
                 KvAdImage = mainidentityKvAd.KvAd.ImageFile.ImageUrl,
@@ -224,6 +225,44 @@ namespace JurayKV.Persistence.Cache.Repositories
                 return 0;
             }
             return data.Point;
+        }
+        public async Task<List<IdentityKvAdListDto>> GetActiveByCompanyIdAsync(Guid companyId)
+        {
+            //string cacheKey = IdentityKvAdCacheKeys.GetActiveByUserIdKey(userId);
+            //List<IdentityKvAdListDto> list = await _distributedCache.GetAsync<List<IdentityKvAdListDto>>(cacheKey);
+
+            //if (list == null)
+            //{
+
+            //    var mainlist = await _adRepository.GetActiveListByUserId(userId);
+            //    list = mainlist.Select(d => new IdentityKvAdListDto
+            //    {
+            //        Id = d.Id,
+            //        Activity = d.Activity,
+            //        CreatedAtUtc = d.CreatedAtUtc,
+            //        KvAdId = d.KvAdId,
+            //        LastModifiedAtUtc = d.LastModifiedAtUtc,
+            //        UserId = d.UserId,
+            //        VideoUrl = d.VideoUrl,
+            //        Active = d.Active,
+            //        ImageUrl = d.KvAd.ImageUrl
+            //    }).ToList();
+            //    await _distributedCache.SetAsync(cacheKey, list);
+            //}
+            var mainlist = await _adRepository.GetActiveListByCompanyId(companyId);
+            var list = mainlist.Select(d => new IdentityKvAdListDto
+            {
+                Id = d.Id,
+                Activity = d.Activity,
+                CreatedAtUtc = d.CreatedAtUtc,
+                KvAdId = d.KvAdId,
+                LastModifiedAtUtc = d.LastModifiedAtUtc,
+                UserId = d.UserId,
+                VideoUrl = d.VideoUrl,
+                Active = d.Active,
+                ImageUrl = d.KvAd.ImageFile.ImageUrl
+            }).ToList();
+            return list;
         }
 
         public async Task<List<IdentityKvAdListDto>> GetActiveByUserIdAsync(Guid userId)

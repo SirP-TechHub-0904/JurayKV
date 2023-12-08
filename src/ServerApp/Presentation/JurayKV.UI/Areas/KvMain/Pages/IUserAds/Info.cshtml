@@ -27,8 +27,8 @@
 
             <div class="card">
                 <div class="card-body">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 text-center service-simple" style="margin-top:15px;padding:10px;">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6 text-center service-simple" style="margin-top:15px;padding:10px;">
 
                         <h3>ADs from @Model.IdentityKvAdDetailsDto.Fullname</h3>
                         <p>Kindly upload your whatsapp status proof of views</p>
@@ -51,31 +51,31 @@
                             DateTime sixAMDateTimec = new DateTime(Model.IdentityKvAdDetailsDto.CreatedAtUtc.Year, Model.IdentityKvAdDetailsDto.CreatedAtUtc.Month, Model.IdentityKvAdDetailsDto.CreatedAtUtc.Day, 6, 0, 0).AddDays(1);
                         }
                         @{
-                            DateTime currentDate = DateTime.Now;
+                            DateTime currentDate = DateTime.UtcNow.AddHours(1);
                             DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
 
                             bool isLinkEnabled = Model.IdentityKvAdDetailsDto.CreatedAtUtc < nextDay6AM;
 
 
                         }
-                        @if (sixAMDateTime <= DateTime.Now && DateTime.Now <= sixAMDateTimec)
+                        @if (sixAMDateTime <= DateTime.UtcNow.AddHours(1) && DateTime.UtcNow.AddHours(1) <= sixAMDateTimec)
                         {
                             <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
                         }
                         @*@if (isLinkEnabled)
-                        {
-                            @if (Model.IdentityKvAdDetailsDto.AdsStatus != JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
                             {
+                                @if (Model.IdentityKvAdDetailsDto.AdsStatus != JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
+                                {
 
 
-                                <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
+                                    <h4><span class="countdown btn btn-success" data-target-time="6:00:00"></span></h4>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <h4><span class="countdown btn btn-success">--:--</span></h4>
+                            else
+                            {
+                                <h4><span class="countdown btn btn-success">--:--</span></h4>
 
-                        }*@
+                            }*@
                         @if (!String.IsNullOrEmpty(Model.IdentityKvAdDetailsDto.VideoUrl))
                         {
                             <video controls style="max-height:400px;">
@@ -95,8 +95,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4 service-simple" style="margin-top: 15px; padding: 10px;">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6 service-simple" style="margin-top: 15px; padding: 10px;">
                             <h4>Kindly Update The Points from the Video</h4>
 
                             <div class="service-simple">
@@ -112,14 +112,14 @@
                                 }
 
                                 @*@if (User.IsInRole(Constants.AdminTwo) || User.IsInRole(Constants.AdminPolicy))
-                                {
-                                    <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultTwo</a>
-                                }
+                                    {
+                                        <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultTwo</a>
+                                    }
 
-                                @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.AdminPolicy))
-                                {
-                                    <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultThree</a>
-                                }*@
+                                    @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.AdminPolicy))
+                                    {
+                                        <a class="btn btn-success font-bold">@Model.IdentityKvAdDetailsDto.ResultThree</a>
+                                    }*@
 
                                 @if (Model.IdentityKvAdDetailsDto.AdsStatus != JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
                                 {
@@ -128,14 +128,14 @@
                                         <form method="post" enctype="multipart/form-data" asp-page-handler="UpdatePoint">
                                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                             <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
-
+                                            <input type="hidden" asp-for="CompanyUserId" value="@Model.CompanyDetailsDto.UserId" />
                                             <div class="form-group">
                                                 <label class="control-label">Choose to Validate</label>
                                                 <select asp-for="PointChoose" class="form-control">
                                                     @*<option value="">Choose</option>*@
                                                     <option value="First">First Option</option>
                                                     @*<option value="Second">Second Option</option>
-                                                    <option value="Third">Third Option</option>*@
+                <option value="Third">Third Option</option>*@
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -150,47 +150,60 @@
                         </div>
                         @if (Model.IdentityKvAdDetailsDto.AdsStatus != JurayKV.Domain.Primitives.Enum.AdsStatus.Credited)
                         {
-                            
 
-                                <div class="card">
+
+                            <div class="card">
+                                <div class="card-body">
+
+
                                     <form method="post" enctype="multipart/form-data">
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <input type="hidden" asp-for="IdentityKvAdDetailsDto.Id" />
+                                        <input type="hidden" asp-for="CompanyUserId" value="@Model.CompanyDetailsDto.UserId" />
 
                                         @if (User.IsInRole(Constants.AdminOne) || User.IsInRole(Constants.SuperAdminPolicy))
                                         {
                                             <div class="form-group">
-                                                <label asp-for="PointOne" class="control-label">Add Total Views in These Advert</label>
+                                                <h4>@Model.CompanyDetailsDto.Name Financial Information</h4>
+
+                                                <h6>Balance (@Model.WalletDetailsDto.Amount)</h6>
+                                                <h6>Amount Charged Per Point (@Model.CompanyDetailsDto.AmountPerPoint)</h6>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="PointOne" class="control-label">Add Total Views in These Advert </label>
                                                 <input asp-for="PointOne" class="form-control" />
                                             </div>
                                         }
 
                                         @*@if (User.IsInRole(Constants.AdminTwo) || User.IsInRole(Constants.SuperAdminPolicy))
-                                        {
-                                            <div class="form-group">
-                                                <label asp-for="PointTwo" class="control-label">Total Views in These Advert</label>
-                                                <input asp-for="PointTwo" class="form-control" />
-                                            </div>
-                                        }
+                {
+                    <div class="form-group">
+                        <label asp-for="PointTwo" class="control-label">Total Views in These Advert</label>
+                        <input asp-for="PointTwo" class="form-control" />
+                    </div>
+                }
 
-                                        @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.SuperAdminPolicy))
-                                        {
-                                            <div class="form-group">
-                                                <label asp-for="PointThree" class="control-label">Total Views in These Advert</label>
-                                                <input asp-for="PointThree" class="form-control" />
-                                            </div>
-                                        }*@
+                @if (User.IsInRole(Constants.AdminThree) || User.IsInRole(Constants.SuperAdminPolicy))
+                {
+                    <div class="form-group">
+                        <label asp-for="PointThree" class="control-label">Total Views in These Advert</label>
+                        <input asp-for="PointThree" class="form-control" />
+                    </div>
+                }*@
 
                                         <div class="form-group">
                                             <input type="submit" value="Submit" class="btn btn-primary" />
                                             <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="">Back</a>
 
                                         </div>
+
                                     </form>
                                 </div>
-                            
+                            </div>
                         }
                     </div>
+
 
                 </div>
             </div>
@@ -198,8 +211,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
                             <div class="service-simple" style="margin-top: 15px; padding: 10px;">
                                 <a href="@Model.IdentityKvAdDetailsDto.KvAdImage">
                                     <div class="position-relative">
@@ -214,7 +227,7 @@
             </div>
 
         }
-        </div>
+    </div>
 
 </div>
 

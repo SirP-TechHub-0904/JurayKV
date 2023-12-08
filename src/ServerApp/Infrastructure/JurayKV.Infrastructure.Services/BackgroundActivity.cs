@@ -36,7 +36,7 @@ namespace JurayKV.Infrastructure.Services
 
         public async Task SendEmailToEveningActiveAdsAsync()
         {
-            DateTime currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.UtcNow.AddHours(1);
             DateTime nextDay6AM = currentDate.Date.AddDays(1).AddHours(6);
 
             //var data = _dbContext.IdentityKvAds.Include(x => x.KvAd)
@@ -67,7 +67,7 @@ namespace JurayKV.Infrastructure.Services
 
         public async Task UpdateAllUserAdsAfterSix()
         {
-            DateTime cutoffTime = DateTime.Now.Date.AddHours(6);
+            DateTime cutoffTime = DateTime.UtcNow.AddHours(1).Date.AddHours(6);
             var data = await _dbContext.IdentityKvAds.AsNoTracking()
                 .Where(msg => msg.CreatedAtUtc < cutoffTime && msg.Active == true) 
                 .Where(x => x.Active == true).Take(50).ToListAsync();

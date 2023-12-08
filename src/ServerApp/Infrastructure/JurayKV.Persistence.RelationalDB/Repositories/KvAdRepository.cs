@@ -11,6 +11,7 @@ using TanvirArjel.ArgumentChecker;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories.GenericRepositories;
 using JurayKV.Domain.Aggregates.BucketAggregate;
+using JurayKV.Domain.ValueObjects;
 
 namespace JurayKV.Persistence.RelationalDB.Repositories
 {
@@ -73,7 +74,18 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             _dbContext.Remove(kvAd);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task<List<KvAd>> AdsByCompanyIdList(Guid companyId)
+        {
+            var data = await _dbContext.kvAds
+                .Include(x => x.Bucket)
+                .Include(x => x.Company)
+                .Include(x => x.ImageFile)
+                .Where(x => x.CompanyId == companyId && x.Status == Domain.Primitives.Enum.DataStatus.Active)
+                .Where(x => x.ImageFile != null)
+                .ToListAsync();
 
+            return data;
+        }
         public async Task<List<KvAd>> AdsByBucketId(Guid bucketId)
         {
             var data = await _dbContext.kvAds
@@ -86,17 +98,47 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             return data;
         }
-        public async Task<List<KvAd>> AdsForAllBucket(DateTime date)
+        public async Task<List<KvAd>> AdsByCompanyId(Guid companyId)
         {
+            DateTime mdate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
 
-            DateTime sixAMDateTime = new DateTime(date.Year, date.Month, date.Day, 6, 0, 0);
-            DateTime sixAMDateTimec = sixAMDateTime.AddDays(1);
+            //
+            var data = await _dbContext.kvAds
+                .Include(x => x.Bucket)
+                .Include(x => x.Company)
+                .Include(x => x.IdentityKvAds)
+                .Include(x => x.ImageFile)
+                .Where(x => x.CompanyId == companyId)
+                .Where(x => x.ImageFile != null)
+                .Where(x=>x.CreatedAtUtc.Date < mdate.Date)
+                .ToListAsync();
+
+            return data;
+        }
+        public async Task<List<KvAd>> AdsForAllBucketByCompanyId(DateTime date, Guid companyId)
+        {
 
             var data = await _dbContext.kvAds
                 .Include(x => x.Bucket)
                 .Include(x => x.Company)
+                .Include(x=>x.IdentityKvAds)
                 .Include(x => x.ImageFile)
-                .Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active && sixAMDateTime <= x.CreatedAtUtc && x.CreatedAtUtc <= sixAMDateTimec)
+                .Where(x=>x.CompanyId == companyId)
+                .Where(item => item.CreatedAtUtc.Date == date.Date)
+                //.Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active && date.ToString("ddMMyyyy") == x.DateId)
+                .Where(x => x.ImageFile != null)
+                .ToListAsync();
+
+            return data;
+        }
+        public async Task<List<KvAd>> AdsForAllBucket(DateTime date)
+        {
+            DateTime mdate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
+            var data = await _dbContext.kvAds
+                .Include(x => x.Bucket)
+                .Include(x => x.Company)
+                .Include(x => x.ImageFile)
+                .Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active && date.ToString("ddMMyyyy") == x.DateId)
                 .Where(x => x.ImageFile != null)
                 .ToListAsync();
 
@@ -141,7 +183,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<List<KvAd>> GetByActiveAsync()
         {
-            DateTime createdAtUtc = DateTime.Now;
+            DateTime createdAtUtc = DateTime.UtcNow.AddHours(1);
             DateTime sixAMDateTime = new DateTime(createdAtUtc.Year, createdAtUtc.Month, createdAtUtc.Day, 6, 0, 0);
             DateTime sixAMDateTimec = sixAMDateTime.AddDays(1);
 
@@ -149,7 +191,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                 .Include(x => x.Bucket)
                 .Include(x => x.ImageFile)
                 .Include(x => x.Company)
-                .Where(x => x.Active == true && sixAMDateTime <= DateTime.Now && DateTime.Now <= sixAMDateTimec)
+                .Where(x => x.Active == true && sixAMDateTime <= DateTime.UtcNow.AddHours(1) && DateTime.UtcNow.AddHours(1) <= sixAMDateTimec)
                 .ToListAsync();
         }
     }

@@ -15,6 +15,10 @@ namespace JurayKV.Persistence.Cache.Keys
         {
             return $"Company-{companyId}";
         }
+        public static string GetUserKey(Guid userId)
+        {
+            return $"CompanyDetails-{userId}";
+        }
 
         public static string GetDetailsKey(Guid companyId)
         {

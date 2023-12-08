@@ -50,6 +50,15 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<Guid> InsertReturnIdAsync(Transaction transaction)
+        {
+            transaction.ThrowIfNull(nameof(transaction));
+
+            await _dbContext.AddAsync(transaction);
+            await _dbContext.SaveChangesAsync();
+            return transaction.Id;
+        }
+
         public async Task UpdateAsync(Transaction transaction)
         {
             transaction.ThrowIfNull(nameof(transaction));
@@ -84,6 +93,16 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         public async Task<int> TransactionCount(Guid userId)
         {
            return await _dbContext.Transactions.Where(x=>x.UserId == userId).CountAsync();
+        }
+
+        public async Task<List<Transaction>> GetListByUserId(Guid userId)
+        {
+            var list = await _dbContext.Transactions
+                .Include(x=>x.User)
+                .Include(x=>x.Wallet)
+                 .Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAtUtc)
+                  .ToListAsync();
+            return list;
         }
     }
 

@@ -22,11 +22,13 @@ namespace JurayKV.Persistence.Cache.Repositories
     {
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public CompanyCacheRepository(IDistributedCache distributedCache, IQueryRepository repository)
+        public CompanyCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, ICompanyRepository companyRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
+            _companyRepository = companyRepository;
         }
 
         public async Task<List<CompanyListDto>> GetListAsync()
@@ -40,7 +42,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Id = d.Id,
                     Name = d.Name,
-                    CreatedAtUtc = d.CreatedAtUtc 
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    User = d.User,
+                    UserId = d.UserId,
+                    AmountPerPoint = d.AmountPerPoint,
                 };
 
                 list = await _repository.GetListAsync(selectExp);
@@ -63,7 +68,9 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     Name = d.Name,
                     CreatedAtUtc = d.CreatedAtUtc,
-                    
+                    User = d.User,
+                    UserId = d.UserId,
+                    AmountPerPoint = d.AmountPerPoint,
                 };
 
                 company = await _repository.GetByIdAsync(companyId, selectExp);
@@ -72,7 +79,25 @@ namespace JurayKV.Persistence.Cache.Repositories
             }
             return company;
         }
+        public async Task<CompanyDetailsDto> GetByUserIdAsync(Guid userId)
+        {
 
+            var cmp = await _companyRepository.GetByUserIdAsync(userId);
+            var company = new CompanyDetailsDto
+            {
+                Id = cmp.Id,
+                Name = cmp.Name,
+                CreatedAtUtc = cmp.CreatedAtUtc,
+                User = cmp.User,
+                UserId = cmp.UserId,
+                AmountPerPoint = cmp.AmountPerPoint,
+                Fullname = cmp.User.FirstName +" "+cmp.User.LastName,
+                Email = cmp.User.Email,
+                Phone = cmp.User.PhoneNumber,
+            };
+            
+            return company;
+        }
         public async Task<CompanyDetailsDto> GetDetailsByIdAsync(Guid companyId)
         {
             string cacheKey = CompanyCacheKeys.GetDetailsKey(companyId);
@@ -84,7 +109,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Id = d.Id,
                     Name = d.Name,
-                    CreatedAtUtc = d.CreatedAtUtc
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    User = d.User,
+                    UserId = d.UserId,
+                    AmountPerPoint = d.AmountPerPoint,
                 };
 
                 company = await _repository.GetByIdAsync(companyId, selectExp);

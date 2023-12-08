@@ -1,6 +1,7 @@
 using JurayKV.Application;
 using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Application.Queries.KvAdQueries;
+using JurayKV.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,15 +28,17 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
         {
             GetKvAdListByBucketIdQuery command = new GetKvAdListByBucketIdQuery(id);
             KvAds = await _mediator.Send(command);
-            DateTime currentDate = DateTime.Now;
+
+            DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
+             
             // Get finished items (where the date is before 6 am today)
             KvAdsFinished = KvAds.Where(x=>x.Status == Domain.Primitives.Enum.DataStatus.Active)
-                .Where(item => item.CreatedAtUtc < currentDate.Date.AddHours(6)).OrderByDescending(X => X.CreatedAtUtc)
+                .Where(item => item.CreatedAtUtc.Date < currentDate.Date).OrderByDescending(X => X.CreatedAtUtc)
                 .ToList();
 
             // Get active and upcoming items (where the date is after or exactly 6 am today)
             KvAdsUpcoming = KvAds.Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active)
-                .Where(item => item.CreatedAtUtc >= currentDate.Date.AddHours(6)).OrderBy(X=>X.CreatedAtUtc)
+                .Where(item => item.CreatedAtUtc.Date >= currentDate.Date).OrderBy(X=>X.CreatedAtUtc)
                 .ToList();
 
 
