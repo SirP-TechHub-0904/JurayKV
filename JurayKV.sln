@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.Flut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKvV.Infrastructure.Interswitch", "src\ServerApp\Infrastructure\JurayKvV.Infrastructure.Interswitch\JurayKvV.Infrastructure.Interswitch.csproj", "{7630D82A-4709-479C-8DFE-904BA9BE8CE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JurayKV.Infrastructure.Opay", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.Opay\JurayKV.Infrastructure.Opay.csproj", "{48AABE0F-E265-4967-859E-A906C84E9E10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7630D82A-4709-479C-8DFE-904BA9BE8CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48AABE0F-E265-4967-859E-A906C84E9E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48AABE0F-E265-4967-859E-A906C84E9E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48AABE0F-E265-4967-859E-A906C84E9E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48AABE0F-E265-4967-859E-A906C84E9E10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{81A9BCF2-40AF-4C84-92D7-8AF96A51B7A6} = {E1D1A568-3BD0-429C-A717-18B329D75120}
 		{02C3065A-4D8B-4A32-85B5-68B0E77C066F} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
 		{7630D82A-4709-479C-8DFE-904BA9BE8CE1} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
+		{48AABE0F-E265-4967-859E-A906C84E9E10} = {7E02466D-9055-484A-AFD1-33AD5CA46437}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C622411-9649-4977-93A0-2C624539C0EE}

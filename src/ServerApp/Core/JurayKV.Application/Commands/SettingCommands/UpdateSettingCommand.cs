@@ -14,11 +14,11 @@ public sealed class UpdateSettingCommand : IRequest
     public UpdateSettingCommand(SettingDetailsDto setting)
     {
         Setting = setting;
-         
+
     }
 
     public SettingDetailsDto Setting { get; }
-     
+
 }
 
 internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingCommand>
@@ -43,11 +43,12 @@ internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingComman
         var getupdate = await _settingRepository.GetByIdAsync(request.Setting.Id);
         if (getupdate != null)
         {
-             
+
 
             getupdate.MinimumAmountBudget = request.Setting.MinimumAmountBudget;
             getupdate.DefaultAmountPerView = request.Setting.DefaultAmountPerView;
-             
+            getupdate.BillGateway = request.Setting.BillGateway;
+            getupdate.PaymentGateway = request.Setting.PaymentGateway;
 
             await _settingRepository.UpdateAsync(getupdate);
 

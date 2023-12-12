@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.Queries.SettingQueries
 {
@@ -17,5 +18,7 @@ namespace JurayKV.Application.Queries.SettingQueries
         [Display(Name = "Minimum Amount Budget")]
         public decimal MinimumAmountBudget { get; set; }
 
+        public PaymentGateway PaymentGateway { get; set; }
+        public BillGateway BillGateway { get; set; }
     }
 }

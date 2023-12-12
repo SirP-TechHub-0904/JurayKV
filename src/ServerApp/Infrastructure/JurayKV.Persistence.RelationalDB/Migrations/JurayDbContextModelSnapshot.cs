@@ -620,11 +620,17 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("BillGateway")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("DefaultAmountPerView")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("MinimumAmountBudget")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PaymentGateway")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -25,28 +25,28 @@ namespace JurayKV.UI.Areas.Payment.Pages
             var status = HttpContext.Request.Query["status"].ToString();
             var areapath = HttpContext.Request.Query["areapath"].ToString();
             VerifyTransactionQuery command = new VerifyTransactionQuery(transaction_id);
-            var response = await _mediator.Send(command);
-            if (response.status == "success")
-            {
-                GetTransactionByIdQuery getcommand = new GetTransactionByIdQuery(Guid.Parse(tranxRef));
-                var Transactionresponse = await _mediator.Send(getcommand);
+            //var response = await _mediator.Send(command);
+            //if (response.status == "success")
+            //{
+            //    GetTransactionByIdQuery getcommand = new GetTransactionByIdQuery(Guid.Parse(tranxRef));
+            //    var Transactionresponse = await _mediator.Send(getcommand);
 
 
-                ValidateAndUpdateTransactionCommand validateCommand = new ValidateAndUpdateTransactionCommand(Transactionresponse.Id, transaction_id, EntityStatus.Successfull);
-                TransactionResponseDto outcome = await _mediator.Send(validateCommand);
-                if (outcome.Success)
-                {
-                    TempData["success"] = "Successfull";
-                    return RedirectToPage("/Account/Index", new { area = "client" });
-                    //return RedirectToPage(outcome.Path, new { area = areapath });
-                }
-                else
-                {
-                    TempData["error"] = "Unable to Complete Process";
-                    return RedirectToPage(outcome.Path, new { area = "client" });
-                }
+            //    ValidateAndUpdateTransactionCommand validateCommand = new ValidateAndUpdateTransactionCommand(Transactionresponse.Id, transaction_id, EntityStatus.Successfull);
+            //    TransactionResponseDto outcome = await _mediator.Send(validateCommand);
+            //    if (outcome.Success)
+            //    {
+            //        TempData["success"] = "Successfull";
+            //        return RedirectToPage("/Account/Index", new { area = "client" });
+            //        //return RedirectToPage(outcome.Path, new { area = areapath });
+            //    }
+            //    else
+            //    {
+            //        TempData["error"] = "Unable to Complete Process";
+            //        return RedirectToPage(outcome.Path, new { area = "client" });
+            //    }
 
-            }
+            //}
             TempData["error"] = "Unable to Process Completely";
             return RedirectToPage("/Account/Index", new {area= areapath });
         }

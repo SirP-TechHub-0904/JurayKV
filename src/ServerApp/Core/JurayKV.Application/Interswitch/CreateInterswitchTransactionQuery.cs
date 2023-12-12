@@ -45,9 +45,9 @@ namespace JurayKV.Application.Interswitch
                 model.pay_item_name = "Koboview";
                 model.site_redirect_url = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/verify";
 
-                string repositories = await _repositoryService.Payment(model);
+                //string repositories = await _repositoryService.Payment(model);
 
-                return repositories;
+                return "";
             }
 
         }

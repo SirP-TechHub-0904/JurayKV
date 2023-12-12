@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,13 +23,13 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             _httpClient = new HttpClient();
             _configuration = configuration;
         }
-      
+
         public async Task<string> Payment(PaymentRequest model)
         {
             var clientId = _configuration["Interswitch:ClientId"];
             var clientSecret = _configuration["Interswitch:ClientSecret"];
             //access bearer
-            Authentication authentication= new Authentication(_configuration);
+            Authentication authentication = new Authentication(_configuration);
             string accessToken = await authentication.GetAccessTokenAsync(clientId, clientSecret);
 
 
@@ -36,22 +37,22 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
 
             var requestData = new PaymentRequest
             {
-               merchant_code = model.merchant_code,
-               pay_item_id = model.pay_item_id,
-               txn_ref = model.txn_ref,
-               amount = model.amount,
-               currency = model.currency,
-               cust_email = model.cust_email,
-               cust_id = model.cust_id,
-               cust_name = model.cust_name,
-               pay_item_name = model.pay_item_name,
-               site_redirect_url = model.site_redirect_url,
+                merchant_code = model.merchant_code,
+                pay_item_id = model.pay_item_id,
+                txn_ref = model.txn_ref,
+                amount = model.amount,
+                currency = model.currency,
+                cust_email = model.cust_email,
+                cust_id = model.cust_id,
+                cust_name = model.cust_name,
+                pay_item_name = model.pay_item_name,
+                site_redirect_url = model.site_redirect_url,
             };
 
             var jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(requestData);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-             _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
 
 
@@ -69,17 +70,18 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
         {
             var clientId = _configuration["Interswitch:ClientId"];
             var clientSecret = _configuration["Interswitch:ClientSecret"];
+            var MerchantCode = _configuration["Interswitch:MerchantCode"];
 
-            // Access bearer token
-            Authentication authentication = new Authentication(_configuration);
-            string accessToken = await authentication.GetAccessTokenAsync(clientId, clientSecret);
+            //// Access bearer token
+            //Authentication authentication = new Authentication(_configuration);
+            //string accessToken = await authentication.GetAccessTokenAsync(clientId, clientSecret);
 
             var apiUrl = $"https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantcode={merchantcode}&transactionreference={reference}&amount={amount}";
 
             // Make the GET request
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-            _httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            //_httpClient.DefaultRequestHeaders.Clear();
+            //_httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+            //_httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
 
             var response = await _httpClient.GetAsync(apiUrl);
 
@@ -384,29 +386,371 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
 
             return validationResponse;
         }
-        public async Task<BillersCategoriesResponse> GetBillersCategories(string token, string terminalId)
+
+        public async Task<BillerListResponse> GetBillers()
         {
-            var apiUrl = "http://172.25.20.59/quicktellerservice/api/v5/services/categories";
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-            _httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
-            _httpClient.DefaultRequestHeaders.Add("TerminalID", terminalId);
-              
-
-            var response = await _httpClient.GetAsync(apiUrl);
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                // Handle non-success status codes
-                // You might want to log or throw a specific exception
+                string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/services";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                BillersCategoriesResponse responses = new BillersCategoriesResponse();
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    BillerListResponse outcome = JsonConvert.DeserializeObject<BillerListResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return outcome;
+                }
+            }
+            catch (Exception d)
+            {
+                return null;
+            }
+        }
+
+
+        static string CalculateSignature(string data, string apiSecret)
+        {
+            using (var sha1 = new HMACSHA1(Encoding.UTF8.GetBytes(apiSecret)))
+            {
+                byte[] hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(data));
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
+
+        public async Task<BillersByCategoryResponse> GetBillersByCategory(string categoryId)
+        {
+            try
+            {
+                string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/services?categoryId={categoryId}";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                BillersCategoriesResponse responses = new BillersCategoriesResponse();
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    BillersByCategoryResponse outcome = JsonConvert.DeserializeObject<BillersByCategoryResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return outcome;
+                }
+            }
+            catch (Exception d)
+            {
+                return null;
+            }
+        }
+
+        public async Task<BillerPaymentItemResponse> GetBillerPaymentItem(string billerId)
+        {
+            try
+            {
+                string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/services/options?serviceid={billerId}";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                BillersCategoriesResponse responses = new BillersCategoriesResponse();
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    BillerPaymentItemResponse outcome = JsonConvert.DeserializeObject<BillerPaymentItemResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return outcome;
+                }
+            }
+            catch (Exception d)
+            {
+                return null;
+            }
+        }
+
+        public async Task<CustomerValidationResponse> CustomerValidation(string paymentCode, string customerId)
+        {
+            try
+            {
+                string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/Transactions/validatecustomers";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                CustomerValidationResponse responses = new CustomerValidationResponse();
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+                    httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
+                    // Create the request payload
+                    var payload = new
+                    {
+                        customers = new[]
+                        {
+                    new
+                    {
+                        PaymentCode = paymentCode,
+                        CustomerId = customerId
+                    }
+                },
+                        TerminalId = terminalId
+                    };
+                    // Create the HTTP content with the JSON payload
+                    // Convert payload to JSON string
+                    var jsonPayload = JsonConvert.SerializeObject(payload);
+
+                    // Convert JSON string to HttpContent
+                    HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.PostAsync(apiUrl, content);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    CustomerValidationResponse outcome = JsonConvert.DeserializeObject<CustomerValidationResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return outcome;
+                }
+            }
+            catch (Exception d)
+            {
+                return null;
+            }
+        }
+
+        public async Task<BillerCategoryListResponse> ListBillersCategory()
+        {
+            BillerCategoryListResponse responses = new BillerCategoryListResponse();
+
+            try
+            {
+                string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/services/categories";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    responses = JsonConvert.DeserializeObject<BillerCategoryListResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return responses;
+                }
+            }
+            catch (Exception d)
+            {
+                responses.ResponseCode = d.ToString();
+                return null;
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
+        }
 
-            var serviceCategoriesResponse = JsonConvert.DeserializeObject<BillersCategoriesResponse>(responseContent);
+        public async Task<BankListResponse> BankList()
+        {
+            BankListResponse responses = new BankListResponse();
 
-            return serviceCategoriesResponse;
+            try
+            {
+                string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/configuration/fundstransferbanks";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    responses = JsonConvert.DeserializeObject<BankListResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return responses;
+                }
+            }
+            catch (Exception d)
+            {
+                responses.ResponseCode = d.ToString();
+                return responses;
+            }
+        }
+
+        public async Task<TransferFundResponse> SingleTransfer(TransferFundsRequest model)
+        {
+            TransferFundResponse responses = new TransferFundResponse();
+
+            try
+            {
+                string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/transactions/TransferFunds";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+
+                    // Convert request model to JSON string
+                    var jsonPayload = JsonConvert.SerializeObject(model);
+
+                    // Convert JSON string to HttpContent
+                    HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.PostAsync(apiUrl, content);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    responses = JsonConvert.DeserializeObject<TransferFundResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return responses;
+                }
+            }
+            catch (Exception d)
+            {
+                //responses.ResponseCode = d.ToString();
+                return responses;
+            }
+        }
+
+        public async Task<AccountVerificationResponse> ValidateBankAccount(string accountNumber, string bankCode)
+        {
+            AccountVerificationResponse responses = new AccountVerificationResponse();
+
+            try
+            {
+                string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/Transactions/DoAccountNameInquiry";
+                string terminalId = "3pbl0001";
+                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
+                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+
+                //access bearer
+                Authentication authentication = new Authentication(_configuration);
+                TokenResponse accessToken = await authentication.GetBillersAccessTokenAsync(clientId, clientSecret);
+
+                 // Create a new HttpClient instance
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.access_token}");
+                    httpClient.DefaultRequestHeaders.Add("Terminalid", terminalId);
+                    httpClient.DefaultRequestHeaders.Add("accountid", accountNumber);
+                    httpClient.DefaultRequestHeaders.Add("bankcode", bankCode);
+
+                    // Create the HTTP content with the JSON payload
+                    //HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+
+                    // Perform the HTTP POST request
+                    var response = await httpClient.GetAsync(apiUrl);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    responses = JsonConvert.DeserializeObject<AccountVerificationResponse>(responseContent);
+
+                    //  return accesstoken;
+                    return responses;
+                }
+            }
+            catch (Exception d)
+            {
+                return null;
+            }
+        }
+
+        public Task<AccountVerificationResponse> NameInquiryByBVN(string bvn)
+        {
+            throw new NotImplementedException();
         }
     }
+
+
 }

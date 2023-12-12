@@ -10,6 +10,26 @@ namespace JurayKV.Domain.Primitives
 {
     public class Enum
     {
+        public enum PaymentGateway
+        {
+            [Description("NotDefind")]
+            NotDefind = 0,
+            [Description("Flutterwave")]
+            Flutterwave = 1,
+
+            [Description("Interswitch")]
+            Interswitch = 2,
+        }
+        public enum BillGateway
+        {
+            [Description("NotDefind")]
+            NotDefind = 0,
+            [Description("Flutterwave")]
+            Flutterwave = 1,
+
+            [Description("Interswitch")]
+            Interswitch = 2,
+        }
         public enum NotificationStatus
         {
             [Description("NotDefind")]

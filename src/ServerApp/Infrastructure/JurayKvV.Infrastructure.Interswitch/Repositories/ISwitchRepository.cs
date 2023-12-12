@@ -10,7 +10,7 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
 {
     public interface ISwitchRepository
     {
-        Task<string> Payment (PaymentRequest model);
+        
         Task<ComfirmationResponse> PaymentComfirmation (string merchantcode, string reference, string amount);
         Task<UssdIssuersResponse> GetUssdIssuers();
         Task<GenerateUssdResponse> GenerateUssdTransaction(string accessToken, UssdTransactionRequest requestData);
@@ -23,6 +23,18 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
         Task<QuickTellerServiceOptionsResponse> GetBillerPaymentItemQuickTellerServiceOptions(string token, string serviceId, string terminalId);
         Task<TransactionResponse> ProcessTransaction(string token, string terminalId, SendBillPaymentRequest transactionRequest);
         Task<ValidationResponse> ValidateCustomers(string token, string terminalId, ValidateCustomersRequest validateCustomersRequest);
-        Task<BillersCategoriesResponse> GetBillersCategories(string token, string terminalId);
+        //Task<BillersCategoriesResponse> GetBillersCategories(string token, string terminalId);
+        Task<BillerListResponse> GetBillers();
+        Task<BillerCategoryListResponse> ListBillersCategory();
+        Task<BillersByCategoryResponse> GetBillersByCategory(string categoryId);
+        Task<BillerPaymentItemResponse> GetBillerPaymentItem(string billerId);
+        Task<CustomerValidationResponse> CustomerValidation(string paymentCode, string customerId);
+
+        Task<BankListResponse> BankList();
+        Task<TransferFundResponse> SingleTransfer(TransferFundsRequest model);
+
+        Task<AccountVerificationResponse> ValidateBankAccount(string accountNumber, string bankCode);
+        Task<AccountVerificationResponse> NameInquiryByBVN(string bvn);
+
     }
 }
