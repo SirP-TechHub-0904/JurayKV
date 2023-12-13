@@ -1,5 +1,6 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using MediatR;
+using System.Linq;
 using TanvirArjel.ArgumentChecker;
 
 namespace JurayKV.Application.Queries.SliderQueries;
@@ -20,7 +21,7 @@ public sealed class GetSliderListQuery : IRequest<List<SliderDetailsDto>>
             request.ThrowIfNull(nameof(request));
 
             List<SliderDetailsDto> sliderDtos = await _sliderCacheRepository.GetListAsync();
-            return sliderDtos;
+            return sliderDtos.Where(x=>x.Show == true).ToList();
         }
     }
 }

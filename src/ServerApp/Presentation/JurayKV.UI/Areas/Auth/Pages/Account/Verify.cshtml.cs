@@ -35,9 +35,12 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         public Guid Xtxnt { get; set; }
         [BindProperty]
         public int NotificationNumber { get; set; }
+        public string RefX { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string xmal, string txtd)
+
+        public async Task<IActionResult> OnGetAsync(string xmal, string txtd, string refx = null)
         {
+            RefX = refx;
             if (xmal == null)
             {
                 return RedirectToPage("/Index");
@@ -71,7 +74,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     DataResponseDto result = await _mediator.Send(command);
                     //
 
-                  
+
                     if (result.BoolResponse == true)
                     {
                         TempData["success"] = "Code Sent Successfully.";

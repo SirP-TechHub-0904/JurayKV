@@ -82,8 +82,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public string RefX { get; set; }
+        public async Task OnGetAsync(string returnUrl = null, string refx = null)
         {
+            RefX = refx;
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);

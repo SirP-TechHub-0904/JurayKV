@@ -27,37 +27,37 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<List<SliderDetailsDto>> GetListAsync()
         {
-            string cacheKey = SliderCacheKeys.ListKey;
-            List<SliderDetailsDto> list = await _distributedCache.GetAsync<List<SliderDetailsDto>>(cacheKey);
+            //string cacheKey = SliderCacheKeys.ListKey;
+            //List<SliderDetailsDto> list = await _distributedCache.GetAsync<List<SliderDetailsDto>>(cacheKey);
 
-            if (list == null)
+            //if (list == null)
+            //{
+            Expression<Func<Slider, SliderDetailsDto>> selectExp = d => new SliderDetailsDto
             {
-                Expression<Func<Slider, SliderDetailsDto>> selectExp = d => new SliderDetailsDto
-                {
-                    Id = d.Id,
-                    Url = d.Url,
-                    Key = d.Key,
-                    SecondUrl = d.SecondUrl,
-                    SecondKey = d.SecondKey,
-                    YoutubeVideo = d.YoutubeVideo,
-                    IsVideo = d.IsVideo,
-                    SortOrder = d.SortOrder,
-                    Show = d.Show,
-                    Title = d.Title,
-                    MiniTitle = d.MiniTitle,
-                    Text = d.Text,
-                    ButtonText = d.ButtonText,
-                    ButtonLink = d.ButtonLink,
-                    DisableVideoButton = d.DisableVideoButton,
-                    VideoButtonText = d.VideoButtonText,
-                    VideoLink = d.VideoLink,
+                Id = d.Id,
+                Url = d.Url,
+                Key = d.Key,
+                SecondUrl = d.SecondUrl,
+                SecondKey = d.SecondKey,
+                YoutubeVideo = d.YoutubeVideo,
+                IsVideo = d.IsVideo,
+                SortOrder = d.SortOrder,
+                Show = d.Show,
+                Title = d.Title,
+                MiniTitle = d.MiniTitle,
+                Text = d.Text,
+                ButtonText = d.ButtonText,
+                ButtonLink = d.ButtonLink,
+                DisableVideoButton = d.DisableVideoButton,
+                VideoButtonText = d.VideoButtonText,
+                VideoLink = d.VideoLink,
 
-                };
+            };
 
-                list = await _repository.GetListAsync(selectExp);
+            List<SliderDetailsDto> list = await _repository.GetListAsync(selectExp);
 
-                await _distributedCache.SetAsync(cacheKey, list);
-            }
+            //await _distributedCache.SetAsync(cacheKey, list);
+            //}
 
             return list;
         }

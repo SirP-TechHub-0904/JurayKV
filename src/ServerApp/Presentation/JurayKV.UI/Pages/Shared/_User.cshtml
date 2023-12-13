@@ -155,7 +155,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/" class="brand-link" style="text-align: center; margin: 0 auto;">
-                <img src="~/img/Koboview-logo-main.png" alt="KoboView Advert" class="" style=" height: 30px; text-align: center; margin: 0 auto;">
+                <img src="~/img/Koboview-logo-main.png" alt="Koboview Advert" class="" style=" height: 30px; text-align: center; margin: 0 auto;">
             </a>
 
             <!-- Sidebar -->
@@ -245,10 +245,26 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a asp-page="/Account/Index" asp-area="Payment" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p class="uppercase">
+                                    Payment
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a asp-page="/Account/Transactions" asp-area="User" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p class="uppercase">
                                     Transactions
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-page="/Account/ReferralHistory" asp-area="User" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p class="uppercase">
+                                    My Referrals
                                 </p>
                             </a>
                         </li>
@@ -315,7 +331,7 @@
 
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; @DateTime.UtcNow.Year KoboView</strong>
+            <strong>Copyright &copy; @DateTime.UtcNow.Year Koboview</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> 1.0

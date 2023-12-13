@@ -12,8 +12,10 @@ namespace JurayKV.UI.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public string RefX { get; set; }
+        public void OnGet(string refx = null)
         {
+            RefX = refx;
         }
     }
 }

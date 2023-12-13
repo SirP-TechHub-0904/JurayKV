@@ -63,7 +63,7 @@
 <h3 class="login-box-msg">Verify Your Account</h3>
 
 <p class="login-box-msg">Please choose one way to receive your 6-digit code</p>
-<form asp-page-handler="SMS" method="post">
+<form asp-page-handler="SMS" method="post" onsubmit="return disableSubmit()">
     <input asp-for="Xtxnt" type="hidden" />
     <input asp-for="NotificationNumber" type="hidden" value="1" />
     <div class="row">
@@ -73,7 +73,7 @@
                     <span class="btn-gradient">
                         <i class="fa fa-check"></i>
                     </span>
-                    <span class="btn-text"> SMS OTP <i class="fa fa-sms" style="margin-left:20px;"></i></span>
+                    <span class="btn-text"> SMS OTP <i class="fa fa-sms" style="margin-left:20px;"></i> <span style="color: red; margin-left: 3px;"><i>unavailable</i></span></span>
                 </button>
             </div>
         </div>
@@ -82,7 +82,7 @@
 
 
 
-<form asp-page-handler="Voice" method="post">
+<form asp-page-handler="Voice" method="post" onsubmit="return disableSubmit()">
     <input asp-for="Xtxnt" type="hidden" />
     <input asp-for="NotificationNumber" type="hidden" value="3" />
 
@@ -94,7 +94,7 @@
                     <span class="btn-gradient">
                         <i class="fa fa-check"></i>
                     </span>
-                    <span class="btn-text"> Voice OTP <i class="fa fa-phone" style="margin-left:20px;"></i></span>
+                    <span class="btn-text"> Voice OTP <i class="fa fa-phone" style="margin-left:20px;"></i> <span style="color: red; margin-left: 3px;"><i>unavailable</i></span></span>
                 </button>
             </div>
         </div>
@@ -123,11 +123,19 @@
 <div class="row">
 
     <div class="col-md-12" style="text-align:center;">
-        <a asp-page="./Login" class="text-center" style="text-align:center;">I already have an Account</a>
+        <a asp-page="./Login" asp-route-refx="@Model.RefX" class="text-center" style="text-align:center;">I already have an Account</a>
     </div>
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function disableSubmit() {
+            // Optionally, you can add additional logic here to conditionally enable or disable the form submission.
+            // For example, you can check if the Voice OTP is available.
 
+            // Returning false prevents the form from submitting.
+            return false;
+        }
+    </script>
 }
 

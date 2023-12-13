@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.Flut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKvV.Infrastructure.Interswitch", "src\ServerApp\Infrastructure\JurayKvV.Infrastructure.Interswitch\JurayKvV.Infrastructure.Interswitch.csproj", "{7630D82A-4709-479C-8DFE-904BA9BE8CE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JurayKV.Infrastructure.Opay", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.Opay\JurayKV.Infrastructure.Opay.csproj", "{48AABE0F-E265-4967-859E-A906C84E9E10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.Opay", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.Opay\JurayKV.Infrastructure.Opay.csproj", "{48AABE0F-E265-4967-859E-A906C84E9E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

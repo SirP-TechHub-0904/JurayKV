@@ -15,10 +15,10 @@ namespace JurayKV.Application.Caching.Repositories
     public interface IUserManagerCacheRepository
     {
         Task<List<UserManagerListDto>> GetListAsync();
-        
+        Task<UserManagerDetailsDto> GetReferralInfoByPhoneAsync(string phone);
 
         Task<UserManagerDetailsDto> GetByIdAsync(Guid modelId);
         Task<UserDashboardDto> GetUserDashboardDto(Guid userId, CancellationToken cancellationToken);
-
+        Task<List<UserManagerListDto>> GetListReferralAsync(string myphone);
     }
 }

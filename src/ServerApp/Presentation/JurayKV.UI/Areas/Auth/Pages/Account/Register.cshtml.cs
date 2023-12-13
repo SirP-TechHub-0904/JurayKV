@@ -7,6 +7,7 @@ using JurayKV.Application.Commands.UserManagerCommands;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Validation;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Persistence.RelationalDB.Migrations;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -90,11 +92,28 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-
-        public async Task OnGetAsync(string returnUrl = null)
+        [BindProperty]
+        public string RefPhone { get; set; }
+        [BindProperty]
+        public string RefName { get; set; }
+        public async Task OnGetAsync(string returnUrl = null, string refx = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (refx != null)
+            {
+                try
+                {
+                    string last10DigitsPhoneNumber1 = refx.Substring(Math.Max(0, refx.Length - 10));
+
+                    var userref = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber.Contains(refx));
+                    if (userref != null)
+                    {
+                        RefName = userref.SurName + " " + userref.FirstName;
+                        RefPhone = userref.PhoneNumber;
+                    }
+                }
+                catch { }
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -103,19 +122,23 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                try {
+                try
+                {
                     CreateUserDto create = new CreateUserDto();
                     create.Fullname = Input.Fullname;
                     create.Email = Input.Email;
                     create.Password = Input.Password;
                     create.PhoneNumber = Input.PhoneNumber;
                     create.Role = "User";
+                    create.RefPhone = RefPhone;
                     CreateUserManagerCommand command = new CreateUserManagerCommand(create);
                     ResponseCreateUserDto Result = await _mediator.Send(command);
-                    if(Result.Succeeded == false)
+                    if (Result.Succeeded == false)
                     {
                         Input.Password = null;
-                        Input.ConfirmPassword = null; 
+                        Input.ConfirmPassword = null;
+                        RefName = RefName;
+                        RefPhone = RefPhone;
                         TempData["error"] = Result.Message;
                         ModelState.AddModelError(string.Empty, Result.Message);
 

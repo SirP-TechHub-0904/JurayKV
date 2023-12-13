@@ -12,6 +12,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
     {
         
         Task<ComfirmationResponse> PaymentComfirmation (string merchantcode, string reference, string amount);
+
+        #region
         Task<UssdIssuersResponse> GetUssdIssuers();
         Task<GenerateUssdResponse> GenerateUssdTransaction(string accessToken, UssdTransactionRequest requestData);
         Task<VirtualAccountTransactionResponse> CreateVirtualAccountTransaction(string accessToken, VirtualAccountTransactionRequest requestData);
@@ -24,6 +26,7 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
         Task<TransactionResponse> ProcessTransaction(string token, string terminalId, SendBillPaymentRequest transactionRequest);
         Task<ValidationResponse> ValidateCustomers(string token, string terminalId, ValidateCustomersRequest validateCustomersRequest);
         //Task<BillersCategoriesResponse> GetBillersCategories(string token, string terminalId);
+        #endregion
         Task<BillerListResponse> GetBillers();
         Task<BillerCategoryListResponse> ListBillersCategory();
         Task<BillersByCategoryResponse> GetBillersByCategory(string categoryId);

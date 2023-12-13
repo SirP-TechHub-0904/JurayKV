@@ -9,7 +9,7 @@
         public bool IsDisabled { get; set; }
         public DateTime Date { get; set; }
         public DateTime CreationUTC { get; set; }
-
+        public bool Verified { get; set; }
         public DateTime? LastLoggedInAtUtc { get; set; }
     }
 }

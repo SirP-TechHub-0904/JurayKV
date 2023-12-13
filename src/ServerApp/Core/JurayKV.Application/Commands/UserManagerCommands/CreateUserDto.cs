@@ -8,5 +8,6 @@
         public string Password { get; set; }
          public bool Comfirm { get; set; }
         public string Role { get; set; }
+        public string RefPhone { get; set; }
      }
 }

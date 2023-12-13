@@ -40,7 +40,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
             request.ThrowIfNull(nameof(request));
 
             var user = await _userManager.GetByIdAsync(request.Id);
-
+            var reff = await _userManager.GetReferralInfoByPhoneAsync(user.RefferedBy);
             UserManagerDetailsDto outcome = new UserManagerDetailsDto
             {
                 Id = user.Id,
@@ -53,6 +53,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 Surname = user.Surname,
                 Firstname = user.Firstname, Lastname = user.Lastname,
                 IsCompany = user.IsCompany,
+                RefferedBy = reff.Fullname
             };
 
             

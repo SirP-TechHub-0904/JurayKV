@@ -8,6 +8,7 @@ using JurayKV.Application.Queries.UserManagerQueries;
 using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Domain.Aggregates.EmployeeAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.ValueObjects;
 using JurayKV.Persistence.Cache.Keys;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using TanvirArjel.EFCore.GenericRepository;
@@ -35,6 +37,27 @@ namespace JurayKV.Persistence.Cache.Repositories
             _userManager = userManager;
         }
 
+        public async Task<List<UserManagerListDto>> GetListReferralAsync(string myphone)
+        {
+            string last10DigitsPhoneNumber1 = myphone.Substring(Math.Max(0, myphone.Length - 10));
+            var userlist = await _userManager.Users.Where(x => x.RefferedByPhoneNumber.Contains(last10DigitsPhoneNumber1)).ToListAsync();
+            // Manual mapping from entities to DTOs
+            var list = userlist.Select(entity => new UserManagerListDto
+            {
+                Id = entity.Id,
+                Date = entity.CreationUTC,
+                Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                IsDisabled = entity.IsDisabled,
+                Email = entity.Email,
+                PhoneNumber = entity.PhoneNumber,
+                LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                CreationUTC = entity.CreationUTC,
+                Verified = entity.EmailConfirmed
+            }).ToList();
+
+            return list;
+        }
+
         public async Task<List<UserManagerListDto>> GetListAsync()
         {
             //string cacheKey = UserManagerCacheKeys.ListKey;
@@ -42,23 +65,57 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (list == null)
             //{
-                var userlist = await _userManager.Users.ToListAsync();
-                // Manual mapping from entities to DTOs
-               var list = userlist.Select(entity => new UserManagerListDto
-                {
-                    Id = entity.Id,
-                    Date = entity.CreationUTC,
-                    Fullname = entity.SurName + " "+entity.FirstName + " "+entity.LastName,
-                    IsDisabled = entity.IsDisabled,
-                    Email = entity.Email,
-                    PhoneNumber = entity.PhoneNumber,
-                    LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
-                    // Map other properties as needed
-                }).ToList();
+            var userlist = await _userManager.Users.ToListAsync();
+            // Manual mapping from entities to DTOs
+            var list = userlist.Select(entity => new UserManagerListDto
+            {
+                Id = entity.Id,
+                Date = entity.CreationUTC,
+                Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                IsDisabled = entity.IsDisabled,
+                Email = entity.Email,
+                PhoneNumber = entity.PhoneNumber,
+                LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                CreationUTC= entity.CreationUTC,
+                // Map other properties as needed
+            }).ToList();
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
 
             return list;
+        }
+        public async Task<UserManagerDetailsDto> GetReferralInfoByPhoneAsync(string phone)
+        {
+            try
+            {
+                UserManagerDetailsDto userManager = new UserManagerDetailsDto();
+                if (phone != null)
+                {
+                    string last10DigitsPhoneNumber1 = phone.Substring(Math.Max(0, phone.Length - 10));
+                    var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber.Contains(last10DigitsPhoneNumber1));
+                    if (entity != null)
+                    {
+                        userManager = new UserManagerDetailsDto
+                        {
+                            Id = entity.Id,
+
+                            Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+
+                            Email = entity.Email,
+                            PhoneNumber = entity.PhoneNumber,
+
+                        };
+                    }
+                }
+                //    await _distributedCache.SetAsync(cacheKey, userManager);
+                //}
+
+                return userManager;
+            }
+            catch (Exception a)
+            {
+                return null;
+            }
         }
 
         public async Task<UserManagerDetailsDto> GetByIdAsync(Guid userManagerId)
@@ -70,24 +127,24 @@ namespace JurayKV.Persistence.Cache.Repositories
             //if (userManager == null)
             //{
             var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
-                if (entity != null)
+            if (entity != null)
+            {
+                userManager = new UserManagerDetailsDto
                 {
-                    userManager = new UserManagerDetailsDto
-                    {
-                        Id = entity.Id,
-                        CreationUTC = entity.CreationUTC,
-                        Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                        IsDisabled = entity.IsDisabled,
-                        Email = entity.Email,
-                        PhoneNumber = entity.PhoneNumber,
-                        LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
-                        Surname =entity.SurName,
-                        Firstname = entity.FirstName,
-                        Lastname = entity.LastName,
-
-                        IsCompany = await _userManager.IsInRoleAsync(entity, "Company")
-                    };
-                }
+                    Id = entity.Id,
+                    CreationUTC = entity.CreationUTC,
+                    Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                    IsDisabled = entity.IsDisabled,
+                    Email = entity.Email,
+                    PhoneNumber = entity.PhoneNumber,
+                    LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                    Surname = entity.SurName,
+                    Firstname = entity.FirstName,
+                    Lastname = entity.LastName,
+                    RefferedBy = entity.RefferedByPhoneNumber,
+                    IsCompany = await _userManager.IsInRoleAsync(entity, "Company")
+                };
+            }
 
             //    await _distributedCache.SetAsync(cacheKey, userManager);
             //}
@@ -103,19 +160,19 @@ namespace JurayKV.Persistence.Cache.Repositories
             //if (userManager == null)
             //{
             var entity = await _userManager.FindByIdAsync(userManagerId.ToString());
-                if (entity != null)
+            if (entity != null)
+            {
+                userManager = new UserManagerDetailsDto
                 {
-                    userManager = new UserManagerDetailsDto
-                    {
-                        Id = entity.Id,
-                        CreationUTC = entity.CreationUTC,
-                        Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                        IsDisabled = entity.IsDisabled,
-                        Email = entity.Email,
-                        PhoneNumber = entity.PhoneNumber,
-                        LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
-                    };
-                }
+                    Id = entity.Id,
+                    CreationUTC = entity.CreationUTC,
+                    Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                    IsDisabled = entity.IsDisabled,
+                    Email = entity.Email,
+                    PhoneNumber = entity.PhoneNumber,
+                    LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                };
+            }
 
             //    await _distributedCache.SetAsync(cacheKey, userManager);
             //}
@@ -129,7 +186,7 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //
             Specification<KvPointListDto> kvpointspec = new Specification<KvPointListDto>();
-            kvpointspec.Conditions.Add(x=>x.UserId == userId);
+            kvpointspec.Conditions.Add(x => x.UserId == userId);
             kvpointspec.Take = 10;
             List<KvPointListDto> pointlist = await _repository.GetListAsync<KvPointListDto>(kvpointspec, cancellationToken);
 
@@ -140,10 +197,10 @@ namespace JurayKV.Persistence.Cache.Repositories
             List<TransactionListDto> translist = await _repository.GetListAsync<TransactionListDto>(transspec, cancellationToken);
 
             //
-          
+
             Specification<IdentityKvAdListDto> useradsspec = new Specification<IdentityKvAdListDto>();
             useradsspec.Conditions.Add(x => x.UserId == userId && x.Active == true);
-             
+
             int count = await _repository.GetCountAsync<IdentityKvAdListDto>(useradsspec.Conditions, cancellationToken);
             //
 

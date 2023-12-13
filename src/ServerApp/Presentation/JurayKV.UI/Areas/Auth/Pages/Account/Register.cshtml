@@ -9,6 +9,9 @@
 <div asp-validation-summary="All" class="text-danger"></div>
 
 <form id="registrationForm" method="post">
+    <input type="hidden" asp-for="RefPhone" />
+
+
     <div class="input-group mb-3">
         <input type="text" class="form-control" asp-for="Input.Fullname" placeholder="Full name" onkeyup="myUppercase()">
         <div class="input-group-append">
@@ -49,6 +52,18 @@
             </div>
         </div>
     </div>
+    @if (Model.RefName != null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="">
+                    <label for="">
+                        Referred by (@Model.RefName)
+                    </label>
+                </div>
+            </div>
+        </div>
+    }
     <div class="row">
         <div class="col-8">
             <div class="icheck-primary">

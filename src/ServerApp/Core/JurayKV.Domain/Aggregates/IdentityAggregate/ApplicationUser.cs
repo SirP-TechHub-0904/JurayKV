@@ -21,4 +21,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public DateTime XvalueDate { get; set; }
 
     public bool DisableEmailNotification { get; set; }
+
+    public string RefferedByPhoneNumber { get;set; }
 }

@@ -94,7 +94,7 @@
 
         .login-6 .form-inner {
             max-width: 450px;
-            width: 50%;
+            width: 100%;
             margin: 0 30px;
             text-align: center;
         }
@@ -118,6 +118,21 @@
             font-weight: 500;
             font-size: 20px;
         }
+        @@media (min-width: 768px) {
+            .login-6 .form-inner {
+                max-width: 450px;
+                width: 50%;
+                margin: 0 30px;
+                text-align: center;
+            }
+        }
+        @@media (max-width: 767px) {
+            .login-6 .form-section a.forgot-password {
+                font-size: 16px;
+                color: #717171;
+                float: left;
+            }
+        }
     </style>
 
 </head>
@@ -138,7 +153,7 @@
                 <div class="col-lg-6 align-self-center pad-0 form-section clip-home">
                     <div class="form-inner">
                         <a href="/" class="logo">
-                            <img class="img-fluid logo" src="~/img/Koboview-logo-main.png" alt="KoboView" style="min-height: 120px; padding: 0px; background-color: white;">
+                            <img class="img-fluid logo" src="~/img/Koboview-lgn.png" alt="Koboview" style="height: 100px; padding: 0px; background-color: white;">
                         </a>
                         <div data-bn-type="text" class="css-leflpn">
                             <div data-bn-type="text" class="css-ft5043" style="color:#f5f5f5;">Please check that you are visiting the correct URL</div>

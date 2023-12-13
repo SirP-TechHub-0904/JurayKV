@@ -16,12 +16,14 @@ namespace JurayKV.UI.Pages
             _logger = logger;
             _mediator = mediator;
         }
-
-        public async Task<IActionResult> OnGetAsync()
+        public string RefX { get; set; }
+         
+            public async Task<IActionResult> OnGetAsync(string refx = null)
         {
             GetSliderListQuery command = new GetSliderListQuery();
             Slider = await _mediator.Send(command);
-            return Page();
+                RefX = refx;
+                return Page();
         }
         public List<SliderDetailsDto> Slider = new List<SliderDetailsDto>();
 
