@@ -17,14 +17,16 @@
                 <thead>
                     <tr>
                         <th>S/N</th>
-                        
+
                         <th>
                             @Html.DisplayNameFor(model => model.Setting[0].MinimumAmountBudget)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Setting[0].DefaultAmountPerView)
                         </th>
-                         
+                        <th>
+                            @Html.DisplayNameFor(model => model.Setting[0].DefaultReferralAmmount)
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -43,14 +45,16 @@
                                 }
                                 @sn
                             </td>
-                            
+
                             <td>
                                 @Html.DisplayFor(modelItem => item.MinimumAmountBudget)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DefaultAmountPerView)
                             </td>
-                           
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DefaultReferralAmmount)
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success">Action</button>

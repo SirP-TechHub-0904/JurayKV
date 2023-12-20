@@ -48,9 +48,7 @@ public sealed class EmailSender : IEmailSender
                 mail.Body = emailbody;
                 //set the addresses 
 
-
-
-                mail.From = new MailAddress("help@koboview.com", "KoboView"); //IMPORTANT: This must be same as your smtp authentication address.
+                mail.From = new MailAddress("help@koboview.com", "Koboview"); //IMPORTANT: This must be same as your smtp authentication address.
                 mail.To.Add(model.Email);
 
                 //set the content 
@@ -58,14 +56,29 @@ public sealed class EmailSender : IEmailSender
 
                 mail.IsBodyHtml = true;
                 //send the message 
-                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-
-                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
-                NetworkCredential Credentials = new NetworkCredential("help@koboview.com", "xuoyokecrbnihahi");
+                SmtpClient smtp = new SmtpClient("mail.koboview.com");
+                NetworkCredential Credentials = new NetworkCredential("help@koboview.com", "Admin@123");
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = Credentials; smtp.Timeout = 20000;
-                //alternative port number is 8889
-                smtp.EnableSsl = true; smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.Credentials = Credentials;
+                smtp.Port = 25;    //alternative port number is 8889
+                smtp.EnableSsl = false;
+
+                //mail.From = new MailAddress("help@koboview.com", "KoboView"); //IMPORTANT: This must be same as your smtp authentication address.
+                //mail.To.Add(model.Email);
+
+                ////set the content 
+                //mail.Subject = model.Subject.Replace("\r\n", "");
+
+                //mail.IsBodyHtml = true;
+                ////send the message 
+                //SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+
+                ////IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                //NetworkCredential Credentials = new NetworkCredential("help@koboview.com", "xuoyokecrbnihahi");
+                //smtp.UseDefaultCredentials = false;
+                //smtp.Credentials = Credentials; smtp.Timeout = 20000;
+                ////alternative port number is 8889
+                //smtp.EnableSsl = true; smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(mail);
 
 

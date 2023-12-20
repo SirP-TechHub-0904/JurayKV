@@ -23,6 +23,7 @@ namespace JurayKV.Domain.Aggregates.SettingAggregate
 
         public decimal DefaultAmountPerView { get; set; }
         public decimal MinimumAmountBudget { get; set; }
+        public decimal DefaultReferralAmmount { get; set; }
         public PaymentGateway PaymentGateway { get; set; }
         public BillGateway BillGateway { get; set; }
 

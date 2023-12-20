@@ -53,7 +53,8 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 Surname = user.Surname,
                 Firstname = user.Firstname, Lastname = user.Lastname,
                 IsCompany = user.IsCompany,
-                RefferedBy = reff.Fullname
+                RefferedBy = reff.Fullname,
+                PhoneOfRefferedBy = user.RefferedBy
             };
 
             

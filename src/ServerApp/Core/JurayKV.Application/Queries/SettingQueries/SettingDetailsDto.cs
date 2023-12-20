@@ -18,6 +18,9 @@ namespace JurayKV.Application.Queries.SettingQueries
         [Display(Name = "Minimum Amount Budget")]
         public decimal MinimumAmountBudget { get; set; }
 
+        [Display(Name = "Default Referral Ammount")]
+        public decimal DefaultReferralAmmount { get; set; }
+
         public PaymentGateway PaymentGateway { get; set; }
         public BillGateway BillGateway { get; set; }
     }

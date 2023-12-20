@@ -88,6 +88,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 MinimumAmountBudget = d.MinimumAmountBudget,
                 PaymentGateway = d.PaymentGateway,
                 BillGateway = d.BillGateway,
+                DefaultReferralAmmount = d.DefaultReferralAmmount,
             };
             return setting;
         }

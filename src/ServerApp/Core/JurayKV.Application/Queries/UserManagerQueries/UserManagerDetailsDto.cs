@@ -18,5 +18,6 @@
         public bool DisableEmailNotification { get; set; }
         public bool IsCompany {  get; set; }
         public string RefferedBy { get; set; }
+        public string PhoneOfRefferedBy { get; set; }
     }
 }

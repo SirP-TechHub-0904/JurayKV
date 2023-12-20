@@ -47,6 +47,7 @@ internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingComman
 
             getupdate.MinimumAmountBudget = request.Setting.MinimumAmountBudget;
             getupdate.DefaultAmountPerView = request.Setting.DefaultAmountPerView;
+            getupdate.DefaultReferralAmmount = request.Setting.DefaultReferralAmmount;
             getupdate.BillGateway = request.Setting.BillGateway;
             getupdate.PaymentGateway = request.Setting.PaymentGateway;
 

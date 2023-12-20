@@ -1,8 +1,17 @@
+using Amazon.Runtime.Internal;
+using Azure.Core;
 using JurayKV.Application.Commands.IdentityCommands.UserCommands;
 using JurayKV.Application.Commands.NotificationCommands;
+using JurayKV.Application.Commands.TransactionCommands;
+using JurayKV.Application.Commands.WalletCommands;
 using JurayKV.Application.Queries.IdentityQueries.UserQueries;
+using JurayKV.Application.Queries.SettingQueries;
+using JurayKV.Application.Queries.TransactionQueries;
+using JurayKV.Application.Queries.UserManagerQueries;
+using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Application.Services;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using JurayKV.Domain.Aggregates.WalletAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,12 +28,15 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMediator _mediator;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
-        public ComfirmationModel(UserManager<ApplicationUser> userManager, IMediator mediator, SignInManager<ApplicationUser> signInManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWalletRepository _walletRepository;
+        public ComfirmationModel(UserManager<ApplicationUser> userManager, IMediator mediator, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpContextAccessor, IWalletRepository walletRepository)
         {
             _userManager = userManager;
             _mediator = mediator;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
+            _walletRepository = walletRepository;
         }
 
         /// <summary>
@@ -70,6 +82,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 try
                 {
                     var identityResult = await _userManager.FindByIdAsync(Xtxnt.ToString());
+                    if(identityResult.EmailConfirmed == true) {
+                        
+                        return RedirectToPage("./Login");
+                        }
                     GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(identityResult.Id.ToString());
 
                     EmailVerificationCode result = await _mediator.Send(command);
@@ -82,6 +98,42 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     {
                         identityResult.EmailConfirmed = true;
                         await _userManager.UpdateAsync(identityResult);
+
+                        //if the referral is not null, credit the referral
+                        //get user by id
+                        GetUserManagerByPhoneQuery getuserbyphonecommand = new GetUserManagerByPhoneQuery(identityResult.RefferedByPhoneNumber);
+                        var UserWHoReferredTheseAccount = await _mediator.Send(getuserbyphonecommand);
+                        if(UserWHoReferredTheseAccount != null)
+                        {
+                            //get settings
+                            GetSettingDefaultQuery settingscommand = new GetSettingDefaultQuery();
+                            var settingData = await _mediator.Send(settingscommand);
+
+                          
+                            //if transaction is debit.
+                            GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(UserWHoReferredTheseAccount.Id);
+                            var getwallet = await _mediator.Send(walletcommand);
+
+                            //create the transaction
+                              
+                            CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(getwallet.Id, getwallet.UserId, "Referral Bonus",
+                                settingData.DefaultReferralAmmount,
+                            TransactionTypeEnum.Credit, EntityStatus.Successfull, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL");
+                            var transaction = await _mediator.Send(transactioncreatecommand);
+                            //GET transaction information to update wallet
+                            //get the transaction by id
+                            GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                            var thetransaction = await _mediator.Send(gettranCommand);
+                            //update walet
+                            getwallet.Amount = settingData.DefaultReferralAmmount;
+ 
+                            var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                            getwallet.Log = "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                            //getwallet = null;
+                            UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwallet.UserId, "Validate Transaction", getwallet.Log, getwallet.Amount);
+                            await _mediator.Send(updatewalletcommand);
+                        }
+
                         //if (DateTime.UtcNow > result.SentAtUtc.AddMinutes(5))
                         //{
                         //    TempData["error"] = "The code is expired.";

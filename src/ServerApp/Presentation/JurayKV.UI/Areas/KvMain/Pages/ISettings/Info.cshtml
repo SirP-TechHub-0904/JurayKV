@@ -15,7 +15,7 @@
             <div class="col-md-12">
 
                 <dl class="row">
-                    
+
                     <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Setting.MinimumAmountBudget)
                     </dt>
@@ -23,14 +23,20 @@
                         @Html.DisplayFor(model => model.Setting.MinimumAmountBudget)
                     </dd>
 
-                    
+
                     <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Setting.DefaultAmountPerView)
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Setting.DefaultAmountPerView)
                     </dd>
-                    
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DefaultReferralAmmount)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DefaultReferralAmmount)
+                    </dd>
+
                 </dl>
             </div>
         </div>

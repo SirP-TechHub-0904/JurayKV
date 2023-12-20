@@ -56,14 +56,18 @@
          </div>
     @foreach(var item in Model.Billers.BillerCategories) { 
         <div class="col-sm-6 col-xs-6">
-            <div class="info-box">
+            <a asp-page="./BxListAquiry" asp-route-id="@item.Id">
 
-                <div class="info-box-content">
-                    <span class="info-box-text">@item.Name</span>
-                    
+
+                <div class="info-box">
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@item.Name</span>
+
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
-            </div>
+            </a>
             <!-- /.info-box -->
         </div>
     }
