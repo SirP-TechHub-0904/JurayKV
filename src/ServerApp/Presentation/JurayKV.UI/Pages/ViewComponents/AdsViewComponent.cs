@@ -19,7 +19,7 @@ namespace JurayKV.UI.Pages.ViewComponents
 
             GetKvAdListQuery command = new GetKvAdListQuery();
            var KvAds = await _mediator.Send(command);
-            return View(KvAds);
+            return View(KvAds.OrderByDescending(x=>x.CreatedAtUtc).Take(7).ToList());
         }
     }
 }

@@ -3,90 +3,42 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<div class="swiper-main-slider-fade swiper-container">
+    <div class="swiper-wrapper">
 
-<section class="pt-0 pb-0">
-    <div class="container-fluid px-0">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="gen-banner-movies banner-style-2">
-                    <div class="owl-carousel owl-loaded owl-drag" data-dots="false" data-nav="true" data-desk_num="1"
-                         data-lap_num="1" data-tab_num="1" data-mob_num="1" data-mob_sm="1" data-autoplay="true"
-                         data-loop="true" data-margin="0">
-                        @foreach (var item in Model.Slider)
-                        {
-                            <div class="item" style="background: url(@item.Url)">
-                                <div class="gen-movie-contain-style-2 h-100">
-                                    <div class="container h-100">
-                                        <div class="row align-items-center h-100">
-
-                                            <div class="col-xl-6 cou-slider-pr">
-                                                <div class="gen-tag-line"><span>@Html.Raw(item.MiniTitle)</span></div>
-                                                <div class="gen-movie-info">
-                                                    <h3>@Html.Raw(item.Title)</h3>
-                                                </div>
-                                                <div class="gen-movie-meta-holder">
-
-                                                    <p>
-                                                        @Html.Raw(item.Text)
-                                                    </p>
-
-                                                </div>
-
-                                                <div class="gen-movie-action">
-                                                    <div class="gen-btn-container">
-                                                       
-                                                            <a asp-page="/Advertise" asp-route-refx="@Model.RefX" class="gen-button .gen-button-dark disable-style1">
-                                                                <span class="text">
-                                                                    @Html.Raw(item.ButtonText)
-                                                                </span>
-                                                            </a>
-                                                         
-
-
-                                                    </div>
-                                                </div>
-
-
-
-
-                                            </div>
-
-
-                                            @if (item.DisableVideoButton == false)
-                                            {
-                                                <div class="col-xl-6">
-                                                    <div class="gen-front-image">
-                                                        <img src="@item.SecondUrl" alt="owl-carousel-banner-image">
-                                                        <a href="@item.VideoLink" class="playBut popup-youtube popup-vimeo popup-gmaps">
-                                                            <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
-                                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="213.7px"
-                                                                 height="213.7px" viewBox="0 0 213.7 213.7"
-                                                                 enable-background="new 0 0 213.7 213.7" xml:space="preserve">
-                                                            <polygon class="triangle" id="XMLID_17_" fill="none" stroke-width="7"
-                                                                     stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
-                                                                     points="
-                  73.5,62.5 148.5,105.8 73.5,149.1 "></polygon>
-                                                            <circle class="circle" id="XMLID_18_" fill="none" stroke-width="7"
-                                                                    stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
-                                                                    cx="106.8" cy="106.8" r="103.3">
-   </circle>
-</svg>
-                                                            <span>@item.VideoButtonText</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
+        <!-- Slide 1 Start -->
+        @foreach (var item in Model.Slider)
+        {
+            <div class="swiper-slide" style="background-image:url(@item.Url);">
+                <!-- <div class="medium-overlay"></div> -->
+                <div class="container">
+                    <div class="slider-content left-holder">
+                        <h2 class="animated fadeInDown">
+                            @Html.Raw(item.Title)
+                        </h2>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 col-12">
+                                <p class="animated fadeInDown">
+                                    @Html.Raw(item.Text)
+                                </p>
                             </div>
-                        }
+                        </div>
+                        <div class="animated fadeInUp mt-30">
+                            <a asp-page="/Advertise" asp-route-refx="@Model.RefX" class="dark-button button-md"> @Html.Raw(item.ButtonText)</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        }
+
         </div>
-    </div>
-</section>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+ 
 
 <div class="section-block-grey">
     <div class="container">
@@ -111,9 +63,9 @@
                                 <p>
                                     Koboview is an advertising company that specializes in advertising on WhatsApp status, one of the most popular and engaging social media features. We offer a unique and effective way for businesses to connect with their target audience, tapping into the vast user base of WhatsApp. Our advertising approach is built on the principles of user privacy, relevance, and engagement.
                                 </p>
-                                <p>
+                                @*<p>
                                     At Koboview, we understand the power of storytelling and visual content, and we leverage this to create compelling advertising campaigns that resonate with users. We provide a user-friendly, non-intrusive experience, ensuring that our clients' messages are seen by the right people at the right time.
-                                </p>
+                                </p>*@
                             </div>
 
                             <div class="mt-25">
@@ -199,7 +151,7 @@
                 <div class="row">
 
                     <div class="col-md-6 col-sm-6 col-12">
-                        <div class="feature-box" style="height:250px;">
+                        <div class="feature-box" style="height:300px;">
                             <i class="icon-clock2"></i>
                             <h4>User-Centric Approach</h4>
                             <p>
@@ -209,7 +161,7 @@
                     </div>
 
                     <div class="col-md-6 col-sm-6 col-12">
-                        <div class="feature-box" style="height:250px;">
+                        <div class="feature-box" style="height:300px;">
                             <i class="icon-wallet2"></i>
                             <h4>
                                 Ethical Advertising Practices
@@ -220,7 +172,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-12">
-                        <div class="feature-box" style="height:250px;">
+                        <div class="feature-box" style="height:300px;">
                             <i class="icon-wallet2"></i>
                             <h4>
                                 Precision Targeting and Engagement
@@ -231,7 +183,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-12">
-                        <div class="feature-box" style="height:250px;">
+                        <div class="feature-box" style="height:300px;">
                             <i class="icon-wallet2"></i>
                             <h4>
                                 Innovative Solutions and Proven Success

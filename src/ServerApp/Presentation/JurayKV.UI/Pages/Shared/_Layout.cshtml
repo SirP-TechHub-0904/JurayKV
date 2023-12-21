@@ -1,173 +1,48 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html lang="zxx">
 <head>
-    <meta charset="utf-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Koboview - Unlock Earnings by Sharing - Koboview Makes It Happen (@ViewData["Title"])</title>
     <link rel="shortcut icon" href="~/img/Koboview-Icon.png" type="image/x-icon" />
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/bootstrap.min.css">
+
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/font-awesome.css">
+
+    <!-- Icomoon -->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/icomoon.css">
+
+    <!-- Slider -->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/slider.css">
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="~/mxm/css/animate.css">
+
+    <!-- Color Switcher -->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/switcher.css">
+
+    <!-- Owl Carousel  -->
+    <link rel="stylesheet" href="~/mxm/css/owl.carousel.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/default.css">
+    <link rel="stylesheet" type="text/css" href="~/mxm/css/styles.css" id="colors">
+    <!-- Fonts Google -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <meta property="og:site_name" content="@ViewData["Title"]">
     <meta property="og:title" content="@ViewData["PageName"]" />
     <meta property="og:description" content="@ViewData["Description"]" />
     <meta property="og:image" itemprop="image" content="@ViewData["Image"]">
     <meta property="og:type" content="website" />
     <meta property="og:updated_time" content="@DateTime.UtcNow.AddHours(1)" />
-    <!-- CSS bootstrap-->
-    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
-    <link href="~/css/style2.css" rel="stylesheet" />
-    <!--  Style -->
-    <link rel="stylesheet" href="~/css/style.css" />
-    <!--  Responsive -->
-    <link rel="stylesheet" href="~/css/responsive.css" />
-    <link href="~/css/site.css" rel="stylesheet" />
-
+    <link href="~/Layout/mistro/css/fontawesome-all.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        #gen-loading {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            display: flex;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9999;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-        }
-
-        header#gen-header {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            clear: both;
-            background: #ffffff;
-            border: 1px solid #1509bb;
-            z-index: 99;
-        }
-
-            header#gen-header .gen-bottom-header .navbar .navbar-nav li a {
-                font-weight: 800;
-                color: #1509bb;
-                font-family: var(--title-fonts);
-            }
-
-            header#gen-header.gen-header-style-1 .gen-bottom-header .navbar .navbar-nav li i {
-                color: #1509bb;
-            }
-
-
-
-        /* .gen-banner-movies.banner-style-2 .item:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: inline-block;
-            background: -webkit-linear-gradient(left, rgb(34 31 31 / 7%) 0%,rgba(34,31,31,0.4) 100%) background: -webkit-linear-gradient(left, rgba(34,31,31,1) 0%,rgba(34,31,31,0.4) 100%);
-            background: linear-gradient(to right, rgb(255 255 255 / 0%) 0%,rgba(34,31,31,0.4) 100%) filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#221f1f', endColorstr='#66221f1f',GradientType=1 );
-        }*/
-
-        @@media (min-width: 1200px) {
-            .col-xl-6 {
-                width: 40%;
-                padding-left: 8%;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-info h3 {
-                font-size: 42px;
-                line-height: 40px;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-meta-holder p, .gen-movie-contain-style-2 .gen-movie-info p {
-                line-height: 1.5;
-                margin-top: 10px;
-            }
-        }
-
-        @@media (max-width: 1024px ) and (min-width: 768px) {
-            .col-xl-6 {
-                width: 50%;
-                padding-left: 5%;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-info h3 {
-                font-size: 32px;
-                line-height: 30px;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-meta-holder p, .gen-movie-contain-style-2 .gen-movie-info p {
-                line-height: 1.3;
-                margin-top: 10px;
-            }
-        }
-
-        @@media (max-width: 425px) {
-            .col-xl-6 {
-                width: 60%;
-                padding-left: 5%;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-info h3 {
-                font-size: 16px;
-                line-height: 17px;
-            }
-
-            .gen-movie-contain-style-2 .gen-movie-meta-holder p, .gen-movie-contain-style-2 .gen-movie-info p {
-                line-height: 1.2;
-                font-size: 10px;
-                margin-top: 6px;
-            }
-
-            .gen-button {
-                text-transform: uppercase;
-                position: relative;
-                width: auto;
-                font-weight: 400;
-                background: var(--primary-color);
-                color: var(--white-color);
-                font-family: var(--title-fonts);
-                font-size: 12px;
-                padding: 7px 5px;
-                line-height: 2;
-                vertical-align: middle;
-                border: none;
-                display: inline-block;
-                overflow: hidden;
-                -webkit-border-radius: 0px;
-                -moz-border-radius: 0px;
-                border-radius: 0px;
-            }
-
-            .md-top-x {
-                margin-top: 18px;
-            }
-
-            .section-heading h4 {
-                position: relative;
-                font-size: 20px;
-                font-weight: 600;
-                color: #111;
-                line-height: 100%;
-                margin-bottom: 10px;
-            }
-
-            .section-heading h2 {
-                font-size: 22px;
-            }
-        }
-
-        .text-content-big p {
-            color: #242222;
-        }
-
         .section-block-grey {
             padding: 20px 0px 20px 0px;
             background-color: #f9f9f9;
@@ -187,61 +62,33 @@
             font-weight: 500;
             line-height: 130%;
         }
-
-        .section-heading h2 {
-            position: relative;
-            font-size: 26px;
-            font-weight: 500;
-            color: #111;
-            line-height: 130%;
-            margin-bottom: 10px;
-        }
-        .gen-carousel-movies-style-2 .gen-movie-contain .gen-movie-img {
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 0;
-        }
-        .gen-carousel-movies-style-2 .gen-movie-contain .gen-movie-info h3 {
-            font-size: 15px;
-             
-        }
-        footer#gen-footer .gen-footer-style-1 .widget ul.menu li {
-            margin-bottom: 0;
-            width: calc(50% - 2px);
-            display: block;
-        }
-        footer {
-            background: #111;
-            padding: 5px 0px 20px 0px;
-        }
-        #gen-footer .gen-footer-style-1 .widget:first-child {
-            margin-bottom: 2px;
-        }
         .feature-flex-icon i {
-            
             background-image: linear-gradient(120deg, rgb(5 1 184) 0%, #0501b8 100%);
-             
         }
+
         .section-block {
             padding: 10px 0px 10px 0px;
             background-color: #fff;
         }
+
         .howitworks .feature-box-long h3 {
-             
             font-size: 19px;
             font-weight: 500;
             color: #111;
             margin: 5px 0px 3px 0px;
         }
+
         .howitworks h3, .howitworks h6, .howitworks p, .howitworks li {
             color: #000000;
             text-align: justify;
         }
+
         .howitworks .feature-box-long p {
             font-size: 15px;
             font-weight: 400;
             color: #000;
         }
+
         .howitworks .feature-box-long h3 {
             font-size: 29px;
             font-weight: 800;
@@ -251,219 +98,206 @@
             margin: 5px 0px 3px 0px;
             margin-bottom: 20px;
         }
+
         @@media (min-width: 425px) {
             .howitworks .feature-box-long {
                 height: 900px;
             }
         }
+
+        .section-block-grey {
+            padding: 20px 0px 20px 0px;
+            background-color: #d9d9d9;
+        }
     </style>
-
-
 </head>
-
 <body>
-    <div id="gen-loading">
-        <div id="gen-loading-center">
 
-            <img src="~/img/Koboview-Icon.png" alt="loading">
 
+    <!-- Preloader Start-->
+    <div id="preloader">
+        <div class="row loader">
+            <div class="loader-icon"></div>
         </div>
     </div>
-    <!-- Preloader End -->
-    <header id="gen-header" class="gen-header-style-1">
-        <div class="gen-bottom-header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <nav class="navbar navbar-expand-lg navbar-light">
-                            <a class="navbar-brand" href="/">
-                                <img class="img-fluid logo" src="~/img/Koboview-logo-main.png" alt="Koboview">
-                            </a>
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                <div id="gen-menu-contain" class="gen-menu-contain">
-                                    <ul id="gen-main-menu" class="navbar-nav ml-auto">
-                                        <li class="menu-item">
-                                            <a asp-page="/About">About Us</a>
 
-                                        </li>
-
-                                        <li class="menu-item">
-                                            <a asp-page="/Advertise">Advertise</a>
-
-                                        </li>
-                                        <li class="menu-item">
-                                            <a asp-page="/Howitworks">How it Works</a>
-
-                                        </li>
-                                         
-                                        <li class="menu-item">
-                                            <a href="#">Account</a>
-                                            <i class="fa fa-chevron-down gen-submenu-icon"></i>
-
-                                            <ul class="sub-menu">
-
-                                                <li class="menu-item">
-                                                    <a class="" asp-area="Auth" asp-page="/Account/Register">Register</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" asp-area="Auth" asp-page="/Account/Login">Login</a>
-                                                </li>
-
-
-                                            </ul>
-                                        </li>
-
-
-
-                                    </ul>
-                                </div>
-                            </div>
-
-
-
-                            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
-                                <i class="fas fa-bars"></i>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
+    <header>
+        <nav id="navigation4" class="container navigation">
+            <div class="nav-header">
+                <a class="nav-brand" href="index.html">
+                    <img src="~/img/Koboview-logo-main.png" class="main-logo" alt="logo" id="main_logo" style="max-height:70px;">
+                </a>
+                <div class="nav-toggle"></div>
             </div>
-        </div>
+            <div class="nav-menus-wrapper">
+                <ul class="nav-menu align-to-right">
+                    <li>
+                        <a asp-page="/About">About Us</a>
+
+                    </li>
+
+                    <li>
+                        <a asp-page="/Advertise">Advertise</a>
+
+                    </li>
+                    <li>
+                        <a asp-page="/Howitworks">How it Works</a>
+
+                    </li>
+                    <li>
+                        <a href="#">Account</a>
+                        <ul class="nav-dropdown">
+                            <li>
+                                <a class="" asp-area="Auth" asp-page="/Account/Register">Register</a>
+
+                            </li>
+
+                            <li class="menu-item">
+                                <a class="" asp-area="Auth" asp-page="/Account/Login">Login</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </div>
+        </nav>
     </header>
-
-
-
+    <!-- Navbar END -->
+    <!-- Slider START -->
+    <!-- Slider END -->
     @RenderBody()
 
-    <!-- footer start -->
-    <footer id="gen-footer">
-        <div class="gen-footer-style-1">
-            <div class="gen-footer-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-4 col-md-6">
-                            <div class="widget">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <p>Koboview: Redefining Digital Advertising with Integrity and Innovation. Join us to experience advertising that respects users, enhances brands, and delivers exceptional results.</p>
-                                        <ul class="social-link">
-                                            <li><a href="https://www.facebook.com/profile.php?id=61554310558490" class="facebook"><i class="fab fa-facebook-f"></i></a></li>
-                                            <li><a href="https://www.instagram.com/koboview1/" class="facebook"><i class="fab fa-instagram"></i></a></li>
-                                            <li><a href="https://twitter.com/KoboV55217" class="facebook"><i class="fab fa-twitter"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-6">
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="widget">
-                                    <h4 class="footer-title">Quick Links</h4>
-                                    <div class="menu-about-container">
-                                        <ul class="menu">
+    <!-- Footer START -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- Column 1 Start -->
+                <div class="col-md-4 col-sm-6 col-12">
+                    <h3>Koboview</h3>
+                    <div class="mt-25">
+                        <p class="mt-25">
+                            Redefining Digital Advertising with Integrity and Innovation. Join us to experience advertising that respects users, enhances brands, and delivers exceptional results.
 
-                                            <li class="menu-item">
-                                                <a asp-page="/Privacy">
-                                                    Privacy
-                                                    Policy
-                                                </a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a asp-page="/Termofuse">
-                                                    Terms Of
-                                                    Use
-                                                </a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a asp-page="/Help">
-                                                    Help
-                                                    Center
-                                                </a>
-                                            </li>
 
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4  col-md-6">
-                                <div class="widget">
-                                    <h4 class="footer-title">Downlaod App</h4>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <a href="#">
-                                                <img src="images/asset-35.png" class="gen-playstore-logo" alt="playstore">
-                                            </a>
-                                            <a href="#">
-                                                <img src="images/asset-36.png" class="gen-appstore-logo" alt="appstore">
-                                            </a>
-                                        </div>
+                        </p>
+                        <div class="footer-social-icons mt-25">
+                            <ul>
+                                <li><a href="https://www.facebook.com/profile.php?id=61554310558490"><i class="fa fa-facebook-square"></i></a></li>
+                                <li><a href="https://www.instagram.com/koboview1/"><i class="fa fa-instagram"></i></a></li>
+                                <li><a href="https://twitter.com/KoboV55217"><i class="fa fa-x-twitter"></i></a></li>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-            <div class="gen-copyright-footer">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 align-self-center">
-                            <span class="gen-copyright">
-                                <a target="_blank" href="#">
-                                    Copyright 2023 Koboview. All Rights
-                                    Reserved.
-                                </a>
-                            </span>
+                            </ul>
                         </div>
                     </div>
                 </div>
+                <!-- Column 1 End -->
+                <!-- Column 2 Start -->
+                <div class="col-md-4 col-sm-6 col-12">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-list">
+                        <li>
+                            <a asp-page="/Privacy">
+                                Privacy
+                                Policy
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-page="/Termofuse">
+                                Terms Of
+                                Use
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-page="/Help">
+                                Help
+                                Center
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Column 2 End -->
+                <!-- Column 4 Start -->
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="widget">
+                        <h4 class="footer-title" style="color:white;margin-bottom:10px;">Downlaod App</h4>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="#" style="margin-bottom:10px;">
+                                    <img src="images/asset-35.png" class="gen-playstore-logo" alt="playstore">
+                                </a>
+                                <a href="#">
+                                    <img src="images/asset-36.png" class="gen-appstore-logo" alt="appstore">
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Column 4 End -->
             </div>
+
+            <!-- Footer Bar Start -->
+            <div class="footer-bar">
+                <p><span class="primary-color">Koboview</span> © 2023. All Rights Reserved.</p>
+            </div>
+            <!-- Footer Bar End -->
         </div>
     </footer>
-    <!-- footer End -->
-    <!-- footer End -->
-    <!-- Back-to-Top start -->
-    <div id="back-to-top">
-        <a class="top" id="top" href="#top"> <i class="ion-ios-arrow-up"></i> </a>
-    </div>
-    <!-- Back-to-Top end -->
-    <!-- js-min -->
-    <script src="~/js/jquery-3.6.0.min.js"></script>
-    <script src="~/js/asyncloader.min.js"></script>
-    <!-- JS bootstrap -->
-    <script src="~/js/bootstrap.min.js"></script>
-    <!-- owl-carousel -->
-    <script src="~/js/owl.carousel.min.js"></script>
-    <!-- counter-js -->
-    <script src="~/js/jquery.waypoints.min.js"></script>
-    <script src="~/js/jquery.counterup.min.js"></script>
-    <!-- popper-js -->
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/swiper-bundle.min.js"></script>
-    <!-- Iscotop -->
-    <script src="~/js/isotope.pkgd.min.js"></script>
+    <!-- Footer END -->
+    <!-- Scroll to top button Start -->
+    <a href="#" class="scroll-to-top"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+    <!-- Scroll to top button End -->
+    <!-- Jquery -->
+    <script src="~/mxm/js/jquery.min.js"></script>
 
-    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <!--Popper JS-->
+    <script src="~/mxm/js/popper.min.js"></script>
 
-    <script src="~/js/slick.min.js"></script>
-    <script src="~/js/asyncloader.min.js"></script>
+    <!--Popper JS-->
+    <script src="~/mxm/js/popper.min.js"></script>
 
+    <!-- Bootstrap JS-->
+    <script src="~/mxm/js/bootstrap.min.js"></script>
 
+    <!-- Owl Carousel-->
+    <script src="~/mxm/js/owl.carousel.js"></script>
 
+    <!-- Navbar JS -->
+    <script src="~/mxm/js/navigation.js"></script>
+    <script src="~/mxm/js/navigation.fixed.js"></script>
 
+    <!-- Wow JS -->
+    <script src="~/mxm/js/wow.min.js"></script>
 
+    <!-- Countup -->
+    <script src="~/mxm/js/jquery.counterup.min.js"></script>
+    <script src="~/mxm/js/waypoints.min.js"></script>
 
+    <!-- Tabs -->
+    <script src="~/mxm/js/tabs.min.js"></script>
 
+    <!-- Yotube Video Player -->
+    <script src="~/mxm/js/jquery.mb.YTPlayer.min.js"></script>
 
-    <script src="~/js/streamlab-core.js"></script>
+    <!-- Swiper Slider -->
+    <script src="~/mxm/js/swiper.min.js"></script>
 
-    <script src="~/js/script.js"></script>
+    <!-- Isotop -->
+    <script src="~/mxm/js/isotope.pkgd.min.js"></script>
 
+    <!-- Switcher JS -->
+    <script src="~/mxm/js/switcher.js"></script>
+
+    <!-- Modernizr -->
+    <script src="~/mxm/js/modernizr.js"></script>
+
+    <!-- Google Map -->
+    <script src="~/mxm/js/map.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/mxm/js/main.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>
-
 </html>
