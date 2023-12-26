@@ -95,7 +95,8 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     Status = x.Status,
                     Amount = x.Amount,
                     CreatedAtUtc = x.CreatedAtUtc,
-                    TransactionType = x.TransactionType
+                    TransactionType = x.TransactionType,
+                    Note = x.Note,
                 }).ToList();
 
                 userdto.TransactionsCount = await _transactionCacheRepository.TransactionCount(request.UserId);

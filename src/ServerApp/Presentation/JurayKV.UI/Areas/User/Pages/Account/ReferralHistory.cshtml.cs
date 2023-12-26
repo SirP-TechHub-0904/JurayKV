@@ -24,7 +24,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             _userManager = userManager;
         }
         public List<UserManagerListDto> UserData { get; set; }
-
+        public string Phonenumber { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
@@ -32,7 +32,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             GetUserManagerByReferralListQuery command = new GetUserManagerByReferralListQuery(userdata.PhoneNumber);
 
             UserData = await _mediator.Send(command);
-            
+            Phonenumber = userdata.PhoneNumber;
             return Page();
         }
     }

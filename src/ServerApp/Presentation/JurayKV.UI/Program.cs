@@ -3,9 +3,11 @@ using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Commands.DepartmentCommands;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Services;
+using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Infrastructure.Flutterwave.Repositories;
 using JurayKV.Infrastructure.Opay.core.Repositories;
 using JurayKV.Infrastructure.Services;
+using JurayKV.Infrastructure.VTU.Repository;
 using JurayKV.Persistence.Cache;
 using JurayKV.Persistence.Cache.Repositories;
 using JurayKV.Persistence.RelationalDB.Extensions;
@@ -69,7 +71,8 @@ namespace JurayKV.UI
             builder.Services.AddTransient<ISwitchRepository, SwitchRepository>();
             builder.Services.AddTransient<IBackgroundActivity, BackgroundActivity>();
             builder.Services.AddTransient<IOpayRepository, OpayRepository>();
-             // IOpayRepository
+            builder.Services.AddTransient<IVtuService, VtuService>();
+            // IOpayRepository
             //builder.Services.AddInterswitch(configuration);
             //builder.Services.Configure<RaveConfig>(Configuration.GetSection("RaveConfig"));
             // Access the configuration using builder.Configuration

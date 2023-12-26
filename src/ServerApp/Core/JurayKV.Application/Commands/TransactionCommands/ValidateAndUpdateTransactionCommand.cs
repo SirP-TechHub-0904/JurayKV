@@ -122,7 +122,7 @@ namespace JurayKV.Application.Commands.TransactionCommands
                 getwallet.Amount += Convert.ToDecimal(transactionToBeUpdated.Amount);
                 getwallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
                 var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                getwallet.Log = "<br> Wallet Update from "+ transactionToBeUpdated.Description+" " + advertRequest.Id + " ::Amount: " + transactionToBeUpdated.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                getwallet.Log = getwallet.Log + "<br> Wallet Update from " + transactionToBeUpdated.Description+" " + advertRequest.Id + " ::Amount: " + transactionToBeUpdated.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
                 //getwallet = null;
                 await _walletRepository.UpdateAsync(getwallet);
 

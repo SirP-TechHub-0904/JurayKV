@@ -31,6 +31,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.Flutterwave\JurayKV.Infrastructure.Flutterwave.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.VTU\JurayKV.Infrastructure.VTU.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\JurayKvV.Infrastructure.Interswitch\JurayKvV.Infrastructure.Interswitch.csproj" />
 	  <ProjectReference Include="..\JurayKV.Domain\JurayKV.Domain.csproj" />
 	</ItemGroup>

@@ -20,12 +20,13 @@
                         <th>
                             Date
                         </th>
-                        
+
                         <th>Amount </th>
-                        
+
+                        <th>Note </th>
                         <th>Type </th>
                         <th>Status </th>
-                         
+                        <th>Action</th>
 
                     </tr>
                 </thead>
@@ -42,7 +43,7 @@
                                 }
                                 @sn
                             </td>
-                             
+
                             <td>
                                 <a asp-page="./TransactionDetails" asp-route-id="@item.Id">
                                     @item.CreatedAtUtc.ToString("dd/MM/yyyy")
@@ -51,15 +52,21 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Amount)
                             </td>
- 
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Note)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.TransactionType)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Status)
                             </td>
+                            <td>
+                               <a class="btn btn-primary" asp-page="./TransactionInfo" asp-route-id="@item.Id">
+                                   More
+                               </a>
+                            </td>
 
-                             
 
                         </tr>
                     }

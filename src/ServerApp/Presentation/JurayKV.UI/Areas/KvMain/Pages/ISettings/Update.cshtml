@@ -32,6 +32,17 @@
                         <span asp-validation-for="Setting.DefaultReferralAmmount" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="Setting.BillGateway" class="control-label"></label>
+                        @Html.DropDownListFor(model => model.Setting.BillGateway, new SelectList(Enum.GetValues(typeof(JurayKV.Domain.Primitives.Enum.BillGateway))), new { @class = "form-control" })
+                        <span asp-validation-for="Setting.BillGateway" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Setting.PaymentGateway" class="control-label"></label>
+                        @Html.DropDownListFor(model => model.Setting.PaymentGateway, new SelectList(Enum.GetValues(typeof(JurayKV.Domain.Primitives.Enum.PaymentGateway))), new { @class = "form-control" })
+                        <span asp-validation-for="Setting.PaymentGateway" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>
 

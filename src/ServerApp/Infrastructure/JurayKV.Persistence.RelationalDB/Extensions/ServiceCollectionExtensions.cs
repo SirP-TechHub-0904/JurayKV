@@ -1,5 +1,6 @@
 ﻿using JurayKV.Domain.Aggregates.AdvertRequestAggregate;
 using JurayKV.Domain.Aggregates.BucketAggregate;
+using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
 using JurayKV.Domain.Aggregates.CompanyAggregate;
 using JurayKV.Domain.Aggregates.DashboardAggregate;
 using JurayKV.Domain.Aggregates.DepartmentAggregate;
@@ -15,6 +16,7 @@ using JurayKV.Domain.Aggregates.NotificationAggregate;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.SliderAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -103,6 +105,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IImageRepository, ImageRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.AddScoped<IAdvertRequestRepository, AdvertRequestRepository>();
+        services.AddScoped<IVariationRepository, VariationRepository>();
+        services.AddScoped<ICategoryVariationRepository, CategoryVariationRepository>();
+       
+
         services.AddGenericRepository<JurayDbContext>();
         services.AddQueryRepository<JurayDbContext>();
     }

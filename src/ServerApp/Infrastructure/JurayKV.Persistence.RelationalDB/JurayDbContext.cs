@@ -1,5 +1,6 @@
 ﻿using JurayKV.Domain.Aggregates.AdvertRequestAggregate;
 using JurayKV.Domain.Aggregates.BucketAggregate;
+using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
 using JurayKV.Domain.Aggregates.CompanyAggregate;
 using JurayKV.Domain.Aggregates.DepartmentAggregate;
 using JurayKV.Domain.Aggregates.EmployeeAggregate;
@@ -14,6 +15,7 @@ using JurayKV.Domain.Aggregates.NotificationAggregate;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.SliderAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -50,6 +52,8 @@ public sealed class JurayDbContext : IdentityDbContext<ApplicationUser, Applicat
     public DbSet<ImageFile> ImageFiles { get;set; }
     public DbSet<Setting> Settings { get;set; }
     public DbSet<AdvertRequest> AdvertRequests { get;set; }
+    public DbSet<Variation> Variations { get;set; }
+    public DbSet<CategoryVariation> CategoryVariations { get;set; }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ////ChangeTracker.ApplyValueGenerationOnUpdate();

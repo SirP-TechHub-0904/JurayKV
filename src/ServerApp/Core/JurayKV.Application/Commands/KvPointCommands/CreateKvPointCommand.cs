@@ -100,7 +100,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     getwallet.Amount += Convert.ToDecimal(request.Point);
                     getwallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
                     var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                    getwallet.Log = "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    getwallet.Log = getwallet.Log + "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
 
                     await _walletRepository.UpdateAsync(getwallet);
 

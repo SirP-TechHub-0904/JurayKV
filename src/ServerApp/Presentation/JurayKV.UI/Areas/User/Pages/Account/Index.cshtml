@@ -2,6 +2,20 @@
 @model JurayKV.UI.Areas.User.Pages.Account.IndexModel
 @{
 }
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Ops!</strong> @TempData["error"]
+    </div>
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Good!</strong> @TempData["success"]
+    </div>
+}
+
 <div class="row">
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box">
@@ -118,18 +132,24 @@
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Type</th>
+                                <td>
+                                 Note
+                                </td>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.DashboardData.LastTenTransactions)
                             {
 
-
+                                
                                 <tr>
-                                    <td><a href="">@item.CreatedAtUtc.ToString("dd/MM/yyyy")</a></td>
+                                    <td><a asp-page="./TransactionInfo" asp-route-id="@item.Id">@item.CreatedAtUtc.ToString("dd/MM/yyyy")</a></td>
                                     <td>@item.Amount</td>
                                     <td>@item.Status</td>
                                     <td>@item.TransactionType</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Note)
+                                    </td>
                                 </tr>
                             }
                         </tbody>

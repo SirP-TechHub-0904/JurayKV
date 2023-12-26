@@ -1,5 +1,8 @@
 using JurayKV.Application;
 using JurayKV.Application.Interswitch;
+using JurayKV.Application.Queries.SettingQueries;
+using JurayKV.Application.VtuServices;
+using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
 using JurayKvV.Infrastructure.Interswitch.ResponseModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,12 +21,31 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
         {
             _mediator = mediator;
         }
-      
-     public   BillerCategoryListResponse Billers { get; set; }
+
+        public BillerCategoryListResponse Billers { get; set; }
+        public SettingDetailsDto SettingDetails { get; set; }
+
+        public List<CategoryVariation> CategoryVariations { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            ListBillersCategoryQuery getcommand = new ListBillersCategoryQuery();
-            Billers = await _mediator.Send(getcommand);
+            GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
+            SettingDetails = await _mediator.Send(settingcommand);
+
+            if (SettingDetails == null)
+            {
+                return RedirectToPage("Index");
+            }
+
+            if (SettingDetails.BillGateway == Domain.Primitives.Enum.BillGateway.VTU)
+            {
+                GetVariationCategoryCommand categorycommand = new GetVariationCategoryCommand();
+                CategoryVariations = await _mediator.Send(categorycommand);
+            }
+            else
+            {
+                ListBillersCategoryQuery getcommand = new ListBillersCategoryQuery();
+                Billers = await _mediator.Send(getcommand);
+            }
             return Page();
         }
     }

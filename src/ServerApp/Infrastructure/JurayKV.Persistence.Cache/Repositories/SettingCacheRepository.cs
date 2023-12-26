@@ -40,6 +40,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     DefaultAmountPerView = d.DefaultAmountPerView,
                     MinimumAmountBudget = d.MinimumAmountBudget,
+                    DefaultReferralAmmount = d.DefaultReferralAmmount,
+
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
                 };
@@ -63,6 +65,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     DefaultAmountPerView = d.DefaultAmountPerView,
                     MinimumAmountBudget = d.MinimumAmountBudget,
+                    DefaultReferralAmmount = d.DefaultReferralAmmount,
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
 

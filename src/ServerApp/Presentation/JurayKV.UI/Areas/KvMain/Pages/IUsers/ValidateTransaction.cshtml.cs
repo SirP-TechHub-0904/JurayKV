@@ -10,7 +10,7 @@ using JurayKV.Application.Queries.WalletQueries;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-     [Authorize(Policy = Constants.AdminPolicy)]
+     [Authorize(Policy = Constants.SuperAdminPolicy)]
     public class ValidateTransactionModel : PageModel
     {
 

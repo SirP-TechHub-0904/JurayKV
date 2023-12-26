@@ -29,6 +29,9 @@ namespace JurayKV.Domain.Primitives
 
             [Description("Interswitch")]
             Interswitch = 2,
+
+            [Description("VTU")]
+            VTU = 4,
         }
         public enum NotificationStatus
         {
@@ -251,7 +254,19 @@ namespace JurayKV.Domain.Primitives
 
 
         }
+        public enum VariationType
+        {
+            [Description("Airtime/Data")]
+            AirtimeData = 1,
 
+            [Description("TV")]
+            TV = 2,
+
+            [Description("Electricity")]
+            Electricity = 3,
+
+
+        }
         public enum EntityStatus
         {
             [Description("Successfull")]

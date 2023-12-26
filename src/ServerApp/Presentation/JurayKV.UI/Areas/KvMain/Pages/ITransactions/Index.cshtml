@@ -23,6 +23,7 @@
                         <th>
                             Fullname
                         </th>
+                        <th>Note</th>
                         <th>Amount </th>
                         <th>Wallet Balance </th>
                         <th>Type </th>
@@ -52,6 +53,9 @@
                                 <a asp-page="./Details" asp-route-id="@item.Id">
                                     @Html.DisplayFor(modelItem => item.Fullname)
                                 </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Note)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Amount)

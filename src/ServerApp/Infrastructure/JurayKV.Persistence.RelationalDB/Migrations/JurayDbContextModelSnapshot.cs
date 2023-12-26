@@ -85,6 +85,38 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.ToTable("Buckets");
                 });
 
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.CategoryVariationAggregate.CategoryVariation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Charge")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VariationType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoryVariations");
+                });
+
             modelBuilder.Entity("JurayKV.Domain.Aggregates.CompanyAggregate.Company", b =>
                 {
                     b.Property<Guid>("Id")
@@ -750,6 +782,40 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.VariationAggregate.Variation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Amount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CategoryVariationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryVariationId");
+
+                    b.ToTable("Variations");
+                });
+
             modelBuilder.Entity("JurayKV.Domain.Aggregates.WalletAggregate.Wallet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1038,6 +1104,17 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("JurayKV.Domain.Aggregates.VariationAggregate.Variation", b =>
+                {
+                    b.HasOne("JurayKV.Domain.Aggregates.CategoryVariationAggregate.CategoryVariation", "CategoryVariation")
+                        .WithMany()
+                        .HasForeignKey("CategoryVariationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoryVariation");
                 });
 
             modelBuilder.Entity("JurayKV.Domain.Aggregates.WalletAggregate.Wallet", b =>

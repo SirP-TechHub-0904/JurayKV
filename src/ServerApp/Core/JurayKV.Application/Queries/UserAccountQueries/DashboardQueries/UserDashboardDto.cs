@@ -66,5 +66,6 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
 
         public TransactionTypeEnum TransactionType { get; set; }
         public EntityStatus Status { get; set; }
+        public string Note {  get; set; }
     }
 }

@@ -125,10 +125,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                             GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
                             var thetransaction = await _mediator.Send(gettranCommand);
                             //update walet
-                            getwallet.Amount = settingData.DefaultReferralAmmount;
+                            getwallet.Amount = getwallet.Amount + settingData.DefaultReferralAmmount;
  
                             var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                            getwallet.Log = "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                            getwallet.Log = getwallet.Log + "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
                             //getwallet = null;
                             UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwallet.UserId, "Validate Transaction", getwallet.Log, getwallet.Amount);
                             await _mediator.Send(updatewalletcommand);

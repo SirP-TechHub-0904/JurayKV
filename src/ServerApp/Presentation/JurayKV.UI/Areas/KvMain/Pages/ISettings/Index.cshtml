@@ -27,6 +27,12 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Setting[0].DefaultReferralAmmount)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Setting[0].BillGateway)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Setting[0].PaymentGateway)
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -54,6 +60,12 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DefaultReferralAmmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BillGateway)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PaymentGateway)
                             </td>
                             <td>
                                 <div class="btn-group">
