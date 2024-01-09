@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using JurayKV.Domain.ValueObjects;
 
 namespace JurayKV.Infrastructure.Services;
 
@@ -19,11 +20,14 @@ public sealed class EmailSender : IEmailSender
     private readonly IConfiguration _configManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IExceptionLogger _exceptionLogger;
-     public EmailSender(IExceptionLogger exceptionLogger, UserManager<ApplicationUser> userManager, IConfiguration configManager)
+    private readonly LoggerLibrary _logger;
+
+    public EmailSender(IExceptionLogger exceptionLogger, UserManager<ApplicationUser> userManager, IConfiguration configManager, LoggerLibrary logger)
     {
         _exceptionLogger = exceptionLogger;
-         _userManager = userManager;
+        _userManager = userManager;
         _configManager = configManager;
+        _logger = logger;
     }
 
     public async Task<bool> SendAsync(string smsMessage, string id, string subject)
@@ -35,54 +39,111 @@ public sealed class EmailSender : IEmailSender
 
             (string Email, string VerificationCode, string Subject) model = (request.Email, smsMessage, subject);
             // string emailBody = await _viewRenderService.RenderViewToStringAsync("/Pages/EmailTemplate/KvMail", model);
-            string emailbody = "welcome {mmm}";
+            string emailbody = "{mmm}";
             emailbody = emailbody.Replace("{mmm}", model.VerificationCode);
             try
             {
 
+                string emailTemplate = @"
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>//CompanyName//</title>
+</head>
+<body style=""font-family: Arial, sans-serif; margin: 0; padding: 0;"">
 
-                ////create the mail message 
-                MailMessage mail = new MailMessage();
-
-
-                mail.Body = emailbody;
-                //set the addresses 
-
-                mail.From = new MailAddress("help@koboview.com", "Koboview"); //IMPORTANT: This must be same as your smtp authentication address.
-                mail.To.Add(model.Email);
-
-                //set the content 
-                mail.Subject = model.Subject.Replace("\r\n", "");
-
-                mail.IsBodyHtml = true;
-                //send the message 
-                SmtpClient smtp = new SmtpClient("mail.koboview.com");
-                NetworkCredential Credentials = new NetworkCredential("help@koboview.com", "Admin@123");
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = Credentials;
-                smtp.Port = 25;    //alternative port number is 8889
-                smtp.EnableSsl = false;
-
-                //mail.From = new MailAddress("help@koboview.com", "KoboView"); //IMPORTANT: This must be same as your smtp authentication address.
-                //mail.To.Add(model.Email);
-
-                ////set the content 
-                //mail.Subject = model.Subject.Replace("\r\n", "");
-
-                //mail.IsBodyHtml = true;
-                ////send the message 
-                //SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-
-                ////IMPORANT:  Your smtp login email MUST be same as your FROM address. 
-                //NetworkCredential Credentials = new NetworkCredential("help@koboview.com", "xuoyokecrbnihahi");
-                //smtp.UseDefaultCredentials = false;
-                //smtp.Credentials = Credentials; smtp.Timeout = 20000;
-                ////alternative port number is 8889
-                //smtp.EnableSsl = true; smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Send(mail);
+    <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" width=""100%"" style=""border-collapse: collapse;"">
+        <tr>
+            <td style=""padding: 20px 0; text-align: center;"">
+                <img src=""//YOUR_LOGO_URL//"" alt=""Company Logo"" width=""200"" style=""display: inline-block;"">
+            </td>
+        </tr>
+        <tr>
+            <td style=""background-color: #f4f4f4; padding: 20px;"">
+                <h2 style=""color: #333333;"">HELLO //Recipient_Name//,</h2>    
+<h4 style=""color: #333333;"">//Subject//.</h4>
 
 
-                return true;
+                <p style=""color: #666666;"">
+                    //Body//
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style=""background-color: #333333; color: #ffffff; padding: 10px; text-align: center;"">
+                <p>&copy; //Date// //CompanyName// | Contact us at: <a href=""mailto://CompanyEmail//"" style=""color: #ffffff; text-decoration: none;"">//CompanyEmail//</a></p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+";
+                emailTemplate = emailTemplate.Replace("//CompanyName//", "Koboview");
+                emailTemplate = emailTemplate.Replace("//YOUR_LOGO_URL//", "https://koboview.com/img/Koboview-logo-main.png");
+                emailTemplate = emailTemplate.Replace("//Subject//", model.Subject.Replace("\r\n", ""));
+                emailTemplate = emailTemplate.Replace("//Body//", emailbody);
+                emailTemplate = emailTemplate.Replace("//CompanyEmail//", "help@koboview.com");
+                emailTemplate = emailTemplate.Replace("//Date//", DateTime.UtcNow.Year.ToString());
+                emailTemplate = emailTemplate.Replace("//Recipient_Name//", request.SurName);
+
+
+                using (var message = new MailMessage())
+                {
+                    message.To.Add(new MailAddress(model.Email));
+                    //message.To.Add(new MailAddress("onwukaemeka41@gmail.com"));
+                    message.From = new MailAddress("noreply@koboview.com", "Koboview");
+                    message.Subject = model.Subject.Replace("\r\n", "");
+                    message.Body = emailTemplate;
+                    message.IsBodyHtml = true; // change to true if body msg is in html
+                    //using (var client = new SmtpClient("smtp.gmail.com"))
+                    //{
+                    //    client.UseDefaultCredentials = false;
+                    //    client.Port = 587;
+                    //    //client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
+                    //    client.Credentials = new NetworkCredential("admin@notification.koboview.com", "njibvbdmmixrmljs");
+                    //    client.EnableSsl = true;
+
+                    //    try
+                    //    {
+                    //        await client.SendMailAsync(message); // Email sent
+                    //        _logger.Log($"mail sent to {model.Email}");
+
+                    //        return true;
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        _logger.Log($"failed mail to {model.Email} {e.ToString()}");
+                    //        // Email not sent, log exception
+                    //        return false;
+                    //    }
+                    //}
+                    using (var client = new SmtpClient("smtp.office365.com"))
+                    {
+                        client.UseDefaultCredentials = false;
+                        client.Port = 587;
+                        client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
+                        client.EnableSsl = true;
+
+                        try
+                        {
+                            await client.SendMailAsync(message); // Email sent
+                            _logger.Log($"mail sent to {model.Email}");
+
+                            return true;
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Log($"failed mail to {model.Email} {e.ToString()}");
+                            // Email not sent, log exception
+                            return false;
+                        }
+                    }
+                }
+                 
+
             }
             catch (Exception ex)
             {

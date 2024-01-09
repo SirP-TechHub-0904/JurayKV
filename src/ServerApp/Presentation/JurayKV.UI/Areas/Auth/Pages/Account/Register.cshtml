@@ -5,53 +5,16 @@
     Layout = "~/Pages/Shared/_Register.cshtml";
 
 }
+<style>
+    .errmsg{
+        color:blue;
+    }
+</style>
 <p class="login-box-msg">Register a new Account</p>
 <div asp-validation-summary="All" class="text-danger"></div>
 
 <form id="registrationForm" method="post">
     <input type="hidden" asp-for="RefPhone" />
-
-
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" asp-for="Input.Fullname" placeholder="Full name" onkeyup="myUppercase()">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-user"></span>
-            </div>
-        </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-            </div>
-        </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" asp-for="Input.PhoneNumber" placeholder="Phone Number">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-phone"></span>
-            </div>
-        </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-            </div>
-        </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="password" class="form-control" asp-for="Input.ConfirmPassword" placeholder="Retype password">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-            </div>
-        </div>
-    </div>
     @if (Model.RefName != null)
     {
         <div class="row">
@@ -64,6 +27,80 @@
             </div>
         </div>
     }
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="Input.Fullname" placeholder="Full name" onkeyup="myUppercaseName(this)" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-user"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="Input.PhoneNumber" placeholder="Phone Number" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-phone"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" asp-for="Input.ConfirmPassword" placeholder="Retype password" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group mb-4" style="margin-bottom:0px !important;">
+        <p>Kindly confirm that you are a human by entering the code below in the box</p>
+    </div>
+    <div class="form-group mb-4" style="margin-bottom:0px !important;">
+
+        <div id="errCaptcha" class="errmsg"></div>
+        <div class="row">
+
+            <div class="col-sm-4" style="">
+                <div class="restart">
+                    <a href="#captcha" id="cliik" onclick="createCaptcha()">Change Code</a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="input">
+                    <input type="text"
+                           name="reCaptcha"
+                           id="reCaptcha"
+                           placeholder="Enter Sum" style="border-radius:8px;padding-left:10px;width:100px;" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div id="captcha" class="captcha">
+                    <script>createCaptcha();</script>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <p style="margin-bottom:0 !important;color:white;">
+
+                </p>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-8">
             <div class="icheck-primary">
@@ -92,12 +129,73 @@
             const agreeTermsCheckbox = document.getElementById("agreeTerms");
 
             form.addEventListener("submit", function (event) {
+                // Validate agreement checkbox
                 if (!agreeTermsCheckbox.checked) {
                     event.preventDefault(); // Prevent form submission
-                    toastr.error('Please agree to the terms before submitting.')
+                    toastr.error('Please agree to the terms before submitting.');
+                    return;
                 }
-                // You can add additional validation or submit logic here if needed.
+
+                // Validate required fields
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredFields.forEach(function (field) {
+                    if (!field.value.trim()) {
+                        event.preventDefault(); // Prevent form submission
+                        toastr.error('All fields are required.');
+                        isValid = false;
+                        return;
+                    }
+                });
+
+                // Validate captcha
+                if (!validateCaptcha()) {
+                    event.preventDefault(); // Prevent form submission
+                    toastr.error('Captcha validation failed.');
+                    return;
+                }
+
+                // Submit the form if all validations pass
+                if (isValid) {
+                    // You can add additional logic or remove this line if not needed.
+                    form.submit();
+                }
             });
+
+            // Initial captcha generation
+            createCaptcha();
         });
+
+        let captchaSum;
+
+        function createCaptcha() {
+            const activeCaptcha = document.getElementById("captcha");
+            const num1 = Math.floor(Math.random() * 10); // Random number 0-9
+            const num2 = Math.floor(Math.random() * 10); // Random number 0-9
+            captchaSum = num1 + num2;
+            activeCaptcha.innerHTML = `${num1} + ${num2} = `;
+        }
+
+        function validateCaptcha() {
+            const errCaptcha = document.getElementById("errCaptcha");
+            const userAnswer = parseInt(document.getElementById("reCaptcha").value);
+
+            if (isNaN(userAnswer) || userAnswer !== captchaSum) {
+                errCaptcha.innerHTML = "Wrong captcha";
+                return false;
+            }
+
+            errCaptcha.innerHTML = "Done";
+            // Generate a new captcha for the next submission
+            createCaptcha();
+            return true;
+        }
+
+        function myUppercaseName(input) {
+            input.value = input.value.toUpperCase();
+        }
     </script>
 }
+
+

@@ -11,6 +11,7 @@ namespace JurayKV.Infrastructure.VTU.ResponseDto
     {
         public string code { get; set; }
         public string message { get; set; }
+        public Guid TransactionId { get; set; }
         public ElectricityResponseData data { get; set; }
     }
 

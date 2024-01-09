@@ -40,6 +40,7 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
     private readonly IEmailSender _emailSender;
     private readonly IVoiceSender _voiceSender;
     private readonly IRepository _repository;
+    private readonly IWhatsappOtp _whatsappOtp;
     public CreateNotificationCommandHandler(
             INotificationRepository notificationRepository,
             INotificationCacheHandler notificationCacheHandler,
@@ -48,7 +49,8 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             IVoiceSender voiceSender,
             IMediator mediator,
             UserManager<ApplicationUser> userManager,
-            IRepository repository)
+            IRepository repository,
+            IWhatsappOtp whatsappOtp)
     {
         _notificationRepository = notificationRepository;
         _notificationCacheHandler = notificationCacheHandler;
@@ -58,6 +60,7 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
         _mediator = mediator;
         _userManager = userManager;
         _repository = repository;
+        _whatsappOtp = whatsappOtp;
     }
 
     public async Task<DataResponseDto> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
@@ -73,9 +76,9 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             bool result = false;
             int randomNumber = RandomNumberGenerator.GetInt32(0, 1000000);
             string vCode = randomNumber.ToString("D6", CultureInfo.InvariantCulture);
-            string verificationCode = string.Join(" ", vCode.ToCharArray());
+            string verificationCode = string.Join("", vCode.ToCharArray());
             verificationCode = verificationCode.TrimEnd();
-            string vcode = $"Your KoboView OTP is {verificationCode}.";
+            string vcode = $"Your Koboview OTP is {verificationCode}";
             string numbercode = verificationCode;
 
             GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(user.Id.ToString());
@@ -86,6 +89,13 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
 
                 SendEmailVerificationCodeCommand verificationcommand = new SendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode);
                 bool verificationresult = await _mediator.Send(verificationcommand);
+                
+            }
+            else
+            {
+                UpdateSendEmailVerificationCodeCommand verificationcommand = new UpdateSendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, getexistingVcode.Id, verificationCode, user.Id.ToString());
+                bool verificationresult = await _mediator.Send(verificationcommand);
+
             }
             //else if (DateTime.UtcNow > getexistingVcode.SentAtUtc.AddMinutes(15))
             //{
@@ -100,12 +110,7 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             //    bool verificationresult = await _mediator.Send(resendcommand);
             //}
 
-            else
-            {
-                vcode = $"Your KoboView OTP is {getexistingVcode.Code}.";
 
-                numbercode = getexistingVcode.Code;
-            }
             DataResponseDto responseDto = new DataResponseDto();
             responseDto.Code = numbercode;
             if (request.NotificationType == NotificationType.SMS)
@@ -114,11 +119,15 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             }
             else if (request.NotificationType == NotificationType.Email)
             {
-                result = await _emailSender.SendAsync(vcode, request.UserId.ToString(), "Account Comfirmation");
+                result = await _emailSender.SendAsync(vcode, request.UserId.ToString(), "Email Comfirmation");
             }
             else if (request.NotificationType == NotificationType.Voice)
             {
                 result = await _voiceSender.SendAsync(vcode, request.UserId.ToString());
+            }
+            else if (request.NotificationType == NotificationType.Whatsapp)
+            {
+                result = await _whatsappOtp.SendAsync(vcode, request.UserId.ToString());
             }
             Notification notification = new Notification();
             notification.UserId = request.UserId;

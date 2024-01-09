@@ -169,6 +169,8 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 if (Result.code == "success")
                 {
                     TempData["success"] = "Successfully";
+                    return RedirectToPage("/Account/TransactionInfo", new { area = "User", id=Result.TransactionId });
+
                 }
                 else if (Result.code == "processing")
                 {

@@ -87,7 +87,7 @@ namespace JurayKV.Application.VtuServices
                     GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
                     var thetransaction = await _mediator.Send(gettranCommand);
                     //update wallet
-
+                    result.TransactionId = thetransaction.Id;
 
                     userwallet.Amount = userwallet.Amount - Convert.ToDecimal(request.Amount);
 
@@ -114,6 +114,7 @@ namespace JurayKV.Application.VtuServices
                 var thetransaction = await _mediator.Send(gettranCommand);
                 //update wallet
 
+                result.TransactionId = thetransaction.Id;
 
                 userwallet.Amount = userwallet.Amount - Convert.ToDecimal(request.Amount);
 

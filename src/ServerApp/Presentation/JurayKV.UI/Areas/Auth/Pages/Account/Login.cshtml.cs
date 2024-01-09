@@ -121,6 +121,14 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                         return RedirectToPage("./Verify", new { xmal = maskedEmail, txtd = user.Id }); 
                     }
+                    //if (!await _userManager.IsPhoneNumberConfirmedAsync(user))
+                    //{
+                    //    ModelState.AddModelError(string.Empty, "You must confirm your email before logging in. Please check your email and enter the code.");
+                    //    string errorMessage = ModelState.GetAllErrors();
+                    //    string maskedEmail = EmailMask.MaskEmail(user.Email);
+
+                    //    return RedirectToPage("./VerifyPhone", new { xmal = maskedEmail, txtd = user.Id });
+                    //}
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);

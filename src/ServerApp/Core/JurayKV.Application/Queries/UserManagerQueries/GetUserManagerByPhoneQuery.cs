@@ -46,6 +46,7 @@ public sealed class GetUserManagerByPhoneQuery : IRequest<UserManagerDetailsDto>
             {
                 request.ThrowIfNull(nameof(request));
                 try { 
+                    if(request.Phone != null) { 
                 string last10DigitsPhoneNumber1 = request.Phone.Substring(Math.Max(0, request.Phone.Length - 10));
                 var user = await _mainUserManager.Users.FirstOrDefaultAsync(x=>x.PhoneNumber.Contains(request.Phone));
 
@@ -66,6 +67,7 @@ public sealed class GetUserManagerByPhoneQuery : IRequest<UserManagerDetailsDto>
 
 
                 return outcome;
+                    }
                 }catch(Exception c) { }
                 return null;
             }

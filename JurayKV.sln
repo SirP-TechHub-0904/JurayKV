@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKvV.Infrastructure.Int
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.Opay", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.Opay\JurayKV.Infrastructure.Opay.csproj", "{48AABE0F-E265-4967-859E-A906C84E9E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JurayKV.Infrastructure.VTU", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.VTU\JurayKV.Infrastructure.VTU.csproj", "{4F76DD51-C55D-4D4A-9D6B-77C68A82116C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JurayKV.Infrastructure.VTU", "src\ServerApp\Infrastructure\JurayKV.Infrastructure.VTU\JurayKV.Infrastructure.VTU.csproj", "{4F76DD51-C55D-4D4A-9D6B-77C68A82116C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -42,6 +42,17 @@
     <meta property="og:updated_time" content="@DateTime.UtcNow.AddHours(1)" />
     <link href="~/Layout/mistro/css/fontawesome-all.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ6Z1QGM21"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-CQ6Z1QGM21');
+    </script>
+
     <style>
         .section-block-grey {
             padding: 20px 0px 20px 0px;
@@ -62,6 +73,7 @@
             font-weight: 500;
             line-height: 130%;
         }
+
         .feature-flex-icon i {
             background-image: linear-gradient(120deg, rgb(5 1 184) 0%, #0501b8 100%);
         }
@@ -109,6 +121,7 @@
             padding: 20px 0px 20px 0px;
             background-color: #d9d9d9;
         }
+
         .md-top-x {
             margin-top: 18px;
         }
@@ -127,7 +140,7 @@
     <header>
         <nav id="navigation4" class="container navigation">
             <div class="nav-header">
-                <a class="nav-brand" href="index.html">
+                <a class="nav-brand" href="/">
                     <img src="~/img/Koboview-logo-main.png" class="main-logo" alt="logo" id="main_logo" style="max-height:70px;">
                 </a>
                 <div class="nav-toggle"></div>

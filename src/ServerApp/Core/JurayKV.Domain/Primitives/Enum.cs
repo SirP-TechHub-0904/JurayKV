@@ -56,8 +56,10 @@ namespace JurayKV.Domain.Primitives
             Email = 2,
 
             [Description("Voice")]
-            Voice = 3
-
+            Voice = 3,
+            [Description("Whatsapp")]
+            Whatsapp = 4
+                
         }
 
         public enum CartStatus

@@ -8,7 +8,7 @@
     <div class="col-md-12">
         <h3 style="text-align:center;">ADVERT BUCKET FOR YOUR STATUS</h3>
         <p style="text-align:center;">Kindly Make Sure You Pick Your Advert From Any of the Bucket Below</p>
-         
+
         @if (TempData["error"] != null)
         {
             <div class="alert alert-danger">
@@ -53,3 +53,33 @@
 
     }
 </div>
+
+
+@section Scripts {
+    <div class="modal fade" id="mainModal" data-backdrop="static">
+        <div class="modal-dialog modal-md" style="width: 70% !important;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3>
+                        Disclaimer: Points Terms for Ad Views
+                    </h3>
+                    <div>
+                        <h6>
+                            Please note that we will only compensate for the initial 500 views of your advertisement.
+                            Any views exceeding this limit will not be eligible for points.
+                        </h6>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(window).on('load', function () {
+            $('#mainModal').modal('show');
+        });
+    </script>
+}

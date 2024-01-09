@@ -65,6 +65,7 @@ namespace JurayKV.UI
             //builder.Services.AddTransient<SendGridConfig>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddTransient<ISmsSender, SmsSender>();
+            builder.Services.AddTransient<IWhatsappOtp, WhatsappOtp>();
             builder.Services.AddTransient<IVoiceSender, VoiceSender>();
             builder.Services.AddTransient<IStorageService, StorageService>();
             builder.Services.AddTransient<IFlutterTransactionService, FlutterTransactionService>();
@@ -163,6 +164,13 @@ namespace JurayKV.UI
                 });
 
                 // Add more policies as needed
+            });
+
+            builder.Services.AddSingleton<LoggerLibrary>(provider =>
+            {
+                var hostingEnvironment = provider.GetRequiredService<IWebHostEnvironment>();
+                var wwwRootPath = hostingEnvironment.WebRootPath;
+                return new LoggerLibrary(wwwRootPath);
             });
             builder.Services.AddHttpClient();
             builder.Services.AddCors(options =>
