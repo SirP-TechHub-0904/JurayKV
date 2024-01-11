@@ -33,7 +33,8 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
             if (SettingDetails == null)
             {
-                return RedirectToPage("Index");
+                TempData["error"] = "Uable to Validate";
+                return RedirectToPage("/Account/Index", new {area="User" });
             }
 
             if (SettingDetails.BillGateway == Domain.Primitives.Enum.BillGateway.VTU)

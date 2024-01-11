@@ -3,8 +3,10 @@
 #nullable disable
 
 using JurayKV.Application;
+using JurayKV.Application.Commands.UserManagerCommands;
 using JurayKV.Application.Services;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +20,14 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IMediator _mediator;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager, IMediator mediator)
         {
             _signInManager = signInManager;
             _logger = logger;
             _userManager = userManager;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -135,7 +139,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                         
+                        LastLoginCommand lst = new LastLoginCommand(user.Id.ToString());
+                        await _mediator.Send(lst);
                         var roles = await _userManager.GetRolesAsync(user);
 
                         if (roles.Contains(Constants.SuperAdminPolicy))

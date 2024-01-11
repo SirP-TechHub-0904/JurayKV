@@ -3,6 +3,7 @@ using Azure.Core;
 using JurayKV.Application.Commands.IdentityCommands.UserCommands;
 using JurayKV.Application.Commands.NotificationCommands;
 using JurayKV.Application.Commands.TransactionCommands;
+using JurayKV.Application.Commands.UserManagerCommands;
 using JurayKV.Application.Commands.WalletCommands;
 using JurayKV.Application.Queries.IdentityQueries.UserQueries;
 using JurayKV.Application.Queries.SettingQueries;
@@ -142,6 +143,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         //UpdateEmailVerificationCodeCommand verificationcommand = new UpdateEmailVerificationCodeCommand(result.Email, result.PhoneNumber, result.Id.ToString(), result.Code, result.Id, DateTime.UtcNow);
                         //bool verificationresult = await _mediator.Send(verificationcommand);
                         await _signInManager.SignInAsync(identityResult, true);
+                        LastLoginCommand lst = new LastLoginCommand(identityResult.Id.ToString());
+                        await _mediator.Send(lst);
                         return RedirectToPage("/Account/Index", new { area = "User" });
                     }
                     else

@@ -142,7 +142,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Firstname = entity.FirstName,
                     Lastname = entity.LastName,
                     RefferedBy = entity.RefferedByPhoneNumber,
-                    IsCompany = await _userManager.IsInRoleAsync(entity, "Company")
+                    IsCompany = await _userManager.IsInRoleAsync(entity, "Company"),
+                    IsCSARole = await _userManager.IsInRoleAsync(entity, "CSA")
                 };
             }
 

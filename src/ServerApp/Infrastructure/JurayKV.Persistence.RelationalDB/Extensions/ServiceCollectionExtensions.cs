@@ -15,7 +15,9 @@ using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.SliderAggregate;
+using JurayKV.Domain.Aggregates.StateLgaAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Domain.Aggregates.UserMessageAggregate;
 using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories;
@@ -107,7 +109,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAdvertRequestRepository, AdvertRequestRepository>();
         services.AddScoped<IVariationRepository, VariationRepository>();
         services.AddScoped<ICategoryVariationRepository, CategoryVariationRepository>();
-       
+
+
+        services.AddScoped<IStateRepository, StateRepository>();
+        services.AddScoped<ILgaRepository, LgaRepository>();
+        services.AddScoped<IUserMessageRepository, UserMessageRepository>();
+
 
         services.AddGenericRepository<JurayDbContext>();
         services.AddQueryRepository<JurayDbContext>();

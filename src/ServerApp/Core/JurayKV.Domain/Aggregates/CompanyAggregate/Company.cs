@@ -28,5 +28,8 @@ namespace JurayKV.Domain.Aggregates.CompanyAggregate
         public ApplicationUser User { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public decimal AmountPerPoint { get; set; }
+
+        public string? CsaPhoneNumber { get; set; }
+
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
+using Twilio.Http;
 
 namespace JurayKV.UI.Areas.Auth.Pages.Account
 {
@@ -70,12 +71,11 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     protocol: Request.Scheme);
                 string mail = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
-                await _emailSender.SendAsync(mail, user.Id.ToString(), "Reset Password");
-
-
+                 await _emailSender.SendAsync(mail, user.Id.ToString(), "Reset Password");
+                TempData["success"] = "Code Sent Successfully.";
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
-
+            TempData["error"] = "Unable to Send Email. Click Resend Again";
             return Page();
         }
     }

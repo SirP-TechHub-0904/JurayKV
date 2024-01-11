@@ -14,7 +14,9 @@ using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.SliderAggregate;
+using JurayKV.Domain.Aggregates.StateLgaAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Domain.Aggregates.UserMessageAggregate;
 using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using Microsoft.AspNetCore.Identity;
@@ -54,6 +56,11 @@ public sealed class JurayDbContext : IdentityDbContext<ApplicationUser, Applicat
     public DbSet<AdvertRequest> AdvertRequests { get;set; }
     public DbSet<Variation> Variations { get;set; }
     public DbSet<CategoryVariation> CategoryVariations { get;set; }
+
+
+    public DbSet<State> States { get;set; }
+    public DbSet<LocalGoverment> LocalGoverments { get;set; }
+    public DbSet<UserMessage> UserMessages { get;set; }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ////ChangeTracker.ApplyValueGenerationOnUpdate();

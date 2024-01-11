@@ -4,6 +4,7 @@ using JurayKV.Persistence.RelationalDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JurayKV.Persistence.RelationalDB.Migrations
 {
     [DbContext(typeof(JurayDbContext))]
-    partial class JurayDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110124506_tie")]
+    partial class tie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,22 +272,10 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("AccountName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AlternativePhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BVN")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -292,9 +283,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationUTC")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTie2Upgraded")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateUpgraded")
@@ -800,39 +788,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.ToTable("Sliders");
                 });
 
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.StateLgaAggregate.LocalGoverment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LGAName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("StatesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StatesId");
-
-                    b.ToTable("LocalGoverments");
-                });
-
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.StateLgaAggregate.State", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("StateName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("States");
-                });
-
             modelBuilder.Entity("JurayKV.Domain.Aggregates.TransactionAggregate.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -879,49 +834,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.UserMessageAggregate.UserMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("All")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateRead")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Disable")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FileKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Read")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserMessages");
                 });
 
             modelBuilder.Entity("JurayKV.Domain.Aggregates.VariationAggregate.Variation", b =>
@@ -1229,17 +1141,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.StateLgaAggregate.LocalGoverment", b =>
-                {
-                    b.HasOne("JurayKV.Domain.Aggregates.StateLgaAggregate.State", "States")
-                        .WithMany("LocalGov")
-                        .HasForeignKey("StatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("States");
-                });
-
             modelBuilder.Entity("JurayKV.Domain.Aggregates.TransactionAggregate.Transaction", b =>
                 {
                     b.HasOne("JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser", "User")
@@ -1257,15 +1158,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.UserMessageAggregate.UserMessage", b =>
-                {
-                    b.HasOne("JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("JurayKV.Domain.Aggregates.VariationAggregate.Variation", b =>
@@ -1349,11 +1241,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
             modelBuilder.Entity("JurayKV.Domain.Aggregates.KvAdAggregate.KvAd", b =>
                 {
                     b.Navigation("IdentityKvAds");
-                });
-
-            modelBuilder.Entity("JurayKV.Domain.Aggregates.StateLgaAggregate.State", b =>
-                {
-                    b.Navigation("LocalGov");
                 });
 #pragma warning restore 612, 618
         }

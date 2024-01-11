@@ -96,6 +96,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         public string RefPhone { get; set; }
         [BindProperty]
         public string RefName { get; set; }
+
+        public bool CheckVerified { get; set; }
         public async Task OnGetAsync(string returnUrl = null, string refx = null)
         {
             ReturnUrl = returnUrl;
@@ -110,6 +112,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     {
                         RefName = userref.SurName + " " + userref.FirstName;
                         RefPhone = userref.PhoneNumber;
+
+                        //check ref verified count.
+                        CheckUserRefVerificationCommand checkcommand = new CheckUserRefVerificationCommand(refx);
+                        CheckVerified = await _mediator.Send(checkcommand);
                     }
                 }
                 catch { }

@@ -116,7 +116,8 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                     XtxtGuid = newGuid.ToString(),
                    CreationUTC = DateTime.UtcNow.AddHours(1),
                    EmailConfirmed = request.Data.Comfirm,
-                   RefferedByPhoneNumber = request.Data.RefPhone
+                   RefferedByPhoneNumber = request.Data.RefPhone,
+                   Tier = Domain.Primitives.Enum.Tier.Tier1
                 };
 
                 IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, request.Data.Password);

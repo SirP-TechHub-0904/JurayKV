@@ -25,6 +25,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         public ICollection<LastTenAds> LastTenAds { get;set; }
         public int TransactionsCount { get;set; }
         public int AdsCount { get;set; }
+        public bool Upgrade {  get;set; }
 
     }
     public class ListRunningAds

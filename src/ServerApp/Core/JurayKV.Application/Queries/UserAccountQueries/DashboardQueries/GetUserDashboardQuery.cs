@@ -61,6 +61,16 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     return null;
                 }
                 userdto.Fullname = user.Fullname;
+                if (user.IsCSARole)
+                {
+                    userdto.Status = "Client Support Assistants (CSAs)";
+                }
+                else
+                {
+                    userdto.Status = "Social Media Assistants (SMAs)";
+                    userdto.Upgrade = true;
+                }
+                
                 var latestExchange = await _exchangeRateCacheRepository.GetByLatestAsync();
                 if(latestExchange != null)
                 {

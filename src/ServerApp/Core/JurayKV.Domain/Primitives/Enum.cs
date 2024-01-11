@@ -20,6 +20,14 @@ namespace JurayKV.Domain.Primitives
             [Description("Interswitch")]
             Interswitch = 2,
         }
+        public enum Tier
+        {
+            [Description("Tier1")]
+            Tier1 = 0,
+            [Description("Tier2")]
+            Tier2 = 1, 
+        }
+
         public enum BillGateway
         {
             [Description("NotDefind")]

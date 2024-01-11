@@ -84,6 +84,7 @@ namespace JurayKV.Persistence.Cache.Repositories
         {
            
             var d = await _settingRepository.GetSettingAsync();
+            if(d != null) { 
             var setting = new SettingDetailsDto
             {
                 Id = d.Id,
@@ -93,7 +94,9 @@ namespace JurayKV.Persistence.Cache.Repositories
                 BillGateway = d.BillGateway,
                 DefaultReferralAmmount = d.DefaultReferralAmmount,
             };
-            return setting;
+                return setting;
+            }
+            return null;
         }
     }
 

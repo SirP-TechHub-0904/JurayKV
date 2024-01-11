@@ -94,7 +94,7 @@ public sealed class EmailSender : IEmailSender
                 {
                     message.To.Add(new MailAddress(model.Email));
                     //message.To.Add(new MailAddress("onwukaemeka41@gmail.com"));
-                    message.From = new MailAddress("noreply@koboview.com", "Koboview");
+                    
                     message.Subject = model.Subject.Replace("\r\n", "");
                     message.Body = emailTemplate;
                     message.IsBodyHtml = true; // change to true if body msg is in html
@@ -120,36 +120,65 @@ public sealed class EmailSender : IEmailSender
                     //        return false;
                     //    }
                     //}
-                    using (var client = new SmtpClient("smtp.office365.com"))
-                    {
-                        client.UseDefaultCredentials = false;
-                        client.Port = 587;
-                        client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
-                        client.EnableSsl = true;
+                    //if (model.Email.Contains("gmai.com"))
+                    //{
+                    //    message.From = new MailAddress("admin@notification.koboview.com", "Koboview");
+                    //    using (var client = new SmtpClient("smtp.gmail.com"))
+                    //    {
+                    //        client.UseDefaultCredentials = false;
+                    //        client.Port = 587;
+                    //        client.Credentials = new NetworkCredential("admin@notification.koboview.com", "zypreccggmtjhllv");
+                    //        client.EnableSsl = true;
 
-                        try
-                        {
-                            await client.SendMailAsync(message); // Email sent
-                            _logger.Log($"mail sent to {model.Email}");
+                    //        try
+                    //        {
+                    //            await client.SendMailAsync(message); // Email sent
+                    //            _logger.Log($"gmail mail sent to {model.Email}");
 
-                            return true;
-                        }
-                        catch (Exception e)
+                    //            return true;
+                    //        }
+                    //        catch (Exception e)
+                    //        {
+                    //            _logger.Log($"gmail failed mail to {model.Email} {e.ToString()}");
+                    //            // Email not sent, log exception
+                    //            return false;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                        message.From = new MailAddress("noreply@koboview.com", "Koboview");
+                        using (var client = new SmtpClient("smtp.office365.com"))
                         {
-                            _logger.Log($"failed mail to {model.Email} {e.ToString()}");
-                            // Email not sent, log exception
-                            return false;
-                        }
+                            client.UseDefaultCredentials = false;
+                            client.Port = 587;
+                            client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
+                            client.EnableSsl = true;
+
+                            try
+                            {
+                                await client.SendMailAsync(message); // Email sent
+                                _logger.Log($"outlook mail sent to {model.Email}");
+
+                                return true;
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.Log($"outlook failed mail to {model.Email} {e.ToString()}");
+                                // Email not sent, log exception
+                                return false;
+                            }
+                        
                     }
                 }
-                 
+
 
             }
             catch (Exception ex)
             {
 
                 return false;
-            } 
+            }
         }
         catch (Exception exception)
         {
