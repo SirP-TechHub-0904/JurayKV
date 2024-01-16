@@ -30,6 +30,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         // Handler
         private class GetUserDashboardQueryHandler : IRequestHandler<GetUserDashboardQuery, UserDashboardDto>
         {
+            private readonly IMediator _mediator;
             private readonly IUserManagerCacheRepository _userManagerCacheRepository;
             private readonly IKvPointCacheRepository _kvPointCacheRepository;
             private readonly IKvAdCacheRepository _kvAdCacheRepository;
@@ -40,7 +41,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
             public GetUserDashboardQueryHandler(IUserManagerCacheRepository userManagerCacheRepository,
                 IKvPointCacheRepository kvPointCacheRepository, IKvAdCacheRepository kvAdCacheRepository,
                 ITransactionCacheRepository transactionCacheRepository, IWalletCacheRepository walletCacheRepository,
-                IExchangeRateCacheRepository exchangeRateCacheRepository, IIdentityKvAdCacheRepository identityKvAdCacheRepository)
+                IExchangeRateCacheRepository exchangeRateCacheRepository, IIdentityKvAdCacheRepository identityKvAdCacheRepository, IMediator mediator)
             {
                 _userManagerCacheRepository = userManagerCacheRepository;
                 _kvPointCacheRepository = kvPointCacheRepository;
@@ -49,6 +50,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                 _walletCacheRepository = walletCacheRepository;
                 _exchangeRateCacheRepository = exchangeRateCacheRepository;
                 _identityKvAdCacheRepository = identityKvAdCacheRepository;
+                _mediator = mediator;
             }
 
             public async Task<UserDashboardDto> Handle(GetUserDashboardQuery request, CancellationToken cancellationToken)
@@ -110,7 +112,12 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                 }).ToList();
 
                 userdto.TransactionsCount = await _transactionCacheRepository.TransactionCount(request.UserId);
-                userdto.AdsCount = await _identityKvAdCacheRepository.AdsCount(request.UserId);
+
+                GetIdentityKvAdByUserIdListQuery command = new GetIdentityKvAdByUserIdListQuery(request.UserId);
+
+                var adcounts = await _mediator.Send(command);
+
+                userdto.AdsCount = adcounts.Count();
                 return userdto;
             }
         }

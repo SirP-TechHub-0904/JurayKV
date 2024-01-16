@@ -10,7 +10,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string FirstName { get; set; }
     public string LastName { get; set; }
 
-    public bool IsDisabled { get; set; }
+    public AccountStatus AccountStatus { get; set; }
 
     public DateTime? LastLoggedInAtUtc { get; set; }
     public DateTime CreationUTC { get; set; }
@@ -46,5 +46,12 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? BankName { get; set; }
     public string? BVN { get; set; }
     public DateTime DateTie2Upgraded { get; set; }
+    public string? ResponseOnCsaRequest { get;set; }
+    public string? ResponseOnTieRequest { get;set; }
+    public bool CsaRequest { get;set; }
+    public bool Tie2Request { get; set; }
+
+    public string? VerificationCode { get; set; }
+    public string? Role { get; set; }
 
 }

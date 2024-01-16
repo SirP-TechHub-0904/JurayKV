@@ -12,10 +12,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Twilio.Rest.Verify.V2.Service;
 using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+using RestSharp;
+using System.Text.RegularExpressions;
 
 namespace JurayKV.Infrastructure.Services
 {
-         public sealed class WhatsappOtp : IWhatsappOtp
+    public sealed class WhatsappOtp : IWhatsappOtp
     {
         private readonly IConfiguration _configManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -27,8 +31,6 @@ namespace JurayKV.Infrastructure.Services
 
         public async Task<bool> SendAsync(string smsMessage, string id)
         {
-            string accountSid = _configManager.GetValue<string>("TWILIO_ACCOUNT_SID");
-            string authToken = _configManager.GetValue<string>("TWILIO_AUTH_TOKEN");
             try
             {
                 var user = await _userManager.FindByIdAsync(id);
@@ -36,38 +38,27 @@ namespace JurayKV.Infrastructure.Services
                 {
                     return false;
                 }
-                //var client = new HttpClient();
-                //var request = new HttpRequestMessage(HttpMethod.Post, "https://my.kudisms.net/api/corporate");
-                //var content = new MultipartFormDataContent();
-                ////content.Add(new StringContent(apiToken), "token");
-                ////content.Add(new StringContent("KoboView"), "senderID");
-                ////content.Add(new StringContent(user.PhoneNumber), "recipient");
-                ////content.Add(new StringContent(smsMessage), "message");
-                //request.Content = content;
 
-                //var response = await client.SendAsync(request);
-                //response.EnsureSuccessStatusCode();
-                //string responseBody = await response.Content.ReadAsStringAsync();
-                //var result = JsonConvert.DeserializeObject<SmsResponse>(responseBody);
-                //if (result.status == "success")
-                //{
-                //    return true;
-                //}
+                string phoneNumberWithPlus = user.PhoneNumber; // Replace with the actual phone number
 
-                // Find your Account SID and Auth Token at twilio.com/console
-                // and set the environment variables. See http://twil.io/secure
-               
-                TwilioClient.Init(accountSid, authToken);
+                string formattedPhoneNumber = FormatToNigeria(phoneNumberWithPlus);
+                if(!String.IsNullOrEmpty(formattedPhoneNumber)) { 
+                string instanceId = "instance74902"; // your instanceId
+                string token = "k5a6qlezjsff9zmt";  
+                string message = smsMessage;
+                var url = "https://api.ultramsg.com/" + instanceId + "/messages/chat";
+                var client = new RestClient(url);
+                var request = new RestRequest(url, Method.POST);
+                request.AddHeader("content-type", "application/x-www-form-urlencoded");
+                request.AddParameter("token", token);
+                request.AddParameter("to", formattedPhoneNumber);
+                request.AddParameter("body", message);
 
-                var verification = VerificationResource.Create(
-                    to: "08165680904",
-                    channel: "whatsapp",
-                    pathServiceSid: "Your otp is 87388738"
-                );
 
-                Console.WriteLine(verification.AccountSid);
-
-                return false;
+                var response = await client.ExecuteAsync(request);
+                var output = response.Content;
+                }
+                return true;
             }
             catch (Exception c)
             {
@@ -75,6 +66,31 @@ namespace JurayKV.Infrastructure.Services
             }
 
             return false;
+        }
+
+        static string FormatToNigeria(string phoneNumber)
+        {
+            try { 
+            // Remove any non-numeric characters from the phone number
+            string numericPhoneNumber = Regex.Replace(phoneNumber, @"[^\d]", "");
+
+            // Check if the phone number starts with "+234" and return as is
+            if (numericPhoneNumber.StartsWith("234"))
+            {
+                return "+" + numericPhoneNumber;
+            }
+
+            // Check if the phone number starts with "0" and replace it with "+234"
+            if (numericPhoneNumber.StartsWith("0"))
+            {
+                numericPhoneNumber = "+234" + numericPhoneNumber.Substring(1);
+            }
+
+            return numericPhoneNumber;
+            }catch(Exception c) { 
+                
+                return "";
+                }
         }
     }
 

@@ -114,10 +114,10 @@
 
         <div>
             <span style="text-align:center;">Didn't receive the code?<br /></span>
-           
+
             <form method="post" asp-page="Verify">
                 <input asp-for="Xtxnt" type="hidden" />
-                <input asp-for="NotificationNumber" type="hidden" value="2" />
+                <input asp-for="NotificationNumber" type="hidden" value="4" />
 
                 <div class="row">
 
@@ -125,14 +125,14 @@
                         <div class="btn-section">
                             <button class="btn btn-success">
 
-                                <span class="btn-text">Resend Via Email <i class="fa fa-envelope" style="margin-left:20px;"></i></span>
+                                <span class="btn-text">Resend Via Whatsapp <i class="fa fa-envelope" style="margin-left:20px;"></i></span>
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
 
-
+            <p><a href="https://wa.me/message/6SQ57ENNZMRPB1" target="_blank" class="btn btn-primary btn-xs">Chat Us on Whatsapp </a> if you submitted a number that is not on whatsapp</p>
         </div>
     </div>
 </div>

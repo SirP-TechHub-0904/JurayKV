@@ -109,7 +109,8 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             //    UpdateEmailVerificationCodeCommand resendcommand = new UpdateEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode, getexistingVcode.Id, null);
             //    bool verificationresult = await _mediator.Send(resendcommand);
             //}
-
+            user.VerificationCode = vcode;
+            await _userManager.UpdateAsync(user);
 
             DataResponseDto responseDto = new DataResponseDto();
             responseDto.Code = numbercode;

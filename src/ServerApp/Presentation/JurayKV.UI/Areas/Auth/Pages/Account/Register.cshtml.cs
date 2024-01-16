@@ -114,8 +114,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         RefPhone = userref.PhoneNumber;
 
                         //check ref verified count.
-                        CheckUserRefVerificationCommand checkcommand = new CheckUserRefVerificationCommand(refx);
-                        CheckVerified = await _mediator.Send(checkcommand);
+                        //CheckUserRefVerificationCommand checkcommand = new CheckUserRefVerificationCommand(refx);
+                        //CheckVerified = await _mediator.Send(checkcommand);
                     }
                 }
                 catch { }

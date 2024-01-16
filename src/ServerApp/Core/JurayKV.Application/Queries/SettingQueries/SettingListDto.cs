@@ -19,6 +19,7 @@ namespace JurayKV.Application.Queries.SettingQueries
 
         public PaymentGateway PaymentGateway { get; set; }
         public BillGateway BillGateway { get; set; }
+        public int SendCount { get; set; }
 
     }
 }

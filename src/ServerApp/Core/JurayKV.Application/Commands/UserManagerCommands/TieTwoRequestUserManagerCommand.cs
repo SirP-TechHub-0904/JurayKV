@@ -92,6 +92,10 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.BankName = request.Data.BankName;
             user.AccountNumber = request.Data.AccountNumber;
             user.AccountName = request.Data.AccountName; 
+            user.DateTie2Upgraded = DateTime.UtcNow.AddHours(1);
+            user.Tie2Request = true;
+            user.ResponseOnTieRequest = "Your Information has been received and is undergoing review with 24hr.";
+
             var result = await _userManager.UpdateAsync(user);
 
             //update role

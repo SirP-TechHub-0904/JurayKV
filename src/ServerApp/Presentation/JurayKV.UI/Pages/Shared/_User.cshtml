@@ -242,13 +242,14 @@
                         }
                         <li class="nav-item" style="background-color: #746e6e;">
 
-                             <a asp-page="/Account/CSA" asp-area="User" class="nav-link">
-                                    <i class="nav-icon fas fa-th"></i>
-                                    <p class="uppercase">
-                                        CSA Dashboard @if (!User.IsInRole("CSA")) { <span style=" font-size: 12px; color: red;">(Upgrade)</span>}
-                                    </p>
-                                </a>
-                            
+                            <a asp-page="/Account/CSA" asp-area="User" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p class="uppercase">
+                                    CSA Dashboard @if (!User.IsInRole("CSA"))
+                                    {<span style=" font-size: 12px; color: red;">(Upgrade)</span>}
+                                </p>
+                            </a>
+
                         </li>
                         @*@await Component.InvokeAsync("Ads")*@
 
@@ -410,10 +411,29 @@
     <form asp-area="Auth" id="logoutForm" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Auth" })" method="get">
     </form>
 
+    <style>
+        #loading1234Modal {
+            background: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for darkness */
+        }
 
+        /*#loadingModal .modal-content {
+            background: none;*/ /* Remove the default white background */
+        /*}*/
+    </style>
+    <div class="modal" id="loading1234Modal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Please wait. Do not close or refresh the page.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
     <script src="~/dashboard/plugins/jquery/jquery.min.js"></script>
+    <script src="~/dashboard/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Your other scripts go here -->
     <!-- jQuery UI 1.11.4 -->
     <script src="~/dashboard/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -788,6 +808,15 @@
                 options: stackedBarChartOptions
             })
         })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                // Show the loading modal
+                $('#loading1234Modal').modal('show');
+            });
+        });
     </script>
 </body>
 </html>

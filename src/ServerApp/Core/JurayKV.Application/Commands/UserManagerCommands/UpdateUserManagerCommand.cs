@@ -40,7 +40,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.LastName = request.Data.LastName;
             user.Email = request.Data.Email;
             user.PhoneNumber = request.Data.PhoneNumber;
-            user.IsDisabled = request.Data.IsDisabled;
+            user.AccountStatus = request.Data.AccountStatus;
             user.DisableEmailNotification = request.Data.DisableEmailNotification;
             await _userManager.UpdateAsync(user);
 

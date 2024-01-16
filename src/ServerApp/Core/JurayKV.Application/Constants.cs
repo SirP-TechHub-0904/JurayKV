@@ -26,7 +26,8 @@ namespace JurayKV.Application
         public const string AdminTwo = "AdminTwo";
         public const string AdminThree = "AdminThree";
         public const string SliderPolicy = "Slider";
-        
+        public const string ValidatorPolicy = "Validator";
+
     }
     public static class EmailMask { 
     public static string MaskEmail(string email)

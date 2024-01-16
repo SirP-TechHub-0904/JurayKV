@@ -7,6 +7,7 @@ namespace JurayKV.Application.Infrastructures;
 public interface IEmailSender
 {
     Task<bool> SendAsync(string smsMessage, string id, string subject);
+    Task<bool> SendEmailAsync(string smsMessage, string email, string subject);
 }
 
 public sealed class EmailMessage

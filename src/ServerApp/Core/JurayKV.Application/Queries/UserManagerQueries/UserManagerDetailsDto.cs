@@ -1,4 +1,6 @@
-﻿namespace JurayKV.Application.Queries.UserManagerQueries
+﻿using static JurayKV.Domain.Primitives.Enum;
+
+namespace JurayKV.Application.Queries.UserManagerQueries
 {
     public class UserManagerDetailsDto
     {
@@ -8,8 +10,9 @@
         public string Firstname { get; set; } 
         public string Lastname { get; set; }
         public string Email { get; set; }
-        public string PhoneNumber { get; set; } 
-        public bool IsDisabled { get; set; }
+        public string PhoneNumber { get; set; }
+        public AccountStatus AccountStatus { get; set; }
+
         public DateTime CreationUTC { get; set; }
 
         public DateTime? LastLoggedInAtUtc { get; set; }
@@ -19,6 +22,31 @@
         public bool IsCompany {  get; set; }
         public string RefferedBy { get; set; }
         public string PhoneOfRefferedBy { get; set; }
-        public bool IsCSARole { get; set; }    
+        public bool IsCSARole { get; set; }
+
+        public Tier Tier { get; set; }
+        public DateTime DateUpgraded { get; set; }
+        public string? About { get; set; }
+        public string? AlternativePhone { get; set; }
+        public string? Address { get; set; }
+        public string? State { get; set; }
+        public string? LGA { get; set; }
+        public string? Occupation { get; set; }
+        public string? FbHandle { get; set; }
+        public string? InstagramHandle { get; set; }
+        public string? TwitterHandle { get; set; }
+        public string? TiktokHandle { get; set; }
+        public string? IDCardUrl { get; set; }
+        public string? IDCardKey { get; set; }
+        public string? PassportUrl { get; set; }
+        public string? PassportKey { get; set; }
+
+        public string? AccountNumber { get; set; }
+        public string? AccountName { get; set; }
+        public string? BankName { get; set; }
+        public string? BVN { get; set; }
+        public DateTime DateTie2Upgraded { get; set; }
+        public string? ResponseOnCsaRequest { get; set; }
+        public bool CsaRequest { get; set; }
     }
 }

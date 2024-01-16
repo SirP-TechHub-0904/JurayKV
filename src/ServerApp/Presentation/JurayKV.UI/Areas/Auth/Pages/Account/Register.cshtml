@@ -59,7 +59,7 @@ else
             </div>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" asp-for="Input.PhoneNumber" placeholder="Phone Number" required="required">
+            <input type="text" class="form-control" asp-for="Input.PhoneNumber" placeholder="Valid Whatsapp Phone Number" required="required">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-phone"></span>
@@ -210,6 +210,31 @@ else
             input.value = input.value.toUpperCase();
         }
     </script>
-}
 
+
+
+
+    <div class="modal fade" id="mainModal" data-backdrop="static">
+        <div class="modal-dialog modal-md" style="width: 70% !important;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3>
+                        Disclaimer: Only Whatsapp Phone Number is Valid
+                    </h3>
+                   
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(window).on('load', function () {
+            $('#mainModal').modal('show');
+        });
+    </script>
+}
+ 
 

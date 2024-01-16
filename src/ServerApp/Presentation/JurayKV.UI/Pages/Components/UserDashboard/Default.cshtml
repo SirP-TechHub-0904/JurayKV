@@ -1,0 +1,19 @@
+﻿
+<a asp-page="./Index" asp-route-all="true" class="btn btn-primary">
+    All Users
+</a>
+ 
+<a asp-page="./Index" asp-route-status="@Domain.Primitives.Enum.AccountStatus.Active" class="btn btn-primary">
+    Active Users
+</a>
+<a asp-page="./Index" asp-route-status="@Domain.Primitives.Enum.AccountStatus.WhatsappActive" class="btn btn-success">
+   Whatsapp Active Users
+</a>
+<a asp-page="./Index" asp-route-status="@Domain.Primitives.Enum.AccountStatus.Suspended" class="btn btn-danger">
+    Suspended Users
+</a>
+<a asp-page="./Index" asp-route-status="@Domain.Primitives.Enum.AccountStatus.Disabled" class="btn btn-warning">
+    Disabled Users
+</a>
+
+ 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.Commands.UserManagerCommands
 {
@@ -12,7 +13,7 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public bool IsDisabled { get; set; }
+        public AccountStatus AccountStatus { get; set; }
 
         public DateTime? LastLoggedInAtUtc { get; set; }
         public DateTime CreationUTC { get; set; }

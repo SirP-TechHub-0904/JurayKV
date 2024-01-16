@@ -12,5 +12,9 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         public string? AccountName { get; set; }
         public string? BankName { get; set; }
         public string? BVN { get; set; }
+
+        public string? Address { get; set; }
+        public string? State { get; set; }
+        public string? LGA { get; set; }
     }
 }

@@ -11,10 +11,12 @@ using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.ValueObjects;
 using JurayKV.Persistence.Cache.Keys;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
@@ -22,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TanvirArjel.EFCore.GenericRepository;
 using TanvirArjel.Extensions.Microsoft.Caching;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Persistence.Cache.Repositories
 {
@@ -47,7 +50,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Id = entity.Id,
                 Date = entity.CreationUTC,
                 Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                IsDisabled = entity.IsDisabled,
+                AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,
                 LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
@@ -57,7 +60,36 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             return list;
         }
+        public async Task<List<UserManagerListDto>> GetListByStatusAsync(AccountStatus status)
+        {
+            var userlist = new List<ApplicationUser>();
+            if (status == AccountStatus.NotDefind)
+            {
+                userlist = await _userManager.Users.ToListAsync();
 
+            }
+            else
+            {
+                userlist = await _userManager.Users.Where(x => x.AccountStatus == status).ToListAsync();
+
+            }
+            var list = userlist.Select(entity => new UserManagerListDto
+            {
+                Id = entity.Id,
+                Date = entity.CreationUTC,
+                Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                AccountStatus = entity.AccountStatus,
+                Email = entity.Email,
+                PhoneNumber = entity.PhoneNumber,
+                LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                CreationUTC = entity.CreationUTC,
+                Verified = entity.EmailConfirmed,
+                VerificationCode = entity.VerificationCode,
+                Role = entity.Role
+            });
+
+            return list.ToList();
+        }
         public async Task<List<UserManagerListDto>> GetListAsync()
         {
             //string cacheKey = UserManagerCacheKeys.ListKey;
@@ -72,11 +104,13 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Id = entity.Id,
                 Date = entity.CreationUTC,
                 Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                IsDisabled = entity.IsDisabled,
+                AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,
                 LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
-                CreationUTC= entity.CreationUTC,
+                CreationUTC = entity.CreationUTC,
+                Verified = entity.EmailConfirmed,
+                VerificationCode = entity.VerificationCode
                 // Map other properties as needed
             }).ToList();
             //    await _distributedCache.SetAsync(cacheKey, list);
@@ -134,7 +168,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = entity.Id,
                     CreationUTC = entity.CreationUTC,
                     Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                    IsDisabled = entity.IsDisabled,
+                    AccountStatus = entity.AccountStatus,
                     Email = entity.Email,
                     PhoneNumber = entity.PhoneNumber,
                     LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
@@ -143,7 +177,31 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Lastname = entity.LastName,
                     RefferedBy = entity.RefferedByPhoneNumber,
                     IsCompany = await _userManager.IsInRoleAsync(entity, "Company"),
-                    IsCSARole = await _userManager.IsInRoleAsync(entity, "CSA")
+                    IsCSARole = await _userManager.IsInRoleAsync(entity, "CSA"),
+
+                    Tier = entity.Tier,
+                    DateTie2Upgraded = entity.DateTie2Upgraded,
+                    About = entity.About,
+                    AlternativePhone = entity.AlternativePhone,
+                    Address = entity.Address,
+                    State = entity.State,
+                    LGA = entity.LGA,
+                    Occupation = entity.Occupation,
+                    FbHandle = entity.FbHandle,
+                    InstagramHandle = entity.InstagramHandle,
+                    TwitterHandle = entity.TwitterHandle,
+                    TiktokHandle = entity.TiktokHandle,
+                    IDCardKey = entity.IDCardKey,
+                    IDCardUrl = entity.IDCardUrl,
+                    PassportUrl = entity.PassportUrl,
+                    PassportKey = entity.PassportKey,
+                    AccountName = entity.AccountName,
+                    AccountNumber = entity.AccountNumber,
+                    BankName = entity.BankName,
+                    BVN = entity.BVN,
+                    DateUpgraded = entity.DateUpgraded,
+                    ResponseOnCsaRequest = entity.ResponseOnCsaRequest,
+                    CsaRequest = entity.CsaRequest,
                 };
             }
 
@@ -168,7 +226,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = entity.Id,
                     CreationUTC = entity.CreationUTC,
                     Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
-                    IsDisabled = entity.IsDisabled,
+                    AccountStatus = entity.AccountStatus,
                     Email = entity.Email,
                     PhoneNumber = entity.PhoneNumber,
                     LastLoggedInAtUtc = entity.LastLoggedInAtUtc,

@@ -275,6 +275,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("AccountStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
@@ -293,6 +296,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<DateTime>("CreationUTC")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("CsaRequest")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("DateTie2Upgraded")
                         .HasColumnType("datetime2");
@@ -324,9 +330,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("InstagramHandle")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDisabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LGA")
                         .HasColumnType("nvarchar(max)");
@@ -372,6 +375,15 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("RefferedByPhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResponseOnCsaRequest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseOnTieRequest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -380,6 +392,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("SurName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Tie2Request")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Tier")
                         .HasColumnType("int");
@@ -396,6 +411,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("VerificationCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("XtxtGuid")
                         .HasColumnType("nvarchar(max)");
@@ -734,6 +752,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PaymentGateway")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

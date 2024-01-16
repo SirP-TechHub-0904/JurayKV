@@ -1,0 +1,177 @@
+﻿@page
+@model JurayKV.UI.Areas.User.Pages.Account.UpgradeTie2Model
+@{
+}
+@if (Model.Tie2Request == true)
+{
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">UPGRADE TO TIE 2</h3>
+
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <strong>Info!</strong> @Model.ResponseOnTieRequest
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">UPGRADE TO TIE 2</h3>
+
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.Address" class="control-label"></label>
+                            <textarea asp-for="TieTwoRequestDto.Address" class="form-control"></textarea>
+                            <span asp-validation-for="TieTwoRequestDto.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Select State</label>
+                            <select asp-for="TieTwoRequestDto.State" class="form-control" id="states" asp-items="Model.ListStates">
+
+                                <option>Please select a State</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lgas">Select LGA:</label>
+                            <select id="lgas" asp-for="TieTwoRequestDto.LGA" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.BankName" class="control-label">Bank Name</label>
+                            <input asp-for="TieTwoRequestDto.BankName" class="form-control" />
+                            <span asp-validation-for="TieTwoRequestDto.BankName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.AccountNumber" class="control-label">Account Number</label>
+                            <input asp-for="TieTwoRequestDto.AccountNumber" class="form-control" />
+                            <span asp-validation-for="TieTwoRequestDto.AccountNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.AccountName" class="control-label">Account Name</label>
+                            <input asp-for="TieTwoRequestDto.AccountName" class="form-control" />
+                            <span asp-validation-for="TieTwoRequestDto.AccountName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.BVN" class="control-label">BVN</label>
+                            <input asp-for="TieTwoRequestDto.BVN" class="form-control" />
+                            <span asp-validation-for="TieTwoRequestDto.BVN" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @if (!String.IsNullOrEmpty(Model.Passport))
+                            {
+                                <img class="" style="max-height:200px;" src="@Model.Passport" alt="User Avatar">
+
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Passport</label><br />
+                            <input type="file" class="control-label" asp-for="passportfile" />
+                        </div>
+                        <div class="form-group">
+                            @if (!String.IsNullOrEmpty(Model.IdCard))
+                            {
+                                <img class="" style="max-height:200px;" src="@Model.IdCard" alt="User Avatar">
+
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Valid ID Card</label><br />
+                            <input type="file" class="control-label" asp-for="iDcardfile" />
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                            <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="path/to/jquery.validate.js"></script>*@
+
+    <script>
+         $(document).ready(function () {
+             $("#states").change(function () {
+                 console.log("check in");
+                 var stateId = $(this).val();
+                 console.log("check ID");
+                 console.log(stateId);
+                 //$.ajax({
+                 //    type: "GET",
+                 //    url: "/User/Account/CSA?handler=LGAs",
+                 //    contentType: "application/json; charset=utf-8",
+                 //    dataType: "json",
+                 //    data: { stateId: stateId },
+
+                 //    success: function (data) {
+                 //        $("#lgas").empty();
+                 //        $.each(data, function (index, item) {
+                 //            $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
+                 //        });
+                 //    }
+
+                 //});
+
+                 // Make sure to wrap this code within a function or an event handler
+                 async function loadLGAs(stateId) {
+                     try {
+                         const response = await fetch(`/User/Account/CSA?handler=LGAs&stateId=${stateId}`, {
+                             method: 'GET',
+                             headers: {
+                                 'Content-Type': 'application/json; charset=utf-8'
+                             },
+                             // You can include other options here if needed
+                         });
+
+                         if (!response.ok) {
+                             throw new Error(`HTTP error! Status: ${response.status}`);
+                         }
+
+                         const data = await response.json();
+                         console.log(data);
+                         // Assuming your response is an array of objects with 'text' and 'value' properties
+                         $("#lgas").empty();
+                         $.each(data, function (index, item) {
+                             $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
+                         });
+                     } catch (error) {
+                         console.error('Error fetching LGAs:', error);
+                     }
+                 }
+
+                 // Call the function with the desired stateId
+                 loadLGAs(stateId);
+
+
+                 console.log("check out");
+                 console.log(stateId);
+             });
+         });
+    </script>
+
+}
+
+ }

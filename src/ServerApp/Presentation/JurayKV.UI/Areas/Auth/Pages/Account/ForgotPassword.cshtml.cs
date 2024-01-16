@@ -20,11 +20,13 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IWhatsappOtp _whatsapp;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IWhatsappOtp whatsapp)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _whatsapp = whatsapp;
         }
 
         /// <summary>
@@ -72,6 +74,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 string mail = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
                  await _emailSender.SendAsync(mail, user.Id.ToString(), "Reset Password");
+                 //await _whatsapp.SendAsync("", user.Id.ToString());
                 TempData["success"] = "Code Sent Successfully.";
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

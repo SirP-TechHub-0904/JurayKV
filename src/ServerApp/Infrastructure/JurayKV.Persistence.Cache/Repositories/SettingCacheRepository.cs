@@ -41,7 +41,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DefaultAmountPerView = d.DefaultAmountPerView,
                     MinimumAmountBudget = d.MinimumAmountBudget,
                     DefaultReferralAmmount = d.DefaultReferralAmmount,
-
+                    SendCount = d.SendCount,
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
                 };
@@ -68,7 +68,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DefaultReferralAmmount = d.DefaultReferralAmmount,
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
-
+                    SendCount = d.SendCount,
                 };
 
                 setting = await _repository.GetByIdAsync(settingId, selectExp);
@@ -93,6 +93,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 PaymentGateway = d.PaymentGateway,
                 BillGateway = d.BillGateway,
                 DefaultReferralAmmount = d.DefaultReferralAmmount,
+                SendCount = d.SendCount
             };
                 return setting;
             }

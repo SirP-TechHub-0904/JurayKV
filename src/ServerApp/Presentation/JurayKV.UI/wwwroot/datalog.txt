@@ -11,3 +11,15 @@
 11/01/2024 03:20:48 - log outlook mail sent to Onwukaemeka41@gmail.com
 11/01/2024 03:21:19 - log outlook mail sent to Onwukaemeka41@gmail.com
 11/01/2024 03:24:33 - log outlook mail sent to sdjhhjg@ui.yuu
+11/01/2024 16:11:37 - log outlook mail sent to chimdi@koboview.com
+12/01/2024 12:08:01 - log outlook mail sent to Onwukaemeka41@gmail.com
+14/01/2024 06:36:42 - log outlook mail sent to Onwukaemeka41@gmail.com
+14/01/2024 07:38:26 - log outlook mail sent to Onwukaemeka41@gmail.com
+14/01/2024 07:38:32 - log outlook mail sent to Onwukaemeka41@gmail.com
+15/01/2024 15:09:21 - log outlook failed mail to onwukaemeka41@gmail.coms System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.4.6 Unusual sending activity detected. <a href=https://www.zoho.com/mail/help/usage-policy.html target=_blank>Learn more.</a> To unblock <a href=https://mail.zoho.com/UnblockMe target=_blank>Click here.</a>
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.Mail.MailWriter.Close()
+   at System.Net.Mail.SmtpClient.Complete(Exception exception, Object result)
+--- End of stack trace from previous location ---
+   at JurayKV.Infrastructure.Services.EmailSender.SendAsync(String smsMessage, String id, String subject) in C:\Users\JURAY\source\repos\JurayKV\src\ServerApp\Infrastructure\JurayKV.Infrastructure.Services\EmailSender.cs:line 164

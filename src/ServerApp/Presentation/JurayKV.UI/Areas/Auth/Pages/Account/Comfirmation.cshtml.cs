@@ -98,6 +98,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     if (result.Code == VerificationCode)
                     {
                         identityResult.EmailConfirmed = true;
+                        identityResult.AccountStatus = AccountStatus.Active;
+                        identityResult.Role = "User";
                         await _userManager.UpdateAsync(identityResult);
 
                         //if the referral is not null, credit the referral

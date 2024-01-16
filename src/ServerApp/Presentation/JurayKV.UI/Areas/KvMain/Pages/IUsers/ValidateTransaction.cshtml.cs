@@ -10,7 +10,7 @@ using JurayKV.Application.Queries.WalletQueries;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-     [Authorize(Policy = Constants.SuperAdminPolicy)]
+    [Authorize(Policy = Constants.ValidatorPolicy)]
     public class ValidateTransactionModel : PageModel
     {
 
@@ -19,9 +19,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         {
             _mediator = mediator;
         }
-
-
-
+         
         [BindProperty]
         public CommandDto Command { get; set; } = new CommandDto();
         public class CommandDto

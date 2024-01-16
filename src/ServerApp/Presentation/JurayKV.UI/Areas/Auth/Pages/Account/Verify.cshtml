@@ -60,13 +60,13 @@
         background-color: #58cadb;
     }
 </style>
-<h3 class="login-box-msg">Verify Your Email</h3>
+<h3 class="login-box-msg">Verify Your Whatsapp Phone Number</h3>
 
-<p class="login-box-msg">Please choose one way to receive your 6-digit code</p>
+@*<p class="login-box-msg">Please choose one way to receive your 6-digit code</p>*@
  
 <form asp-page-handler="Email" method="post">
     <input asp-for="Xtxnt" type="hidden" />
-    <input asp-for="NotificationNumber" type="hidden" value="2" />
+    <input asp-for="NotificationNumber" type="hidden" value="4" />
 
     <div class="row">
 
@@ -76,7 +76,7 @@
                     <span class="btn-gradient">
                         <i class="fa fa-check"></i>
                     </span>
-                    <span class="btn-text">Click to Send Email OTP <i class="fa fa-envelope" style="margin-left:20px;"></i></span>
+                    <span class="btn-text">Click to Send Whatsapp OTP <i class="fa fa-whatsapp" style="margin-left:20px;"></i></span>
                 </button>
             </div>
         </div>

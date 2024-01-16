@@ -57,7 +57,7 @@ public sealed class GetUserManagerByPhoneQuery : IRequest<UserManagerDetailsDto>
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
                     CreationUTC = user.CreationUTC, // Replace with the actual property in ApplicationUser
-                    IsDisabled = user.IsDisabled,
+                    AccountStatus = user.AccountStatus,
                     LastLoggedInAtUtc = user.LastLoggedInAtUtc,
                     Surname = user.SurName,
                     Firstname = user.FirstName,

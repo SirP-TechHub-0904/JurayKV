@@ -25,15 +25,17 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
         private readonly IUserManagerCacheRepository _userManager;
         private readonly IQueryRepository _repository;
         private readonly IMediator _mediator;
- 
+        private readonly UserManager<ApplicationUser> _user;
 
 
-        public GetUserManagerByIdQueryHandler(IUserManagerCacheRepository userManager, IQueryRepository repository, IMediator mediator)
+
+        public GetUserManagerByIdQueryHandler(IUserManagerCacheRepository userManager, IQueryRepository repository, IMediator mediator, UserManager<ApplicationUser> user)
         {
             _userManager = userManager;
             _repository = repository;
             _mediator = mediator;
-         }
+            _user = user;
+        }
 
         public async Task<UserManagerDetailsDto> Handle(GetUserManagerByIdQuery request, CancellationToken cancellationToken)
         {
@@ -48,13 +50,37 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 CreationUTC = user.CreationUTC, // Replace with the actual property in ApplicationUser
-                IsDisabled = user.IsDisabled,
+                AccountStatus = user.AccountStatus,
                 LastLoggedInAtUtc = user.LastLoggedInAtUtc,
                 Surname = user.Surname,
                 Firstname = user.Firstname, Lastname = user.Lastname,
                 IsCompany = user.IsCompany,
                 RefferedBy = reff.Fullname,
-                PhoneOfRefferedBy = user.RefferedBy
+                PhoneOfRefferedBy = user.RefferedBy,
+                Tier = user.Tier,
+                DateTie2Upgraded = user.DateTie2Upgraded,
+                About = user.About,
+                AlternativePhone = user.AlternativePhone,
+                Address = user.Address,
+                State = user.State,
+                LGA = user.LGA,
+                Occupation = user.Occupation,
+                FbHandle = user.FbHandle,
+                InstagramHandle = user.InstagramHandle,
+                TwitterHandle = user.TwitterHandle,
+                TiktokHandle = user.TiktokHandle,
+                IDCardKey = user.IDCardKey,
+                IDCardUrl = user.IDCardUrl,
+                PassportUrl = user.PassportUrl, 
+                PassportKey = user.PassportKey,
+                AccountName = user.AccountName,
+                AccountNumber = user.AccountNumber,
+                BankName    = user.BankName,
+                BVN = user.BVN,
+                DateUpgraded = user.DateUpgraded,
+                ResponseOnCsaRequest = user.ResponseOnCsaRequest,
+                CsaRequest = user.CsaRequest, 
+                IsCSARole = user.IsCSARole,
             };
 
             

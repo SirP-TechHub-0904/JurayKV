@@ -42,7 +42,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             try
             {
                 UpdateUserDto update = new UpdateUserDto();
-                update.IsDisabled = UpdateUserManager.IsDisabled;
+                update.AccountStatus = UpdateUserManager.AccountStatus;
                 update.Email = UpdateUserManager.Email;
                 update.PhoneNumber = UpdateUserManager.PhoneNumber;
                 update.SurName = UpdateUserManager.Surname;

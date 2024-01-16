@@ -99,7 +99,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     {
                         codetype = "Voice";
                     }
-
+                    else if (notificationType == NotificationType.Whatsapp)
+                    {
+                        codetype = "Whatsapp";
+                    }
                     TempData["codetype"] = codetype;
                     //TempData["success"] = "OTP Sent Successfully";
                     return RedirectToPage("./Comfirmation", new { xcode = codetype, xmal = maskedEmail, txtd = identityResult.Id });

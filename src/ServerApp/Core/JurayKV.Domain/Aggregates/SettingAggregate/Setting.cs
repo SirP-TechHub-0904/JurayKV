@@ -21,6 +21,7 @@ namespace JurayKV.Domain.Aggregates.SettingAggregate
         {
         }
 
+        public int SendCount { get; set; }
         public decimal DefaultAmountPerView { get; set; }
         public decimal MinimumAmountBudget { get; set; }
         public decimal DefaultReferralAmmount { get; set; }

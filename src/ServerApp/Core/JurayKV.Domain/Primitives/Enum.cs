@@ -180,6 +180,8 @@ namespace JurayKV.Domain.Primitives
             NotDefind = 0,
             [Description("Active")]
             Active = 1,
+            [Description("WhatsappActive")]
+            WhatsappActive = 6,
 
             [Description("Disabled")]
             Disabled = 2,
