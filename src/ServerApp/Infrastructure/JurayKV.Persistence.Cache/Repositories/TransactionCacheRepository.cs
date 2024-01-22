@@ -40,13 +40,14 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     Amount = d.Amount,
                     Description = d.Description,
-                    Note = d.Note,
+                    UniqueReference = d.UniqueReference,
+                    OptionalNote = d.OptionalNote,
                     Status = d.Status,
                     TrackCode = d.TrackCode,
                     TransactionReference = d.TransactionReference,
                     TransactionType = d.TransactionType,
                     UserId = d.UserId,
-                    Fullname = d.User.SurName + " " + d.User.SurName,
+                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
                     WalletId = d.WalletId,
                     WalletBalance = d.Wallet.Amount,
                     CreatedAtUtc = d.CreatedAtUtc
@@ -57,7 +58,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
 
-            return list;
+            return list.OrderByDescending(x=>x.CreatedAtUtc).ToList();
         }
 
         public async Task<TransactionDetailsDto> GetByIdAsync(Guid transactionId)
@@ -72,7 +73,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     Amount = d.Amount,
                     Description = d.Description,
-                    Note = d.Note,
+                    UniqueReference = d.UniqueReference,
+                    OptionalNote = d.OptionalNote,
                     Status = d.Status,
                     TrackCode = d.TrackCode,
                     TransactionReference = d.TransactionReference,
@@ -104,7 +106,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     Amount = d.Amount,
                     Description = d.Description,
-                    Note = d.Note,
+                    UniqueReference = d.UniqueReference,
+                    OptionalNote = d.OptionalNote,
                     Status = d.Status,
                     TrackCode = d.TrackCode,
                     TransactionReference = d.TransactionReference,
@@ -137,8 +140,9 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Id = d.Id,
                     Amount = d.Amount,
                     Description = d.Description,
-                    Note = d.Note,
-                    Status = d.Status,
+                   UniqueReference = d.UniqueReference,
+                   OptionalNote = d.OptionalNote,
+                   Status = d.Status,
                     TrackCode = d.TrackCode,
                     TransactionReference = d.TransactionReference,
                     TransactionType = d.TransactionType,
@@ -173,7 +177,32 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Id = d.Id,
                 Amount = d.Amount,
                 Description = d.Description,
-                Note = d.Note,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.SurName,
+                WalletId = d.WalletId,
+                WalletBalance = d.Wallet.Amount,
+                CreatedAtUtc = d.CreatedAtUtc
+            }).ToList();
+
+            return list;
+        }
+
+        public async Task<List<TransactionListDto>> GetReferralListByUserIdAsync(Guid userId)
+        {
+            var mainlist = await _transactionRepository.GetReferralListByUserId(userId);
+            var list = mainlist.Select(d => new TransactionListDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
                 Status = d.Status,
                 TrackCode = d.TrackCode,
                 TransactionReference = d.TransactionReference,

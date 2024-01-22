@@ -30,7 +30,8 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; }
 
-        public string Note { get; set; }
+        public string UniqueReference { get; set; }
+        public string OptionalNote { get; set; }
         public decimal Amount { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }

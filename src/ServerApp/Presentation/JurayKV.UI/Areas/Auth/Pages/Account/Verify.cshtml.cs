@@ -77,7 +77,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                     if (result.BoolResponse == true)
                     {
-                        TempData["success"] = "Code Sent Successfully.";
+                        TempData["success"] = "Code Sent Successfuly.";
 
                     }
                     else
@@ -104,7 +104,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         codetype = "Whatsapp";
                     }
                     TempData["codetype"] = codetype;
-                    //TempData["success"] = "OTP Sent Successfully";
+                    //TempData["success"] = "OTP Sent Successfuly";
                     return RedirectToPage("./Comfirmation", new { xcode = codetype, xmal = maskedEmail, txtd = identityResult.Id });
                 }
                 catch (Exception exception)

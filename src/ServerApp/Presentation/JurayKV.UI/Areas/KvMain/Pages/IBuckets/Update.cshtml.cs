@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
             {
                 UpdateBucketCommand command = new UpdateBucketCommand(UpdateBucket.Id, UpdateBucket.Name, UpdateBucket.Disable, UpdateBucket.AdminActive, UpdateBucket.UserActive);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

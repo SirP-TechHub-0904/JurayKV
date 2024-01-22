@@ -19,8 +19,7 @@ namespace JurayKV.UI.Pages.ViewComponents
             
             ViewBag.all = entity.Count();
             ViewBag.ActiveOnly = entity.Where(x=>x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Active).Count();
-            ViewBag.ActiveWhatsapp = entity.Where(x=>x.AccountStatus == Domain.Primitives.Enum.AccountStatus.WhatsappActive).Count();
-            ViewBag.Suspended = entity.Where(x=>x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Suspended).Count();
+             ViewBag.Suspended = entity.Where(x=>x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Suspended).Count();
             ViewBag.Disabled = entity.Where(x=>x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Disabled).Count(); 
             return View();
 

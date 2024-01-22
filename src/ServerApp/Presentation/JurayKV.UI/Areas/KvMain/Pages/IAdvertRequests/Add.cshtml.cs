@@ -55,7 +55,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAdvertRequests
             {
                 CreateAdvertRequestCommand command = new CreateAdvertRequestCommand(Command, imagefile);
                 Guid Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

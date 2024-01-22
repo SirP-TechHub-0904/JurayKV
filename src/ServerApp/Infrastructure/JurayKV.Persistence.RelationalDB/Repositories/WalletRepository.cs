@@ -81,15 +81,15 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<bool> CheckPhoneUnique(string phone)
         {
-            var checkphone = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phone);
-            if (checkphone == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            // Clean the input phone number
+            var cleanedPhone = new string((phone ?? "").Replace(" ", ""));
+            cleanedPhone = cleanedPhone.Substring(Math.Max(0, cleanedPhone.Length - 10));
+
+            // Check if the cleaned phone number is unique in the database
+            var checkphone = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == cleanedPhone);
+
+            return checkphone == null;
+
         }
  
 

@@ -109,7 +109,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 //create transaction and debit wallet
                 if (Result.code == "success")
                 {
-                    TempData["success"] = "Successfully";
+                    TempData["success"] = "Successfuly";
                 }
                 else if (Result.code == "processing")
                 {

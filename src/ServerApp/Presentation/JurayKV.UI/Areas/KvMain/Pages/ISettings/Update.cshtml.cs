@@ -44,7 +44,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISetting
             {
                 UpdateSettingCommand command = new UpdateSettingCommand(Setting);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

@@ -869,7 +869,7 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Note")
+                    b.Property<string>("OptionalNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -885,6 +885,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionVerificationId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UniqueReference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")

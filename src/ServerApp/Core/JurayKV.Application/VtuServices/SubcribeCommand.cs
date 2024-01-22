@@ -80,7 +80,7 @@ namespace JurayKV.Application.VtuServices
 
 
                     //create transaction
-                    CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "TV SUBSCRIPTION", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Successfull, result.data.order_id, "TV SUBSCRIPTION", result.data.order_id);
+                    CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "TV SUBSCRIPTION", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Successful, result.data.order_id, "TV SUBSCRIPTION", result.data.order_id);
                     var transaction = await _mediator.Send(createtransaction);
 
                     //get the transaction by id
@@ -106,7 +106,7 @@ namespace JurayKV.Application.VtuServices
             else if (result.code == "processing")
             {
                 //create transaction
-                CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "TV SUBSCRIPTION", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "TV SUBSCRIPTION", "XXXXXX");
+                CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "TV SUBSCRIPTION", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "TV SUBSCRIPTION", "XXXXXX");
                 var transaction = await _mediator.Send(createtransaction);
 
                 //get the transaction by id

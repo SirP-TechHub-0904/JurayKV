@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.UI.Areas.Auth.Pages.Account
@@ -50,9 +51,21 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         public Guid Xtxnt { get; set; }
         [BindProperty]
         public string One { get; set; }
-        
+
         [BindProperty]
         public int NotificationNumber { get; set; }
+
+
+        [BindProperty]
+        public string XC { get; set; }
+
+        [BindProperty]
+        public string XM { get; set; }
+
+        [BindProperty]
+        public string TX { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync(string xcode, string xmal, string txtd)
         {
             if (xmal == null)
@@ -70,29 +83,67 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             {
                 return NotFound($"Unable to load user with email '{xmal}'.");
             }
-
+            XC = xcode;
+            XM = xmal;
+            TX= txtd;
             Xtxnt = data.Id;
             TempData["codetype"] = xcode;
             return Page();
         }
 
+        [BindProperty]
+        public string NewPhoneNumber { get; set; }
+
+        [BindProperty]
+        public string OldPhoneNumber { get; set; }
+        public async Task<IActionResult> OnPostUpdatePhone(string xcode, string xmal, string txtd)
+        {
+            var user = await _userManager.FindByIdAsync(txtd);
+
+            if (OldPhoneNumber == user.PhoneNumber)
+            {
+                string last10DigitsPhoneNumber1 = NewPhoneNumber.Substring(Math.Max(0, NewPhoneNumber.Length - 10));
+                var checkphone = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber.Contains(last10DigitsPhoneNumber1));
+                if(checkphone == null)
+                {
+                    user.PhoneNumber = NewPhoneNumber;
+                    await _userManager.UpdateAsync(user);
+                    TempData["xsuccess"] = "New Phone Number update. Request for whatsapp code.";
+                    return RedirectToPage("./Comfirmation", new { xcode = xcode, xmal = xmal, txtd = user.Id });
+
+                }
+                else
+                {
+                    TempData["xerror"] = "New Phone Number is Already Used";
+                    return RedirectToPage("./Comfirmation", new { xcode = xcode, xmal = xmal, txtd = user.Id });
+                }
+            }
+            else
+            {
+                TempData["xerror"] = "Old Phone Number is wrong";
+                return RedirectToPage("./Comfirmation", new { xcode = xcode, xmal = xmal, txtd = user.Id });
+
+            }
+
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
-            {
+            
                 try
                 {
                     var identityResult = await _userManager.FindByIdAsync(Xtxnt.ToString());
-                    if(identityResult.EmailConfirmed == true) {
-                        
+                    if (identityResult.EmailConfirmed == true)
+                    {
+
                         return RedirectToPage("./Login");
-                        }
+                    }
                     GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(identityResult.Id.ToString());
 
                     EmailVerificationCode result = await _mediator.Send(command);
                     //
                     string VerificationCode = One;
-                     
+
                     VerificationCode = VerificationCode.Replace(" ", "");
                     result.Code = result.Code.Replace(" ", "");
                     if (result.Code == VerificationCode)
@@ -102,49 +153,49 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         identityResult.Role = "User";
                         await _userManager.UpdateAsync(identityResult);
 
-                        //if the referral is not null, credit the referral
-                        //get user by id
-                        GetUserManagerByPhoneQuery getuserbyphonecommand = new GetUserManagerByPhoneQuery(identityResult.RefferedByPhoneNumber);
-                        var UserWHoReferredTheseAccount = await _mediator.Send(getuserbyphonecommand);
-                        if(UserWHoReferredTheseAccount != null)
-                        {
-                            //get settings
-                            GetSettingDefaultQuery settingscommand = new GetSettingDefaultQuery();
-                            var settingData = await _mediator.Send(settingscommand);
+                    //if the referral is not null, credit the referral
+                    //get user by id
+                    //////GetUserManagerByPhoneQuery getuserbyphonecommand = new GetUserManagerByPhoneQuery(identityResult.RefferedByPhoneNumber);
+                    //////var UserWHoReferredTheseAccount = await _mediator.Send(getuserbyphonecommand);
+                    //////if (UserWHoReferredTheseAccount != null)
+                    //////{
+                    //////    //get settings
+                    //////    GetSettingDefaultQuery settingscommand = new GetSettingDefaultQuery();
+                    //////    var settingData = await _mediator.Send(settingscommand);
 
-                          
-                            //if transaction is debit.
-                            GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(UserWHoReferredTheseAccount.Id);
-                            var getwallet = await _mediator.Send(walletcommand);
 
-                            //create the transaction
-                              
-                            CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(getwallet.Id, getwallet.UserId, "Referral Bonus",
-                                settingData.DefaultReferralAmmount,
-                            TransactionTypeEnum.Credit, EntityStatus.Successfull, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL");
-                            var transaction = await _mediator.Send(transactioncreatecommand);
-                            //GET transaction information to update wallet
-                            //get the transaction by id
-                            GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
-                            var thetransaction = await _mediator.Send(gettranCommand);
-                            //update walet
-                            getwallet.Amount = getwallet.Amount + settingData.DefaultReferralAmmount;
- 
-                            var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                            getwallet.Log = getwallet.Log + "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
-                            //getwallet = null;
-                            UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwallet.UserId, "Validate Transaction", getwallet.Log, getwallet.Amount);
-                            await _mediator.Send(updatewalletcommand);
-                        }
+                    //////    //if transaction is debit.
+                    //////    GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(UserWHoReferredTheseAccount.Id);
+                    //////    var getwallet = await _mediator.Send(walletcommand);
 
-                        //if (DateTime.UtcNow > result.SentAtUtc.AddMinutes(5))
-                        //{
-                        //    TempData["error"] = "The code is expired.";
-                        //    return Page();
-                        //}
-                        //UpdateEmailVerificationCodeCommand verificationcommand = new UpdateEmailVerificationCodeCommand(result.Email, result.PhoneNumber, result.Id.ToString(), result.Code, result.Id, DateTime.UtcNow);
-                        //bool verificationresult = await _mediator.Send(verificationcommand);
-                        await _signInManager.SignInAsync(identityResult, true);
+                    //////    //create the transaction
+
+                    //////CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(getwallet.Id, getwallet.UserId, "Referral Bonus",
+                    //////    settingData.DefaultReferralAmmount,
+                    //////TransactionTypeEnum.Credit, EntityStatus.Successful, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL");
+                    //////var transaction = await _mediator.Send(transactioncreatecommand);
+                    //////    //GET transaction information to update wallet
+                    //////    //get the transaction by id
+                    //////    GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                    //////    var thetransaction = await _mediator.Send(gettranCommand);
+                    //////    //update walet
+                    //////    getwallet.Amount = getwallet.Amount + settingData.DefaultReferralAmmount;
+
+                    //////    var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                    //////    getwallet.Log = getwallet.Log + "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    //////    //getwallet = null;
+                    //////    UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwallet.UserId, "Validate Transaction", getwallet.Log, getwallet.Amount);
+                    //////    await _mediator.Send(updatewalletcommand);
+                    //////}
+
+                    //if (DateTime.UtcNow > result.SentAtUtc.AddMinutes(5))
+                    //{
+                    //    TempData["error"] = "The code is expired.";
+                    //    return Page();
+                    //}
+                    //UpdateEmailVerificationCodeCommand verificationcommand = new UpdateEmailVerificationCodeCommand(result.Email, result.PhoneNumber, result.Id.ToString(), result.Code, result.Id, DateTime.UtcNow);
+                    //bool verificationresult = await _mediator.Send(verificationcommand);
+                    await _signInManager.SignInAsync(identityResult, true);
                         LastLoginCommand lst = new LastLoginCommand(identityResult.Id.ToString());
                         await _mediator.Send(lst);
                         return RedirectToPage("/Account/Index", new { area = "User" });
@@ -161,11 +212,9 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-            }
+            
 
-            // If we got this far, something failed, redisplay form
-            return Page();
+
         }
-
     }
 }

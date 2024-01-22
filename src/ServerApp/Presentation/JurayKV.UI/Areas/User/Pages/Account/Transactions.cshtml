@@ -4,7 +4,7 @@
 }
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">KV TransactionS</h3>
+        <h3 class="card-title">KV Transactions</h3>
 
 
         <a asp-page="./Add" class="btn bg-gradient-warning btn-sm" style="float:right;">Add New</a>
@@ -53,7 +53,7 @@
                                 @Html.DisplayFor(modelItem => item.Amount)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Note)
+                                @Html.DisplayFor(modelItem => item.UniqueReference)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.TransactionType)

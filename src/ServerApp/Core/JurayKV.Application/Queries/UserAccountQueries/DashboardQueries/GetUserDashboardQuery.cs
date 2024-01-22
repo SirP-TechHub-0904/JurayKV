@@ -72,11 +72,11 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     userdto.Status = "Social Media Assistants (SMAs)";
                     userdto.Upgrade = true;
                 }
-                
+
                 var latestExchange = await _exchangeRateCacheRepository.GetByLatestAsync();
-                if(latestExchange != null)
+                if (latestExchange != null)
                 {
-                userdto.ExchangeRate = latestExchange.Amount;
+                    userdto.ExchangeRate = latestExchange.Amount;
 
                 }
                 var wallet = await _walletCacheRepository.GetByUserIdAsync(request.UserId);
@@ -91,7 +91,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
 
                 var lastTenPoints = await _kvPointCacheRepository.GetListByCountAsync(10, request.UserId);
 
-                userdto.LastTenPoints = lastTenPoints.Select(x=> new LastTenPoints
+                userdto.LastTenPoints = lastTenPoints.Select(x => new LastTenPoints
                 {
                     Id = x.Id,
                     Status = x.Status,
@@ -108,7 +108,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     Amount = x.Amount,
                     CreatedAtUtc = x.CreatedAtUtc,
                     TransactionType = x.TransactionType,
-                    Note = x.Note,
+                    Note = x.UniqueReference,
                 }).ToList();
 
                 userdto.TransactionsCount = await _transactionCacheRepository.TransactionCount(request.UserId);

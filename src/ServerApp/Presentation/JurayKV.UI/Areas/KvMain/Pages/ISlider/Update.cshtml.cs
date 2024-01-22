@@ -52,7 +52,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
             {
                 UpdateSliderCommand command = new UpdateSliderCommand(Slider, imagefile, imagefile2, RemoveImage);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

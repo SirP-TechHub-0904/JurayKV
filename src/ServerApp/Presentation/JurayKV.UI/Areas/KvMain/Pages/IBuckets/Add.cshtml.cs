@@ -36,7 +36,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
             {
                 CreateBucketCommand command = new CreateBucketCommand(BucketName);
                 Guid Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

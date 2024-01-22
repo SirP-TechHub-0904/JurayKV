@@ -89,13 +89,13 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
 
                 SendEmailVerificationCodeCommand verificationcommand = new SendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode);
                 bool verificationresult = await _mediator.Send(verificationcommand);
-                
+                user.VerificationCode = vcode;
             }
             else
             {
-                UpdateSendEmailVerificationCodeCommand verificationcommand = new UpdateSendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, getexistingVcode.Id, verificationCode, user.Id.ToString());
-                bool verificationresult = await _mediator.Send(verificationcommand);
-
+                //UpdateSendEmailVerificationCodeCommand verificationcommand = new UpdateSendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, getexistingVcode.Id, verificationCode, user.Id.ToString());
+                //bool verificationresult = await _mediator.Send(verificationcommand);
+                user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}" ;
             }
             //else if (DateTime.UtcNow > getexistingVcode.SentAtUtc.AddMinutes(15))
             //{
@@ -109,7 +109,9 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             //    UpdateEmailVerificationCodeCommand resendcommand = new UpdateEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode, getexistingVcode.Id, null);
             //    bool verificationresult = await _mediator.Send(resendcommand);
             //}
-            user.VerificationCode = vcode;
+
+
+            //user.VerificationCode = vcode;
             await _userManager.UpdateAsync(user);
 
             DataResponseDto responseDto = new DataResponseDto();

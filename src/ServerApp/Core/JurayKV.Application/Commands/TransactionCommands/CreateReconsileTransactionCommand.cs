@@ -26,7 +26,8 @@ public sealed class CreateReconsileTransactionCommand : IRequest<bool>
     {
         public CreateReconsileTransactionCommand(Guid walletId,
             Guid userId,
-            string note,
+            string uniqueReference,
+            string optionalNote,
             decimal amount,
             TransactionTypeEnum transactionType,
             EntityStatus status,
@@ -36,7 +37,8 @@ public sealed class CreateReconsileTransactionCommand : IRequest<bool>
         {
             WalletId = walletId;
             UserId = userId;
-            Note = note;
+           UniqueReference = uniqueReference;
+            OptionalNote = optionalNote;
             Amount = amount;
             TransactionType = transactionType;
             Status = status;
@@ -50,7 +52,8 @@ public sealed class CreateReconsileTransactionCommand : IRequest<bool>
         public Guid WalletId { get; set; }
         public Guid UserId { get; set; }
 
-        public string Note { get; set; }
+        public string UniqueReference { get; set; }
+        public string OptionalNote { get; set; }
         public decimal Amount { get; set; }
 
         public TransactionTypeEnum TransactionType { get; set; }
@@ -87,7 +90,7 @@ public sealed class CreateReconsileTransactionCommand : IRequest<bool>
         {
             _ = request.ThrowIfNull(nameof(request));
 
-            CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(request.WalletId, request.UserId, request.Note, request.Amount,
+            CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(request.WalletId, request.UserId, request.UniqueReference, request.OptionalNote, request.Amount,
                 request.TransactionType, request.Status, request.TransactionReference, request.Description, request.TrackCode + "-RRR");
 
             var transaction = await _mediator.Send(transactioncreatecommand);

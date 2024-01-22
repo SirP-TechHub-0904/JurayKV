@@ -27,9 +27,14 @@
                         <span asp-validation-for="Command.Amount" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Command.Note" class="control-label"></label>
-                        <input asp-for="Command.Note" class="form-control" id="upper" onkeyup="myUppercase()" />
-                        <span asp-validation-for="Command.Note" class="text-danger"></span>
+                        <label asp-for="Command.UniqueReference" class="control-label"></label>
+                        <input asp-for="Command.UniqueReference" class="form-control" id="upper" onkeyup="myUppercase()" />
+                        <span asp-validation-for="Command.UniqueReference" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Command.OptionalNote" class="control-label"></label>
+                        <input asp-for="Command.OptionalNote" class="form-control" id="upper" onkeyup="myUppercase()" />
+                        <span asp-validation-for="Command.OptionalNote" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Command.Description" class="control-label"></label>

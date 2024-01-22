@@ -104,6 +104,16 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                   .ToListAsync();
             return list;
         }
+
+        public async Task<List<Transaction>> GetReferralListByUserId(Guid userId)
+        {
+            var list = await _dbContext.Transactions
+                .Include(x => x.User)
+                .Include(x => x.Wallet)
+                 .Where(x => x.UserId == userId && x.Description.ToLower().Contains("Referral Bonus")).OrderByDescending(x => x.CreatedAtUtc)
+                  .ToListAsync();
+            return list;
+        }
     }
 
 }

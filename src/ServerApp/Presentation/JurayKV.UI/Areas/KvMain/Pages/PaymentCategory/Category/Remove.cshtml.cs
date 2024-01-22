@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.Category
 
                 var data = await _categoryRepository.GetByIdAsync(CategoryVariation.Id);
                 await _categoryRepository.DeleteAsync(data);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

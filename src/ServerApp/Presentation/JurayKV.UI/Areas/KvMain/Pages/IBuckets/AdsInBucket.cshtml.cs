@@ -64,7 +64,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
             {
                 MakeActiveQuery xcommand = new MakeActiveQuery(AdsId, BucketId, Active);
                 await _mediator.Send(xcommand);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

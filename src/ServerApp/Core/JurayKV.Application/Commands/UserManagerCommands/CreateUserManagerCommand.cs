@@ -1,5 +1,7 @@
 ﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Commands.IdentityCommands.UserCommands;
 using JurayKV.Application.Commands.WalletCommands;
+using JurayKV.Application.Queries.IdentityQueries.UserQueries;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using MediatR;
@@ -9,7 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TanvirArjel.ArgumentChecker;
@@ -81,7 +85,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 Random random = new Random();
 
                 // Generate a 6-digit verification code
-                int verificationCode = random.Next(100000, 1000000);
+                int xverificationCode = random.Next(100000, 1000000);
                 Guid newGuid = Guid.NewGuid();
 
                 var checkphone = await _wallet.CheckPhoneUnique(request.Data.PhoneNumber);
@@ -95,7 +99,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 if (checkemail == true)
                 {
                     response.Succeeded = false;
-                    response.Message = response.Message +" Email Already Used...";
+                    response.Message = response.Message + " Email Already Used...";
 
                 }
 
@@ -103,6 +107,17 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 {
                     return response;
                 }
+
+                
+                int randomNumber = RandomNumberGenerator.GetInt32(0, 1000000);
+                string vCode = randomNumber.ToString("D6", CultureInfo.InvariantCulture);
+                string verificationCode = string.Join("", vCode.ToCharArray());
+                verificationCode = verificationCode.TrimEnd();
+                string vcode = $"Your Koboview OTP is {verificationCode}";
+                string numbercode = verificationCode;
+
+                
+
                 ApplicationUser applicationUser = new ApplicationUser
                 {
                     SurName = firstName,
@@ -114,10 +129,10 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                     Xvalue = verificationCode.ToString(),
                     XvalueDate = DateTime.UtcNow.AddHours(1).AddMinutes(20),
                     XtxtGuid = newGuid.ToString(),
-                   CreationUTC = DateTime.UtcNow.AddHours(1),
-                   EmailConfirmed = request.Data.Comfirm,
-                   RefferedByPhoneNumber = request.Data.RefPhone,
-                   Tier = Domain.Primitives.Enum.Tier.Tier1
+                    CreationUTC = DateTime.UtcNow.AddHours(1),
+                    EmailConfirmed = request.Data.Comfirm,
+                    RefferedByPhoneNumber = request.Data.RefPhone,
+                    Tier = Domain.Primitives.Enum.Tier.Tier1
                 };
 
                 IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, request.Data.Password);
@@ -143,7 +158,24 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 //create wallet
                 CreateWalletCommand walletcommand = new CreateWalletCommand(user.Id, "", "wallet created on " + DateTime.UtcNow, 0);
                 Guid Result = await _mediator.Send(walletcommand);
+                //
+                GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(user.Id.ToString());
 
+                EmailVerificationCode getexistingVcode = await _mediator.Send(command);
+                if (getexistingVcode == null)
+                {
+
+                    SendEmailVerificationCodeCommand verificationcommand = new SendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode);
+                    bool verificationresult = await _mediator.Send(verificationcommand);
+                    user.VerificationCode = vcode;
+                }
+                else
+                {
+                    //UpdateSendEmailVerificationCodeCommand verificationcommand = new UpdateSendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, getexistingVcode.Id, verificationCode, user.Id.ToString());
+                    //bool verificationresult = await _mediator.Send(verificationcommand);
+                    user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}";
+                }
+                await _userManager.UpdateAsync(user);
                 string maskedEmail = EmailMask.MaskEmail(applicationUser.Email);
 
                 response.Id = applicationUser.Id;

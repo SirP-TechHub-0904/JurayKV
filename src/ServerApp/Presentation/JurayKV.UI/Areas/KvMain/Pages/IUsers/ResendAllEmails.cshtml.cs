@@ -44,7 +44,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 
                     if (result.BoolResponse == true)
                     {
-                        TempData["success"] = "Code Sent Successfully.";
+                        TempData["success"] = "Code Sent Successfuly.";
 
                     }
                     else
@@ -68,7 +68,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                     }
 
                     TempData["codetype"] = codetype;
-                    //TempData["success"] = "OTP Sent Successfully";
+                    //TempData["success"] = "OTP Sent Successfuly";
                     return RedirectToPage("./Comfirmation", new { xcode = codetype, xmal = maskedEmail, txtd = identityResult.Id });
                 }
                 }

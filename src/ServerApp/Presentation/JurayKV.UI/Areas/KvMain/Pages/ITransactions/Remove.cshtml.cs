@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ITransactions
             {
                 DeleteTransactionCommand command = new DeleteTransactionCommand(UpdateTransaction.Id);
                 await _mediator.Send(command);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

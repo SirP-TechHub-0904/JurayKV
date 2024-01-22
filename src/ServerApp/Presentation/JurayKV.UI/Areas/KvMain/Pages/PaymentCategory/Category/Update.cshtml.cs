@@ -73,7 +73,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.Category
                 data.Name   = CategoryVariation.Name;
                 data.Charge = CategoryVariation.Charge;
                 await _categoryRepository.UpdateAsync(data);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
 
             }
             catch (Exception ex)

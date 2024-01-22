@@ -33,7 +33,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             CreateIdentityKvAdCommand command = new CreateIdentityKvAdCommand(null, Guid.Parse(userId), id, DateTime.UtcNow.AddHours(1));
 
             var outcome = await _mediator.Send(command);
-            return new JsonResult("Successfully");
+            return new JsonResult("Successfuly");
         }
        
 

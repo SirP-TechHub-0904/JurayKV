@@ -15,9 +15,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Numerics;
 using System.Threading;
@@ -25,6 +27,7 @@ using System.Threading.Tasks;
 using TanvirArjel.EFCore.GenericRepository;
 using TanvirArjel.Extensions.Microsoft.Caching;
 using static JurayKV.Domain.Primitives.Enum;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace JurayKV.Persistence.Cache.Repositories
 {
@@ -33,13 +36,26 @@ namespace JurayKV.Persistence.Cache.Repositories
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-        public UserManagerCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, UserManager<ApplicationUser> userManager)
+        private readonly IWalletCacheRepository _walletCacheRepository;
+        private readonly ITransactionCacheRepository _transactionCacheRepository;
+        private readonly IKvPointCacheRepository _kvPointCacheRepository;
+
+        public UserManagerCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, UserManager<ApplicationUser> userManager, IWalletCacheRepository walletCacheRepository, ITransactionCacheRepository transactionCacheRepository, IKvPointCacheRepository kvPointCacheRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
             _userManager = userManager;
+            _walletCacheRepository = walletCacheRepository;
+            _transactionCacheRepository = transactionCacheRepository;
+            _kvPointCacheRepository = kvPointCacheRepository;
         }
+        public async Task<int> GetListReferralCountAsync(string myphone)
+        {
+            string last10DigitsPhoneNumber1 = myphone.Substring(Math.Max(0, myphone.Length - 10));
+            var userlist = await _userManager.Users.Where(x => x.RefferedByPhoneNumber.Contains(last10DigitsPhoneNumber1)).CountAsync();
 
+            return userlist;
+        }
         public async Task<List<UserManagerListDto>> GetListReferralAsync(string myphone)
         {
             string last10DigitsPhoneNumber1 = myphone.Substring(Math.Max(0, myphone.Length - 10));
@@ -73,7 +89,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 userlist = await _userManager.Users.Where(x => x.AccountStatus == status).ToListAsync();
 
             }
-            var list = userlist.Select(entity => new UserManagerListDto
+            var list = userlist.Select(async entity => new UserManagerListDto
             {
                 Id = entity.Id,
                 Date = entity.CreationUTC,
@@ -85,10 +101,228 @@ namespace JurayKV.Persistence.Cache.Repositories
                 CreationUTC = entity.CreationUTC,
                 Verified = entity.EmailConfirmed,
                 VerificationCode = entity.VerificationCode,
-                Role = entity.Role
+                Role = entity.Role,
+                ReferralCount = await GetListReferralCountAsync(entity.PhoneNumber)
             });
+            var xlist = (await Task.WhenAll(list)).ToList();
+            return xlist;
+        }
 
-            return list.ToList();
+        public async Task<UserListPagedDto> GetListByStatusAndDateAsync(AccountStatus status, DateTime? startdate, DateTime? enddate, int pageSize, int pageNumber, string? searchstring, int sortOrder)
+        {
+            var userlist = new List<ApplicationUser>();
+            var filteredUsers = _userManager.Users.AsQueryable();
+
+
+            //// Get distinct emails and their count
+            //var distinctEmails = filteredUsers
+            //    .Where(x => !string.IsNullOrEmpty(x.Email))
+            //    .GroupBy(x => x.Email.ToLower())
+            //    .Select(group => new
+            //    {
+            //        Email = group.Key,
+            //        Count = group.Count()
+            //    })
+            //    .ToList();
+
+            //// Get distinct phone numbers and their count
+            //var distinctPhoneNumbers = filteredUsers
+            //    .Where(x => !string.IsNullOrEmpty(x.PhoneNumber))
+            //    .GroupBy(x => x.PhoneNumber)
+            //    .Select(group => new
+            //    {
+            //        PhoneNumber = group.Key,
+            //        Count = group.Count()
+            //    })
+            //    .Where(x=>x.Count > 1).ToList();
+
+            // Step 1: Sort the numbers
+            var sortedPhoneNumbers = filteredUsers
+                .OrderBy(u => u.PhoneNumber)
+                .Select(u => u.PhoneNumber)
+                .ToList();
+
+            // Step 2: Take the last 10 digits and remove spaces
+            var cleanedPhoneNumbers = sortedPhoneNumbers
+                .Select(phone => new string(phone.Replace(" ", "").ToArray()))
+                .Select(phone => phone.Substring(Math.Max(0, phone.Length - 10)))
+                .ToList();
+
+            // Step 3: Find duplicates
+            var duplicates = cleanedPhoneNumbers.GroupBy(phone => phone).Where(g => g.Count() > 1).ToList();
+
+            
+            if (status == AccountStatus.NotDefind)
+            {
+                if (startdate != null)
+                {
+                    userlist = await filteredUsers.Where(x => x.CreationUTC.Date >= startdate.Value.Date && x.CreationUTC.Date <= enddate.Value.Date).ToListAsync();
+                }
+                else
+                {
+                    userlist = await filteredUsers.ToListAsync();
+
+                }
+            }
+            else
+            {
+                if (startdate != null)
+                {
+                    userlist = await filteredUsers.Where(x => x.AccountStatus == status).Where(x => x.CreationUTC.Date >= startdate.Value.Date && x.CreationUTC.Date <= enddate.Value.Date).ToListAsync();
+
+                }
+                else
+                {
+                    userlist = await filteredUsers.Where(x => x.AccountStatus == status).ToListAsync();
+
+                }
+
+            }
+            if (!string.IsNullOrEmpty(searchstring))
+            {
+                // Add search criteria based on your requirements
+                userlist = userlist
+            .Where(x =>
+                (!string.IsNullOrEmpty(x.FirstName) && x.FirstName.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.LastName) && x.LastName.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.PhoneNumber) && x.PhoneNumber.ToLower().Contains(searchstring.Replace(" ", "").Substring(Math.Max(0, searchstring.Length - 10)))) ||
+                 (!string.IsNullOrEmpty(x.State) && x.State.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.LGA) && x.LGA.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.AccountName) && x.AccountName.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.AccountNumber) && x.AccountNumber.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.BVN) && x.BVN.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.BankName) && x.BankName.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.Occupation) && x.Occupation.ToLower().Contains(searchstring.ToLower())) ||
+                (!string.IsNullOrEmpty(x.Email) && x.Email.ToLower().Contains(searchstring.ToLower())))
+            .ToList();
+
+
+
+            }
+            UserListPagedDto data = new UserListPagedDto();
+            var list = new List<UserManagerListDto>();
+            foreach (var entity in userlist.Skip((pageNumber - 1) * pageSize).Take(pageSize))
+            {
+                var referralCount = await GetListReferralCountAsync(entity.PhoneNumber);
+                var walletbalance = await _walletCacheRepository.GetByUserIdAsync(entity.Id);
+                var gettotalTransactions = await _transactionCacheRepository.GetListByUserIdAsync(entity.Id);
+                var totaltransactionDebit = gettotalTransactions.Where(x=>x.TransactionType == TransactionTypeEnum.Debit).Sum(x=>x.Amount);
+                var totaltransactionCredit = gettotalTransactions.Where(x=>x.TransactionType == TransactionTypeEnum.Credit).Sum(x=>x.Amount);
+                var totaltransactionCount = gettotalTransactions.Count();
+                var referraltransaction = await _transactionCacheRepository.GetReferralListByUserIdAsync(entity.Id);
+
+
+                var totalRefTransaction = referraltransaction.Sum(x=>x.Amount);
+
+                var totalpoints = await _kvPointCacheRepository.GetListByUserIdAsync(entity.Id);
+                var sumpoints = totalpoints.Sum(x=>x.Point);
+                var dto = new UserManagerListDto
+                {
+                    Id = entity.Id,
+                    Date = entity.CreationUTC,
+                    Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
+                    AccountStatus = entity.AccountStatus,
+                    Email = entity.Email,
+                    PhoneNumber = entity.PhoneNumber,
+                    LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                    CreationUTC = entity.CreationUTC,
+                    Verified = entity.EmailConfirmed,
+                    VerificationCode = entity.VerificationCode,
+                    Role = entity.Role,
+                    ReferralCount = referralCount,
+                    WalletBalance = walletbalance.Amount,
+                    TotalTransactionCredit = totaltransactionCredit,
+                    TotalTransactionDebit = totaltransactionDebit,
+                    TotalPoints = sumpoints,
+                    TotalReferralAmount = totalRefTransaction
+                };
+
+                list.Add(dto);
+            }
+            if(sortOrder == 1 || sortOrder == 0)
+            {
+                data.UserManagerListDto = list.OrderBy(x=>x.Fullname).ToList();
+            }else if (sortOrder == 2)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.Email).ToList();
+            }
+            else if (sortOrder == 3)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.PhoneNumber).ToList();
+            }
+            else if (sortOrder == 4)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.CreationUTC).ToList();
+            }
+            else if (sortOrder == 5)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.WalletBalance).ToList();
+            }
+            else if (sortOrder == 6)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.LastLoggedInAtUtc).ToList();
+            }
+            else if (sortOrder == 7)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.TotalTransactionCredit).ToList();
+            }
+            else if (sortOrder == 14)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.TotalTransactionDebit).ToList();
+            }
+            else if (sortOrder == 8)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.TotalPoints).ToList();
+            }
+            else if (sortOrder == 9)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.Role).ToList();
+            }
+            else if (sortOrder == 10)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.AccountStatus).ToList();
+            }
+            else if (sortOrder == 11)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.ReferralCount).ToList();
+            }
+            else if (sortOrder == 12)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.TotalReferralAmount).ToList();
+            }
+            else if (sortOrder == 13)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.Verified).ToList();
+            }
+            data.TotalCount = userlist.Count;
+
+            // Combine emails and counts into a string
+            // Step 4: List the duplicates in the specified format
+            string phoneNumberResult = "";
+            foreach (var group in duplicates)
+            {
+                phoneNumberResult += $" ({group.Key} - {group.Count()})";
+            }
+           
+
+            data.DistintPhone = phoneNumberResult; 
+            data.DistintPhoneCountActive = filteredUsers.Where(x => x.PhoneNumber == data.DistintPhone && x.AccountStatus == AccountStatus.Active).Count();
+            data.DistintEmailCountActive = filteredUsers.Where(x => x.Email == data.DistintEmail && x.AccountStatus == AccountStatus.Active).Count();
+
+
+            return data;
+        }
+        public static string CleanPhoneNumber(string phoneNumber)
+        {
+            if (phoneNumber == null)
+            {
+                return null;
+            }
+
+            // Remove non-digit characters and take the last 10 digits
+            
+               string xphoneNumber = new string(phoneNumber.Replace(" ", "")).Substring(Math.Max(0, phoneNumber.Length - 10));
+            return xphoneNumber;
         }
         public async Task<List<UserManagerListDto>> GetListAsync()
         {

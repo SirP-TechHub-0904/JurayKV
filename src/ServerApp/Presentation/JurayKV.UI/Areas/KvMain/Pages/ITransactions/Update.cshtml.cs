@@ -43,10 +43,10 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ITransactions
             {
                 UpdateTransactionCommand command = new UpdateTransactionCommand(Command.Id,
 Command.WalletId, Command.UserId,
-                    Command.Note, Command.Amount, Command.TransactionType, Command.Status, Command.TransactionReference, Command.Description,
+                    Command.UniqueReference, Command.OptionalNote, Command.Amount, Command.TransactionType, Command.Status, Command.TransactionReference, Command.Description,
                     Command.TrackCode);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

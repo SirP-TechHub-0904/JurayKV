@@ -179,28 +179,20 @@ namespace JurayKV.Domain.Primitives
             [Description("NotDefind")]
             NotDefind = 0,
             [Description("Active")]
-            Active = 1,
-            [Description("WhatsappActive")]
-            WhatsappActive = 6,
+            Active = 1, 
 
             [Description("Disabled")]
             Disabled = 2,
 
             [Description("Suspended")]
-            Suspended = 3,
-            [Description("Pending")]
-            Pending = 4,
-
-            [Description("Closed")]
-            Closed = 8,
+            Suspended = 3, 
         }
 
         public enum TransactionTypeEnum
         {
             Debit = 1,
             Credit = 2,
-            TransferDebit = 3,
-            TransferCredit = 4
+             
         }
       
        
@@ -281,8 +273,8 @@ namespace JurayKV.Domain.Primitives
         }
         public enum EntityStatus
         {
-            [Description("Successfull")]
-            Successfull = 1,
+            [Description("Successful")]
+            Successful = 1,
 
             [Description("Pending")]
             Pending = 2,

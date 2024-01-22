@@ -86,7 +86,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
                 data.Amount = Variation.Amount;
                 data.Name = Variation.Name;
                 await _variationRepository.UpdateAsync(data);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
 
             }
             catch (Exception ex)

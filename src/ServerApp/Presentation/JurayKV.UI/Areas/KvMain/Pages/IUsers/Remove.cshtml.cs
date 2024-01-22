@@ -42,7 +42,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             {
                 //DeleteUserManagerCommand command = new DeleteUserManagerCommand(UpdateUserManager.Id);
                 //await _mediator.Send(command);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

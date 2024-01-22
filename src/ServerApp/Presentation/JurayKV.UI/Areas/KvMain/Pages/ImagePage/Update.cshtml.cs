@@ -52,7 +52,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ImagePage
             {
                 UpdateImageCommand command = new UpdateImageCommand(Image, imagefile);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

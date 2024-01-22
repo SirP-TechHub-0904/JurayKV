@@ -145,10 +145,11 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     Companytransaction.TransactionType = TransactionTypeEnum.Debit;
                     Companytransaction.TransactionReference = Guid.NewGuid().ToString();
                     Companytransaction.Description = "Advert Debit";
-                    Companytransaction.Status = EntityStatus.Successfull;
+                    Companytransaction.Status = EntityStatus.Successful;
                     Companytransaction.UserId = companywallet.UserId;
                     Companytransaction.Amount = request.Point * identityKvAdsInfo.KvAd.Company.AmountPerPoint;
-                    Companytransaction.Note = "ADs";
+                    //Companytransaction.Note = "ADs";
+                    //Companytransaction.Note = "ADs";
 
                     // Persist to the database
                     await _transactionRepository.InsertAsync(Companytransaction);

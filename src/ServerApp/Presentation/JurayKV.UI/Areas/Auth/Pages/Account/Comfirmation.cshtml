@@ -102,7 +102,23 @@
 <div id="wrapper">
     <div id="dialog">
 
-        <h3>Please enter the 6-digit verification code sent to @TempData["codetype"]</h3>
+        <h3 style="font-size: 1.175rem;;">Please enter the 6-digit verification code sent to your whatsapp</h3>
+        @if (TempData["xsuccess"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong> @TempData["xsuccess"]
+            </div>
+        }
+        @if (TempData["xerror"] != null)
+        {
+
+
+            <div class="alert alert-danger">
+                <strong>Oops!</strong> @TempData["xerror"]
+            </div>
+        }
+
+        <div id="countdown">05:00</div>
 
         <div id="form">
             <form method="post">
@@ -113,9 +129,9 @@
         </div>
 
         <div>
-            <span style="text-align:center;">Didn't receive the code?<br /></span>
 
-            <form method="post" asp-page="Verify">
+
+            @*<form method="post" asp-page="Verify">
                 <input asp-for="Xtxnt" type="hidden" />
                 <input asp-for="NotificationNumber" type="hidden" value="4" />
 
@@ -130,14 +146,57 @@
                         </div>
                     </div>
                 </div>
+            </form>*@
+
+            <h6>Submitted a Wrong Whatsapp Number. Update Now</h6>
+            <form method="post" asp-page-handler="UpdatePhone">
+                <input name="xcode" type="hidden" value="@Model.XC" />
+                <input name="xmal" type="hidden" value="@Model.XM" />
+                <input name="txtd" type="hidden" value="@Model.TX" />
+
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="OldPhoneNumber" placeholder="Old Phone Number" required="required">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-phone"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="NewPhoneNumber" placeholder="Whatsapp Number" required="required">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-phone"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="btn-section">
+                            <button type="submit" class="btn btn-primary btn-block">Click to Change</button>
+                        </div>
+                    </div>
+                </div>
             </form>
 
-            <p><a href="https://wa.me/message/6SQ57ENNZMRPB1" target="_blank" class="btn btn-primary btn-xs">Chat Us on Whatsapp </a> if you submitted a number that is not on whatsapp</p>
         </div>
     </div>
 </div>
 
 
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/65534d59cec6a912820fb6ad/1hf6mc9hg';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -170,4 +229,37 @@
         }
     </script>
 
+    <script>
+        // Set the time for the countdown in seconds
+        const countdownTime = 5 * 60; // 5 minutes in seconds
+        let remainingTime = countdownTime;
+
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCountdown() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+
+            // Display the countdown in the format MM:SS
+            countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            // Check if the countdown has reached zero
+            if (remainingTime === 0) {
+                clearInterval(countdownInterval);
+                // Replace the countdown message with the link
+                countdownElement.textContent = "Didn't receive the code? ";
+                const link = document.createElement("a");
+                link.href = "https://wa.me/message/6SQ57ENNZMRPB1";
+                link.target = "_blank";
+                link.textContent = "Click to Chat";
+                countdownElement.appendChild(link);
+            }
+
+            // Decrement the remaining time
+            remainingTime--;
+        }
+
+        // Update the countdown every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
 }

@@ -42,7 +42,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
 
                     // Use the parsedTempKvId in your logic
                     // ...
-                    TempData["success"] = "Ads Registered Successfully";
+                    TempData["success"] = "Ads Registered Successfuly";
                     return RedirectToPage("./Bucket");
                 }
             }

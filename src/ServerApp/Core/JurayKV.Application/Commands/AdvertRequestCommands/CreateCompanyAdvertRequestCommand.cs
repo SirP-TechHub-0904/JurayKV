@@ -99,10 +99,11 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
             transaction.Status = Domain.Primitives.Enum.EntityStatus.Pending;
             transaction.UserId = companyDetailsDto.UserId;
             transaction.Amount = request.AdvertRequest.Amount;
-            transaction.Note = "ADVERT REQUEST";
+            //transaction.Note = "ADVERT REQUEST";
+            //transaction.Note = "ADVERT REQUEST";
 
-            // Persist to the database
-           Guid transactionId = await _transactionRepository.InsertReturnIdAsync(transaction);
+                // Persist to the database
+                Guid transactionId = await _transactionRepository.InsertReturnIdAsync(transaction);
 
            AdvertRequest newAdvert = new AdvertRequest();
 

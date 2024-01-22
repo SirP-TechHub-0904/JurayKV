@@ -97,7 +97,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 //create transaction and debit wallet
                 if (VerifyResponseData.code == "success")
                 {
-                    TempData["success"] = "Successfully";
+                    TempData["success"] = "Successfuly";
                     Verified = true;
                     Variations = await _variationRepository.GetByCategoryByActiveIdAsync(CategoryId);
                     // Map CompanyDropdownListDto to SelectListItem
@@ -165,7 +165,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 //create transaction and debit wallet
                 if (Result.code == "success")
                 {
-                    TempData["success"] = "Successfully";
+                    TempData["success"] = "Successfuly";
                 }
                 else if (Result.code == "processing")
                 {

@@ -28,10 +28,16 @@
                         @Html.DisplayFor(model => model.UpdateTransaction.Fullname)
                     </dd>
                     <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.UpdateTransaction.Note)
+                        @Html.DisplayNameFor(model => model.UpdateTransaction.UniqueReference)
                     </dt>
                     <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.UpdateTransaction.Note)
+                        @Html.DisplayFor(model => model.UpdateTransaction.UniqueReference)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.UpdateTransaction.OptionalNote)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.UpdateTransaction.OptionalNote)
                     </dd>
                     <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.UpdateTransaction.Amount)
@@ -80,7 +86,7 @@
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.UpdateTransaction.TrackCode)
                     </dd>
-                     
+
                 </dl>
             </div>
         </div>

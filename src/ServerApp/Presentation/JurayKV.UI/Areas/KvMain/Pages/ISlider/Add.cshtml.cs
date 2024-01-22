@@ -41,7 +41,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
             {
                 CreateSliderCommand command = new CreateSliderCommand(Slider, imagefile, imagefile2);
                 await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

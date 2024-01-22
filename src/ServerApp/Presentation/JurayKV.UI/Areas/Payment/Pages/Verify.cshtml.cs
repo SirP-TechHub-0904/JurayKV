@@ -32,11 +32,11 @@ namespace JurayKV.UI.Areas.Payment.Pages
             //    var Transactionresponse = await _mediator.Send(getcommand);
 
 
-            //    ValidateAndUpdateTransactionCommand validateCommand = new ValidateAndUpdateTransactionCommand(Transactionresponse.Id, transaction_id, EntityStatus.Successfull);
+            //    ValidateAndUpdateTransactionCommand validateCommand = new ValidateAndUpdateTransactionCommand(Transactionresponse.Id, transaction_id, EntityStatus.Successful);
             //    TransactionResponseDto outcome = await _mediator.Send(validateCommand);
             //    if (outcome.Success)
             //    {
-            //        TempData["success"] = "Successfull";
+            //        TempData["success"] = "Successful";
             //        return RedirectToPage("/Account/Index", new { area = "client" });
             //        //return RedirectToPage(outcome.Path, new { area = areapath });
             //    }

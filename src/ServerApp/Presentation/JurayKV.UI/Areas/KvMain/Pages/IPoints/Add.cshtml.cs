@@ -55,7 +55,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IPoints
             {
                 CreateKvPointCommand command = new CreateKvPointCommand(Command.UserId, Command.IdentityKvAdId, Command.Status, Command.Point, Command.PointHash);
                 Guid Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

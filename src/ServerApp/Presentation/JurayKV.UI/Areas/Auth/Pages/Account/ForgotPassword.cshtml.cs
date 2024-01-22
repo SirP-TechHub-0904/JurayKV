@@ -75,7 +75,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                  await _emailSender.SendAsync(mail, user.Id.ToString(), "Reset Password");
                  //await _whatsapp.SendAsync("", user.Id.ToString());
-                TempData["success"] = "Code Sent Successfully.";
+                TempData["success"] = "Code Sent Successfuly.";
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
             TempData["error"] = "Unable to Send Email. Click Resend Again";

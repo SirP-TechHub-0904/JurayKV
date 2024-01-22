@@ -23,16 +23,22 @@
                                 @Html.DisplayFor(model => model.TransactionDetailsDto.CreatedAtUtc)
                             </dd>
                             <dt class="col-sm-2">
-                               Amount
+                                Amount
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.TransactionDetailsDto.Amount)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.TransactionDetailsDto.Note)
+                                @Html.DisplayNameFor(model => model.TransactionDetailsDto.UniqueReference)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.TransactionDetailsDto.Note)
+                                @Html.DisplayFor(model => model.TransactionDetailsDto.UniqueReference)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.TransactionDetailsDto.OptionalNote)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.TransactionDetailsDto.OptionalNote)
                             </dd>
 
                             <dt class="col-sm-2">

@@ -55,7 +55,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.Category
             try
             {
                  await _categoryRepository.InsertAsync(CategoryVariation);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
 
             }
             catch (Exception ex)

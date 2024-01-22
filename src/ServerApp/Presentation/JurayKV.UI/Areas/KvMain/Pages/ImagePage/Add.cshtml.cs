@@ -41,7 +41,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ImagePage
             {
                 CreateImageCommand command = new CreateImageCommand(Image, imagefile);
                 await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

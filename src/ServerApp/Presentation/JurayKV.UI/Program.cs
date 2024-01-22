@@ -169,7 +169,7 @@ namespace JurayKV.UI
                 });
                 options.AddPolicy(Constants.ValidatorPolicy, policy =>
                 {
-                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.ValidatorPolicy);
+                    policy.RequireRole(Constants.ValidatorPolicy);
                 });
                 // Add more policies as needed
             });

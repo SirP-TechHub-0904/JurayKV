@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISetting
             {
                 DeleteSettingCommand command = new DeleteSettingCommand(Setting.Id);
                 await _mediator.Send(command);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

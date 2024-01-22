@@ -268,7 +268,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
                 }
 
             }
-            kp.Status = Domain.Primitives.Enum.EntityStatus.Successfull;
+            kp.Status = Domain.Primitives.Enum.EntityStatus.Successful;
             kp.PointHash = Guid.NewGuid().ToString();
             kp.IdentityKvAdId = updateAds.Id;
             CreateKvPointCommand updatecommand = new CreateKvPointCommand(kp.UserId, kp.IdentityKvAdId, kp.Status, kp.Point, kp.PointHash);

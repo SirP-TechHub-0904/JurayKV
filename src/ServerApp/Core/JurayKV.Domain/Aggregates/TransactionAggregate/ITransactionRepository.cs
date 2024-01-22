@@ -21,6 +21,7 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
 
         Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId);
         Task<List<Transaction>> GetListByUserId(Guid userId);
+        Task<List<Transaction>> GetReferralListByUserId(Guid userId);
         Task<int> TransactionCount(Guid userId);
 
     }

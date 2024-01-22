@@ -136,7 +136,7 @@ namespace JurayKV.Application.Commands.TransactionCommands
                 CreateNotificationDto addmail = new CreateNotificationDto();
                 addmail.UserId = transactionToBeUpdated.UserId;
                 addmail.NotificationType = NotificationType.Email;
-                addmail.Subject = "Transaction Successfull";
+                addmail.Subject = "Transaction Successful";
                 // Transfer confirmation template
                 string mailTemplate = @"
 Your advert request of ₦{0:N2} has been confirmed and the dashboard credited. <br>Your available Koboview Account balance is ₦{1:N2}.

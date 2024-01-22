@@ -13,7 +13,8 @@ public sealed class CreateTransactionCommand : IRequest<Guid>
 {
     public CreateTransactionCommand(Guid walletId, 
         Guid userId, 
-        string note,
+        string uniqueReference,
+        string optionalNote,
         decimal amount,
         TransactionTypeEnum transactionType,
         EntityStatus status,
@@ -23,7 +24,8 @@ public sealed class CreateTransactionCommand : IRequest<Guid>
     {
       WalletId = walletId;
         UserId = userId;
-        Note = note;
+        UniqueReference = uniqueReference;
+        OptionalNote = optionalNote;
         Amount = amount;
         TransactionType = transactionType;
         Status = status;
@@ -36,8 +38,8 @@ public sealed class CreateTransactionCommand : IRequest<Guid>
 
     public Guid WalletId { get; set; }
     public Guid UserId { get; set; }
-
-    public string Note { get; set; }
+    public string UniqueReference { get; set; }
+    public string OptionalNote { get; set; }
     public decimal Amount { get; set; }
 
     public TransactionTypeEnum TransactionType { get; set; }
@@ -72,7 +74,8 @@ internal class CreateTransactionCommandHandler : IRequestHandler<CreateTransacti
         transaction.Status= request.Status;
         transaction.UserId= request.UserId;
         transaction.Amount= request.Amount;
-        transaction.Note= request.Note;
+        transaction.OptionalNote = request.OptionalNote;
+        transaction.UniqueReference = request.UniqueReference;
 
         // Persist to the database
         await _transactionRepository.InsertAsync(transaction);

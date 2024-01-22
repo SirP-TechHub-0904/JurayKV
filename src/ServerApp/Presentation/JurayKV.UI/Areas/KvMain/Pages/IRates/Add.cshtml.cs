@@ -35,7 +35,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IRates
 
                 CreateExchangeRateCommand command = new CreateExchangeRateCommand(Amount);
                 Guid Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
 
             }
             catch (Exception ex)

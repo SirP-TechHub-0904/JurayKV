@@ -15,6 +15,12 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public bool Verified { get; set; }
         public DateTime? LastLoggedInAtUtc { get; set; }
         public string? VerificationCode { get; set; }
-
+        public int ReferralCount { get; set; }
+        public decimal WalletBalance { get; set; }
+         
+        public decimal TotalTransactionCredit { get;set; }
+        public decimal TotalTransactionDebit { get;set; }
+        public decimal TotalPoints { get;set; }
+        public decimal TotalReferralAmount { get;set; }
     }
 }

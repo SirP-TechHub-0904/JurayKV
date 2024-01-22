@@ -117,6 +117,10 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user != null)
                 {
+                    if(user.AccountStatus == Domain.Primitives.Enum.AccountStatus.Suspended)
+                    {
+                        return RedirectToPage("./Locked", new {id = user.Id});
+                    }
                     if (!await _userManager.IsEmailConfirmedAsync(user))
                     {
                         ModelState.AddModelError(string.Empty, "You must confirm your email before logging in. Please check your email and enter the code.");

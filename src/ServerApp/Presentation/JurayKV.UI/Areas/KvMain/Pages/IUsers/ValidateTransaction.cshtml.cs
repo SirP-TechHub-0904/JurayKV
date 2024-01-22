@@ -27,8 +27,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             public Guid WalletId { get; set; }
 
             public Guid UserId { get; set; }
-
-            public string Note { get; set; }
+            public string UniqueReference { get; set; }
+            public string OptionalNote { get; set; }
             public decimal Amount { get; set; }
 
             public TransactionTypeEnum TransactionType { get; set; }
@@ -63,10 +63,10 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             try
             {
                 CreateReconsileTransactionCommand command = new CreateReconsileTransactionCommand(Command.WalletId, Command.UserId,
-                    Command.Note, Command.Amount, Command.TransactionType, Command.Status, Command.TransactionReference, Command.Description,
+                    Command.UniqueReference, Command.OptionalNote, Command.Amount, Command.TransactionType, Command.Status, Command.TransactionReference, Command.Description,
                     Command.TrackCode);
                 bool Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

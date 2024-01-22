@@ -23,3 +23,11 @@
    at System.Net.Mail.SmtpClient.Complete(Exception exception, Object result)
 --- End of stack trace from previous location ---
    at JurayKV.Infrastructure.Services.EmailSender.SendAsync(String smsMessage, String id, String subject) in C:\Users\JURAY\source\repos\JurayKV\src\ServerApp\Infrastructure\JurayKV.Infrastructure.Services\EmailSender.cs:line 164
+16/01/2024 17:01:04 - log log whatspp code subscribe, KvAdminToken0123, 1158201444
+17/01/2024 13:34:33 - log whatsapp sent text to Onwukaemeka41@gmail.com
+17/01/2024 13:36:03 - log whatsapp sent text to Onwukaemeka41@gmail.com
+17/01/2024 13:36:19 - log whatsapp sent text to Onwukaemeka41@gmail.com
+17/01/2024 15:18:21 - log whatsapp sent text to Onwukaemeka41@gmail.com
+17/01/2024 17:23:20 - log whatsapp sent text to Onwukaemeka41@gmail.com
+17/01/2024 19:17:22 - log whatsapp sent text to hjhjd@hj.kjjh
+18/01/2024 01:03:51 - log whatsapp sent text to iuiui@uiiu.hjhj

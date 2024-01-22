@@ -11,7 +11,8 @@ public sealed class UpdateTransactionCommand : IRequest
 {
     public UpdateTransactionCommand(Guid id, Guid walletId,
         Guid userId,
-        string note,
+        string uniqueReference,
+        string optionalNote,
         decimal amount,
         TransactionTypeEnum transactionType,
         EntityStatus status,
@@ -22,7 +23,8 @@ public sealed class UpdateTransactionCommand : IRequest
         Id = id;
         WalletId = walletId;
         UserId = userId;
-        Note = note;
+        UniqueReference = uniqueReference;
+        OptionalNote = optionalNote;
         Amount = amount;
         TransactionType = transactionType;
         Status = status;
@@ -35,8 +37,8 @@ public sealed class UpdateTransactionCommand : IRequest
     public Guid Id { get; set; }
     public Guid WalletId { get; set; }
     public Guid UserId { get; set; }
-
-    public string Note { get; set; }
+    public string UniqueReference { get; set; }
+    public string OptionalNote { get; set; }
     public decimal Amount { get; set; }
 
     public TransactionTypeEnum TransactionType { get; set; }
@@ -76,7 +78,8 @@ internal class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransacti
         transactionToBeUpdated.Status = request.Status;
         transactionToBeUpdated.UserId = request.UserId;
         transactionToBeUpdated.Amount = request.Amount;
-        transactionToBeUpdated.Note = request.Note;
+        transactionToBeUpdated.UniqueReference = request.UniqueReference;
+        transactionToBeUpdated.OptionalNote = request.OptionalNote;
 
         await _transactionRepository.UpdateAsync(transactionToBeUpdated);
 

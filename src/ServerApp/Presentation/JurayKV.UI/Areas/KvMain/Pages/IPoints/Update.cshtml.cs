@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IPoints
             {
                 UpdateKvPointCommand command = new UpdateKvPointCommand(UpdateKvPoint.Id, UpdateKvPoint.UserId, UpdateKvPoint.IdentityKvAdId, UpdateKvPoint.Status, UpdateKvPoint.Point, UpdateKvPoint.PointHash);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

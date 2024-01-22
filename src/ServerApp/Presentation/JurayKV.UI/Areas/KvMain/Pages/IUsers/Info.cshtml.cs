@@ -19,22 +19,22 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         }
 
         [BindProperty]
-        public UserManagerDetailsDto UpdateUserManager { get; set; }
+        public FullUserManagerDetailsDto UpdateUserManager { get; set; }
         public CompanyDetailsDto UpdateCompany { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             try
             {
-                GetUserManagerByIdQuery command = new GetUserManagerByIdQuery(id);
+                GetFullUserManagerByIdQuery command = new GetFullUserManagerByIdQuery(id);
                 UpdateUserManager = await _mediator.Send(command);
 
 
-                if (UpdateUserManager.IsCompany == true)
-                {
-                    GetCompanyByUserIdQuery xcommand = new GetCompanyByUserIdQuery(id);
-                    UpdateCompany = await _mediator.Send(xcommand);
-                }
+                //if (UpdateUserManager.IsCompany == true)
+                //{
+                //    GetCompanyByUserIdQuery xcommand = new GetCompanyByUserIdQuery(id);
+                //    UpdateCompany = await _mediator.Send(xcommand);
+                //}
                 return Page();
             }
             catch (Exception ex)

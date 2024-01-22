@@ -59,7 +59,7 @@ else
             </div>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" asp-for="Input.PhoneNumber" placeholder="Valid Whatsapp Phone Number" required="required">
+            <input type="text" class="form-control" asp-for="Input.PhoneNumber" id="phoneNumberInput" placeholder="Valid Whatsapp Phone Number" required="required" oninput="removeSpaces()">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-phone"></span>
@@ -137,6 +137,18 @@ else
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function removeSpaces() {
+            // Get the input element
+            var phoneNumberInput = document.getElementById("phoneNumberInput");
+
+            // Remove spaces from the input value
+            var cleanedValue = phoneNumberInput.value.replace(/\s/g, '');
+
+            // Update the input value
+            phoneNumberInput.value = cleanedValue;
+        }
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("registrationForm");

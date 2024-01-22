@@ -97,7 +97,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                         return RedirectToPage("./Index");
 
                     }
-                    TempData["success"] = "Added Successfully";
+                    TempData["success"] = "Added Successfuly";
                     return RedirectToPage("./Index");
 
                 }

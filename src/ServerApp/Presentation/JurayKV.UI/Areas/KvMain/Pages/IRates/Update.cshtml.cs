@@ -45,7 +45,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IRates
                 UpdateExchangeRateCommand command = new UpdateExchangeRateCommand(Command.Id, Command.Amount);
 
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
 
             }
             catch (Exception ex)

@@ -92,7 +92,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAds
                     UpdateKvAdCommand command = new UpdateKvAdCommand(Command.Id, Command.ImageId, Guid.Parse(userId), Command.BucketId, Command.CompanyId, Command.Status);
 
                     await _mediator.Send(command);
-                    TempData["success"] = "Updated Successfully";
+                    TempData["success"] = "Updated Successfuly";
                 }
                 else
                 {

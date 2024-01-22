@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
             {
                 DeleteSliderCommand command = new DeleteSliderCommand(Slider.Id);
                 await _mediator.Send(command);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

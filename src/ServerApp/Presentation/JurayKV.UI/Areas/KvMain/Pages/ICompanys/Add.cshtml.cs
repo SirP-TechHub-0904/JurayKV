@@ -115,7 +115,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
             {
                 CreateCompanyCommand command = new CreateCompanyCommand(CompanyName, UserId, AmountPerPoint);
                 Guid Result = await _mediator.Send(command);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

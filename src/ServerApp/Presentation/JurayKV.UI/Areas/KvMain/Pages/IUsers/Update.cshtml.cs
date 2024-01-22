@@ -51,7 +51,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.DisableEmailNotification = UpdateUserManager.DisableEmailNotification;
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

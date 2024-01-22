@@ -36,7 +36,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
             {
                 ClearActiveAdsQuery xcommand = new ClearActiveAdsQuery();
               await _mediator.Send(xcommand);
-                TempData["success"] = "Added Successfully";
+                TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)
             {

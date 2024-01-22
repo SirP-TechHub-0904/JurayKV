@@ -150,7 +150,9 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                         return Page();
                     }
-                    return RedirectToPage("./Verify", new { xmal = Result.Mxemail, txtd = Result.Id });
+                    return RedirectToPage("./Comfirmation", new { xcode = "whatsapp_api_data", xmal = Result.Mxemail, txtd = Result.Id });
+
+                    //return RedirectToPage("./Verify", new { xmal = Result.Mxemail, txtd = Result.Id });
                 }
                 catch (Exception exception)
                 {

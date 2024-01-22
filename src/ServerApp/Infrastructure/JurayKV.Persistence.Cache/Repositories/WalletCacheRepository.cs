@@ -1,7 +1,9 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Queries.WalletQueries;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Persistence.Cache.Keys;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,16 @@ namespace JurayKV.Persistence.Cache.Repositories
         private readonly IDistributedCache _distributedCache;
         private readonly IQueryRepository _repository;
         private readonly IWalletRepository _wallet;
-        public WalletCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IWalletRepository wallet)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWalletRepository _walletRepository;
+
+        public WalletCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IWalletRepository wallet, UserManager<ApplicationUser> userManager, IWalletRepository walletRepository)
         {
             _distributedCache = distributedCache;
             _repository = repository;
             _wallet = wallet;
+            _userManager = userManager;
+            _walletRepository = walletRepository;
         }
 
         public async Task<List<WalletDetailsDto>> GetListAsync()
@@ -31,19 +38,19 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (list == null)
             //{
-                Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    LastUpdateAtUtc = d.LastUpdateAtUtc,
-                    Log = d.Log,
-                    Note = d.Note,
-                    UserId = d.UserId,
-                    Fullname = d.User.SurName + " "+ d.User.FirstName + " "+ d.User.LastName,
-                };
+            Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                CreatedAtUtc = d.CreatedAtUtc,
+                LastUpdateAtUtc = d.LastUpdateAtUtc,
+                Log = d.Log,
+                Note = d.Note,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+            };
 
-                var list = await _repository.GetListAsync(selectExp);
+            var list = await _repository.GetListAsync(selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
@@ -58,19 +65,19 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (wallet == null)
             //{
-                Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    LastUpdateAtUtc = d.LastUpdateAtUtc,
-                    Log = d.Log,
-                    Note = d.Note,
-                    UserId = d.UserId,
-                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
-                };
+            Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                CreatedAtUtc = d.CreatedAtUtc,
+                LastUpdateAtUtc = d.LastUpdateAtUtc,
+                Log = d.Log,
+                Note = d.Note,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+            };
 
-               var wallet = await _repository.GetByIdAsync(walletId, selectExp);
+            var wallet = await _repository.GetByIdAsync(walletId, selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, wallet);
             //}
@@ -86,19 +93,19 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (wallet == null)
             //{
-                Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    LastUpdateAtUtc = d.LastUpdateAtUtc,
-                    Log = d.Log,
-                    Note = d.Note,
-                    UserId = d.UserId,
-                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
-                };
+            Expression<Func<Wallet, WalletDetailsDto>> selectExp = d => new WalletDetailsDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                CreatedAtUtc = d.CreatedAtUtc,
+                LastUpdateAtUtc = d.LastUpdateAtUtc,
+                Log = d.Log,
+                Note = d.Note,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+            };
 
-               var wallet = await _repository.GetByIdAsync(walletId, selectExp);
+            var wallet = await _repository.GetByIdAsync(walletId, selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, wallet);
             //}
@@ -113,7 +120,30 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (wallet == null)
             //{ 
-               var userwallet = await _wallet.GetByUserIdAsync(userId);
+            var userwallet = await _wallet.GetByUserIdAsync(userId);
+            if (userwallet == null)
+            {
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+                Wallet wallet = new Wallet(Guid.NewGuid());
+                wallet.UserId = user.Id;
+                wallet.Note = "NEW WALLET";
+                wallet.Log = "LOG";
+                wallet.Amount = 0;
+                // Persist to the database
+                 await _walletRepository.InsertAsync(wallet);
+                var getwallet = await _walletRepository.GetByUserIdAsync(user.Id);
+                var Xwallet = new WalletDetailsDto
+                {
+                    Amount = getwallet.Amount,
+                    UserId = getwallet.UserId,
+                    Id = getwallet.Id,
+                    Fullname = getwallet.User.FirstName,
+
+                };
+                return Xwallet;
+            }
+            else
+            {
                 var wallet = new WalletDetailsDto
                 {
                     Amount = userwallet.Amount,
@@ -122,11 +152,11 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Fullname = userwallet.User.FirstName,
 
                 };
-
+                return wallet;
+            }
             //    await _distributedCache.SetAsync(cacheKey, wallet);
             //}
-
-            return wallet;
+             
         }
     }
 

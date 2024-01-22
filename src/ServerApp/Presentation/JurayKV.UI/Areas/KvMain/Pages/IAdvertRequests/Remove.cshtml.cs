@@ -43,7 +43,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAdvertRequests
             {
                 DeleteAdvertRequestCommand command = new DeleteAdvertRequestCommand(UpdateAdvertRequest.Id);
                 await _mediator.Send(command);
-                TempData["success"] = "Deleted Successfully";
+                TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)
             {

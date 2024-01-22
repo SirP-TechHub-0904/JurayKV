@@ -55,7 +55,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IAdvertRequests
             {
                 UpdateAdvertRequestCommand command = new UpdateAdvertRequestCommand(Command, imagefile);
                 await _mediator.Send(command);
-                TempData["success"] = "Updated Successfully";
+                TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {

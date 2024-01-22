@@ -21,5 +21,7 @@ namespace JurayKV.Application.Caching.Repositories
         Task<UserManagerDetailsDto> GetByIdAsync(Guid modelId);
         Task<UserDashboardDto> GetUserDashboardDto(Guid userId, CancellationToken cancellationToken);
         Task<List<UserManagerListDto>> GetListReferralAsync(string myphone);
-    }
+        Task<int> GetListReferralCountAsync(string myphone);
+        Task<UserListPagedDto> GetListByStatusAndDateAsync(AccountStatus status, DateTime? startdate, DateTime? enddate, int pageSize, int pageNumber, string? searchstring, int sortOrder);
+        }
 }
