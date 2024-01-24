@@ -11,7 +11,7 @@
 
     <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
 
                 <dl class="row">
                     <dt class="col-sm-4">
@@ -158,24 +158,7 @@
                     <dd class="col-sm-6">
                         @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.TiktokHandle)
                     </dd>
-                    <dt class="col-sm-4">
-                        ID Card
-                    </dt>
-                    <dd class="col-sm-6">
-                        @if (Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl != null)
-                        {
-                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl" height="200" />
-                        }
-                    </dd>
-                    <dt class="col-sm-4">
-                        Passport
-                    </dt>
-                    <dd class="col-sm-6">
-                        @if (Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl != null)
-                        {
-                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl" height="200" />
-                        }
-                    </dd>
+
 
 
                     <dt class="col-sm-4">
@@ -292,6 +275,30 @@
                     }
                 </dl>
             </div>
+            <div class="col-md-4">
+                <dl>
+
+                    <dt class="col-sm-4">
+                        ID Card
+                    </dt>
+                    <dd class="col-sm-6">
+                        @if (Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl != null)
+                        {
+                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl" height="200" />
+                        }
+                    </dd>
+                    <dt class="col-sm-4">
+                        Passport
+                    </dt>
+                    <dd class="col-sm-6">
+                        @if (Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl != null)
+                        {
+                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl" height="200" />
+                        }
+                    </dd>
+
+                </dl>
+            </div>
         </div>
         <div>
             <div class="card card-success">
@@ -312,10 +319,12 @@
                                             Fullname
                                         </th>
                                         <th>Phone Number </th>
-                                        <th>Verified </th>
                                         <th>Date </th>
                                         <th>Last LoggedIn </th>
-
+                                        <th>Verified </th>
+                                        <th>Posted </th>
+                                        <th>Video Upload </th>
+                                        <th>Success </th>
                                     </tr>
                                 </thead>
                                 @{
@@ -332,16 +341,13 @@
                                                 @sn
                                             </td>
                                             <td>
-
-                                                @Html.DisplayFor(modelItem => item.Fullname)
-
+                                                <a asp-page="./Info" asp-route-id="@item.Id">
+                                                    @Html.DisplayFor(modelItem => item.Fullname)
+                                                </a>
                                             </td>
 
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.PhoneNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Verified)
                                             </td>
                                             <td>
                                                 @item.CreationUTC.ToString("dd/MM/yyyy")
@@ -350,6 +356,58 @@
                                                 @item.LastLoggedInAtUtc
                                             </td>
 
+                                            <td>
+                                                @if (item.Verified == true)
+                                                {
+
+
+                                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.Posted == true)
+                                                {
+
+
+                                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.VideoUpload == true)
+                                                {
+
+
+                                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.SuccessPoint == true)
+                                                {
+
+
+                                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                                }
+                                            </td>
 
                                         </tr>
                                     }
@@ -488,9 +546,9 @@
                                 </table>
                             </div>
                         </div>
-                   
+
                         <hr />
-                        }
+                    }
                 </div>
 
                 <div class="card-body">

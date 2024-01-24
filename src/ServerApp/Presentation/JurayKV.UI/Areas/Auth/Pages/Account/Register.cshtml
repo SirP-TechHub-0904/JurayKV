@@ -15,21 +15,7 @@
     Kindly register your names as they appear on your official documents because our AI has the ability to block irregular and very unconventional names.  Hence, may affect you from receiving your incentives.
 </p>
 <div asp-validation-summary="All" class="text-danger"></div>
-@if (Model.CheckVerified == true)
-{
-    <div class="row">
-        <div class="col-12">
-            <div class="">
-                <label for="">
-                    Sorry. You can not use (@Model.RefName) Referral, He/She has some pending referrals that has not approved their emails.<br />
-                    Kindly click the link to register without a referral. <a asp-page="./Register">Register Now</a>
-                </label>
-            </div>
-        </div>
-    </div>
-}
-else
-{
+ 
 <form id="registrationForm" method="post">
     <input type="hidden" asp-for="RefPhone" />
     @if (Model.RefName != null)
@@ -70,7 +56,7 @@ else
         </div>
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" asp-for="Input.PhoneNumber" id="phoneNumberInput" placeholder="Valid Whatsapp Phone Number" required="required" oninput="removeSpaces()">
+        <input type="text" class="form-control" asp-for="Input.PhoneNumber" id="phoneNumberInput" placeholder="Valid Whatsapp Phone Number" required="required" oninput="removeSpacesAndFormat()">
         <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-phone"></span>
@@ -143,11 +129,30 @@ else
     </div>
 </form>
 
-}
+
 <a asp-page="./Login" class="text-center">I already have an Account</a>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function removeSpacesAndFormat() {
+            // Get the input element
+            var phoneNumberInput = document.getElementById("phoneNumberInput");
+
+            // Remove spaces from the input value
+            var phoneNumber = phoneNumberInput.value.replace(/\s/g, '');
+
+            // Format the phone number as "08054580905" with eleven digits
+            if (phoneNumber.length >= 11) {
+                phoneNumber = phoneNumber.substring(0, 11);
+            }
+
+            // Update the input value with the formatted phone number
+            phoneNumberInput.value = phoneNumber;
+        }
+    </script>
+
     <script>
         function removeSpaces() {
             // Get the input element

@@ -56,9 +56,22 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? ResponseOnCsaRequest { get;set; }
     public string? ResponseOnTieRequest { get;set; }
     public bool CsaRequest { get;set; }
-    public bool Tie2Request { get; set; }
+    public TieRequestStatus Tie2Request { get; set; }
 
     public string? VerificationCode { get; set; }
     public string? Role { get; set; }
+
+
+
+
+
+
+    public bool Posted { get;set; }
+    public bool VideoUpload { get; set; }
+    public bool SuccessPoint { get; set; }
+
+
+
+
 
 }

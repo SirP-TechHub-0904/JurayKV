@@ -42,9 +42,13 @@
                             Fullname
                         </th>
                         <th>Phone Number </th>
-                        <th>Verified </th>
                         <th>Date </th>
                         <th>Last LoggedIn </th>
+                        <th>Verified </th>
+                        <th>Posted </th>
+                        <th>Video Upload </th>
+                        <th>Success </th>
+
 
                     </tr>
                 </thead>
@@ -71,13 +75,63 @@
                                 @Html.DisplayFor(modelItem => item.PhoneNumber)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Verified)
-                            </td>
-                            <td>
                                 @item.CreationUTC.ToString("dd/MM/yyyy")
                             </td>
                             <td>
                                 @item.LastLoggedInAtUtc
+                            </td>
+
+                            <td>
+                                @if (item.Verified == true)
+                                {
+
+
+                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                }
+                            </td>
+                            <td>
+                                @if (item.Posted == true)
+                                {
+
+
+                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                }
+                            </td>
+                            <td>
+                                @if (item.VideoUpload == true)
+                                {
+
+
+                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                }
+                            </td>
+                            <td>
+                                @if (item.SuccessPoint == true)
+                                {
+
+
+                                    <span class="btn btn-success btn-xs"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger btn-xs"><i class="fa fa-times"></i></span>
+
+                                }
                             </td>
 
 

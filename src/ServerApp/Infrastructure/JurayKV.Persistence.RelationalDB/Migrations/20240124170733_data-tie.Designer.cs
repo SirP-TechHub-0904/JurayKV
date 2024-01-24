@@ -4,6 +4,7 @@ using JurayKV.Persistence.RelationalDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JurayKV.Persistence.RelationalDB.Migrations
 {
     [DbContext(typeof(JurayDbContext))]
-    partial class JurayDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240124170733_data-tie")]
+    partial class datatie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -387,9 +390,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Posted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("RefferedByPhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -413,9 +413,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("StateOfOrigin")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("SuccessPoint")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SurName")
                         .HasColumnType("nvarchar(max)");
@@ -441,9 +438,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("VerificationCode")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("VideoUpload")
-                        .HasColumnType("bit");
 
                     b.Property<string>("XtxtGuid")
                         .HasColumnType("nvarchar(max)");

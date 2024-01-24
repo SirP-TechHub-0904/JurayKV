@@ -37,16 +37,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         {
  
             string userId = _userManager.GetUserId(HttpContext.User);
-            //DateTime currentDate = DateTime.UtcNow.AddHours(1);
-
-            //DateTime targetTime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 6, 0, 0);
-
-
-            //// Check if the current time is before 6am on the target date
-            //if (currentDate < targetTime)
-            //{
-            //    currentDate = currentDate.Date.AddDays(-1);
-            //}
+            
 
              DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
             GetKvAdActiveListAllBucketQuery command = new GetKvAdActiveListAllBucketQuery(currentDate);

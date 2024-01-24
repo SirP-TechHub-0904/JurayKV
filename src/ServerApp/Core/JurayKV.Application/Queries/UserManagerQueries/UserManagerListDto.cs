@@ -6,8 +6,9 @@ namespace JurayKV.Application.Queries.UserManagerQueries
     {
         public Guid Id { get; set; }
         public string IdNumber { get; set; }
-
-        public string Fullname {  get; set; }
+        public string Fullname { get; set; }
+        public string Surname {  get; set; }
+        public string Firstname {  get; set; }
         public string Email { get;set; }
         public string PhoneNumber { get;set; }
         public AccountStatus AccountStatus { get; set; }
@@ -27,6 +28,12 @@ namespace JurayKV.Application.Queries.UserManagerQueries
 
         public Tier Tier { get; set; }
         public DateTime? RequestDateTie2Upgraded { get; set; }
+        public TieRequestStatus Tie2Request { get; set; }
 
+
+
+        public bool Posted { get; set; }
+        public bool VideoUpload { get; set; }
+        public bool SuccessPoint { get; set; }
     }
 }

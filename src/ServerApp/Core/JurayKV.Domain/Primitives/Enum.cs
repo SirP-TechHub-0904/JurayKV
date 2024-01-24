@@ -173,6 +173,17 @@ namespace JurayKV.Domain.Primitives
 
         }
 
+        public enum TieRequestStatus
+        {
+            [Description("None")]
+            None = 0,
+            [Description("Requested")]
+            Requested = 1,
+
+            [Description("Approved")]
+            Approved = 2,
+             
+        }
 
         public enum AccountStatus
         {

@@ -1,33 +1,23 @@
 ﻿using JurayKV.Application.Caching.Repositories;
-using JurayKV.Application.Queries.ExchangeRateQueries;
 using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Application.Queries.KvPointQueries;
 using JurayKV.Application.Queries.TransactionQueries;
 using JurayKV.Application.Queries.UserAccountQueries.DashboardQueries;
 using JurayKV.Application.Queries.UserManagerQueries;
 using JurayKV.Application.Queries.WalletQueries;
-using JurayKV.Domain.Aggregates.EmployeeAggregate;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
-using JurayKV.Domain.ValueObjects;
-using JurayKV.Persistence.Cache.Keys;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using TanvirArjel.EFCore.GenericRepository;
-using TanvirArjel.Extensions.Microsoft.Caching;
 using static JurayKV.Domain.Primitives.Enum;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace JurayKV.Persistence.Cache.Repositories
 {
@@ -72,7 +62,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                 PhoneNumber = entity.PhoneNumber,
                 LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
                 CreationUTC = entity.CreationUTC,
-                Verified = entity.EmailConfirmed
+                Verified = entity.EmailConfirmed,
+                Posted = entity.Posted,
+                VideoUpload = entity.VideoUpload,
+                SuccessPoint = entity.SuccessPoint,
             }).ToList();
 
             return list;
@@ -114,30 +107,7 @@ namespace JurayKV.Persistence.Cache.Repositories
         {
             var userlist = new List<ApplicationUser>();
             var filteredUsers = _userManager.Users.AsQueryable();
-
-
-            //// Get distinct emails and their count
-            //var distinctEmails = filteredUsers
-            //    .Where(x => !string.IsNullOrEmpty(x.Email))
-            //    .GroupBy(x => x.Email.ToLower())
-            //    .Select(group => new
-            //    {
-            //        Email = group.Key,
-            //        Count = group.Count()
-            //    })
-            //    .ToList();
-
-            //// Get distinct phone numbers and their count
-            //var distinctPhoneNumbers = filteredUsers
-            //    .Where(x => !string.IsNullOrEmpty(x.PhoneNumber))
-            //    .GroupBy(x => x.PhoneNumber)
-            //    .Select(group => new
-            //    {
-            //        PhoneNumber = group.Key,
-            //        Count = group.Count()
-            //    })
-            //    .Where(x=>x.Count > 1).ToList();
-
+             
             // Step 1: Sort the numbers
             var sortedPhoneNumbers = filteredUsers
                 .OrderBy(u => u.PhoneNumber)
@@ -246,7 +216,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 data.UserManagerListDto = list.OrderBy(x => x.Fullname).ToList();
             }else if (sortOrder == 0)
             {
-                data.UserManagerListDto = list.OrderBy(x => x.CreationUTC).ToList();
+                data.UserManagerListDto = list.OrderByDescending(x => x.CreationUTC).ToList();
             }
             else if (sortOrder == 2)
             {
@@ -258,7 +228,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             }
             else if (sortOrder == 4)
             {
-                data.UserManagerListDto = list.OrderBy(x => x.CreationUTC).ToList();
+                data.UserManagerListDto = list.OrderByDescending(x => x.CreationUTC).ToList();
             }
             else if (sortOrder == 5)
             {
@@ -266,7 +236,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             }
             else if (sortOrder == 6)
             {
-                data.UserManagerListDto = list.OrderBy(x => x.LastLoggedInAtUtc).ToList();
+                data.UserManagerListDto = list.OrderByDescending(x => x.LastLoggedInAtUtc).ToList();
             }
             else if (sortOrder == 7)
             {
@@ -346,14 +316,9 @@ namespace JurayKV.Persistence.Cache.Repositories
         }
         public async Task<List<UserManagerListDto>> GetListAsync()
         {
-            //string cacheKey = UserManagerCacheKeys.ListKey;
-            //List<UserManagerListDto> list = await _distributedCache.GetAsync<List<UserManagerListDto>>(cacheKey);
-
-            //if (list == null)
-            //{
+            
             var userlist = await _userManager.Users.ToListAsync();
-            // Manual mapping from entities to DTOs
-            var list = userlist.Select(entity => new UserManagerListDto
+             var list = userlist.Select(entity => new UserManagerListDto
             {
                 Id = entity.Id,
                 Date = entity.CreationUTC,
@@ -523,12 +488,62 @@ namespace JurayKV.Persistence.Cache.Repositories
             Specification<WalletDetailsDto> walletspec = new Specification<WalletDetailsDto>();
             walletspec.Conditions.Add(x => x.UserId == userId);
             WalletDetailsDto UserWallet = await _repository.GetAsync<WalletDetailsDto>(walletspec, cancellationToken);
-            //
-            //Specification<ExchangeRateDetailsDto> ratespec = new Specification<ExchangeRateDetailsDto>();
-            //ratespec.Conditions.OrderByDescending).;
-            //WalletDetailsDto UserWallet = await _repository.GetAsync<WalletDetailsDto>(walletspec, cancellationToken);
+             
+            return null;
+        }
+
+        public async Task<UserListPagedDto> ListGetListByStatusAndDateAsync(AccountStatus status, DateTime? startdate, DateTime? enddate, int pageSize, int pageNumber, string searchstring, int sortOrder)
+        {
+            var userlist = new List<ApplicationUser>();
+            var filteredUsers = _userManager.Users.AsQueryable();
+
+             
 
             return null;
+        }
+
+        public async Task<IEnumerable<UserManagerListDto>> ListAsync(AccountStatus status)
+        {
+            if (status == AccountStatus.NotDefind) { 
+            var data = _userManager.Users.AsEnumerable();
+            return data.Select(entity => new UserManagerListDto
+            {
+                Id = entity.Id,
+                Date = entity.CreationUTC,
+                IdNumber = entity.IdNumber,
+                Surname = entity.SurName,
+                Firstname = entity.FirstName,
+                AccountStatus = entity.AccountStatus,
+                Email = entity.Email,
+                PhoneNumber = entity.PhoneNumber,
+                LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                CreationUTC = entity.CreationUTC,
+                Verified = entity.EmailConfirmed,
+                VerificationCode = entity.VerificationCode,
+                Tie2Request = entity.Tie2Request,
+                
+            }).AsEnumerable();
+            }
+            else
+            {
+                var data = _userManager.Users.Where(x=>x.AccountStatus == status).AsEnumerable();
+                return data.Select(entity => new UserManagerListDto
+                {
+                    Id = entity.Id,
+                    Date = entity.CreationUTC,
+                    IdNumber = entity.IdNumber,
+                    Surname = entity.SurName,
+                    Firstname = entity.FirstName,
+                    AccountStatus = entity.AccountStatus,
+                    Email = entity.Email,
+                    PhoneNumber = entity.PhoneNumber,
+                    LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                    CreationUTC = entity.CreationUTC,
+                    Verified = entity.EmailConfirmed,
+                    VerificationCode = entity.VerificationCode,
+                    Tie2Request = entity.Tie2Request,
+                }).AsEnumerable();
+            }
         }
     }
 

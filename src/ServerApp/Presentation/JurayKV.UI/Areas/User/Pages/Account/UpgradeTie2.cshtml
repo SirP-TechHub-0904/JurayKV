@@ -2,11 +2,11 @@
 @model JurayKV.UI.Areas.User.Pages.Account.UpgradeTie2Model
 @{
 }
-@if (Model.Tie2Request == true)
+@if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.Requested)
 {
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">UPGRADE TO TIE 2</h3>
+            <h3 class="card-title">UPGRADE TO TIER 2</h3>
 
         </div>
         <div class="card-body">
@@ -16,15 +16,15 @@
         </div>
     </div>
 }
-else
+else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.None)
 {
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">UPGRADE TO TIE 2</h3>
+            <h3 class="card-title">UPGRADE TO TIER 2</h3>
 
         </div>
 
-        <div class="card-body">
+         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
                     <form method="post" enctype="multipart/form-data">
@@ -105,7 +105,17 @@ else
         <div class="card-footer">
         </div>
     </div>
+}
+else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.Approved)
+{
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">ALREADY A TIER 2</h3>
 
+        </div>
+        
+    </div>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -113,51 +123,50 @@ else
         <script src="path/to/jquery.validate.js"></script>*@
 
     <script>
-         $(document).ready(function () {
-             $("#states").change(function () {
-                 console.log("check in");
-                 var stateId = $(this).val();
-                 console.log("check ID");
-                 console.log(stateId);
-                  
-
-                 // Make sure to wrap this code within a function or an event handler
-                 async function loadLGAs(stateId) {
-                     try {
-                         const response = await fetch(`/User/Account/CSA?handler=LGAs&stateId=${stateId}`, {
-                             method: 'GET',
-                             headers: {
-                                 'Content-Type': 'application/json; charset=utf-8'
-                             },
-                             // You can include other options here if needed
-                         });
-
-                         if (!response.ok) {
-                             throw new Error(`HTTP error! Status: ${response.status}`);
-                         }
-
-                         const data = await response.json();
-                         console.log(data);
-                         // Assuming your response is an array of objects with 'text' and 'value' properties
-                         $("#lgas").empty();
-                         $.each(data, function (index, item) {
-                             $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
-                         });
-                     } catch (error) {
-                         console.error('Error fetching LGAs:', error);
-                     }
-                 }
-
-                 // Call the function with the desired stateId
-                 loadLGAs(stateId);
+        $(document).ready(function () {
+            $("#states").change(function () {
+                console.log("check in");
+                var stateId = $(this).val();
+                console.log("check ID");
+                console.log(stateId);
 
 
-                 console.log("check out");
-                 console.log(stateId);
-             });
-         });
+                // Make sure to wrap this code within a function or an event handler
+                async function loadLGAs(stateId) {
+                    try {
+                        const response = await fetch(`/User/Account/CSA?handler=LGAs&stateId=${stateId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8'
+                            },
+                            // You can include other options here if needed
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        console.log(data);
+                        // Assuming your response is an array of objects with 'text' and 'value' properties
+                        $("#lgas").empty();
+                        $.each(data, function (index, item) {
+                            $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
+                        });
+                    } catch (error) {
+                        console.error('Error fetching LGAs:', error);
+                    }
+                }
+
+                // Call the function with the desired stateId
+                loadLGAs(stateId);
+
+
+                console.log("check out");
+                console.log(stateId);
+            });
+        });
     </script>
 
 }
 
- }

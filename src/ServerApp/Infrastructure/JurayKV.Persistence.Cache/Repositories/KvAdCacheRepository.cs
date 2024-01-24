@@ -1,8 +1,10 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Queries.KvAdQueries;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Persistence.Cache.Keys;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections;
@@ -21,13 +23,15 @@ namespace JurayKV.Persistence.Cache.Repositories
         private readonly IQueryRepository _repository;
         private readonly IKvAdRepository _kvAdRepository;
         private readonly IIdentityKvAdRepository _adRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public KvAdCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IKvAdRepository kvAdRepository, IIdentityKvAdRepository adRepository)
+        public KvAdCacheRepository(IDistributedCache distributedCache, IQueryRepository repository, IKvAdRepository kvAdRepository, IIdentityKvAdRepository adRepository, UserManager<ApplicationUser> userManager)
         {
             _distributedCache = distributedCache;
             _repository = repository;
             _kvAdRepository = kvAdRepository;
             _adRepository = adRepository;
+            _userManager = userManager;
         }
 
         public async Task<List<KvAdListDto>> GetListAsync()
@@ -82,6 +86,8 @@ namespace JurayKV.Persistence.Cache.Repositories
 
                 await _distributedCache.SetAsync(cacheKey, bucket);
             }
+
+
 
             return bucket;
         }

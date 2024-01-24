@@ -177,7 +177,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                             CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(getwallet.Id, getwallet.UserId, "Referral Bonus", null,
                                 settingData.DefaultReferralAmmount,
-                            TransactionTypeEnum.Credit, EntityStatus.Successful, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL");
+                            TransactionTypeEnum.Credit, EntityStatus.Successful, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL "+identityResult.IdNumber);
                             var transaction = await _mediator.Send(transactioncreatecommand);
                             //GET transaction information to update wallet
                             //get the transaction by id

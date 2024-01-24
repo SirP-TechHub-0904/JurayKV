@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.UI.Areas.User.Pages.Account
 {
@@ -28,7 +29,7 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         [BindProperty]
         public TieTwoRequestDto TieTwoRequestDto { get; set; } = new TieTwoRequestDto();
 
-        public bool Tie2Request { get; set; }
+        public TieRequestStatus Tie2Request { get; set; }
         public string ResponseOnTieRequest { get; set; }
         public string Passport { get; set; }
         public string IdCard { get; set; }

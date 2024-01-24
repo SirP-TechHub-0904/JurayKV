@@ -1,8 +1,10 @@
 ﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 using System.Transactions;
@@ -34,14 +36,18 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
     private readonly IIdentityKvAdRepository _departmentRepository;
     private readonly IIdentityKvAdCacheHandler _departmentCacheHandler;
     private readonly IRepository _repository;
+    private readonly UserManager<ApplicationUser> _userManager;
+
     public CreateIdentityKvAdCommandHandler(
             IIdentityKvAdRepository departmentRepository,
             IIdentityKvAdCacheHandler departmentCacheHandler,
-            IRepository repository)
+            IRepository repository,
+            UserManager<ApplicationUser> userManager)
     {
         _departmentRepository = departmentRepository;
         _departmentCacheHandler = departmentCacheHandler;
         _repository = repository;
+        _userManager = userManager;
     }
 
     public async Task<Guid> Handle(CreateIdentityKvAdCommand request, CancellationToken cancellationToken)
@@ -76,6 +82,9 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
         await _departmentCacheHandler.RemoveGetActiveByUserIdAsync(create.UserId);
         await _departmentCacheHandler.RemoveDetailsByIdAsync(create.Id);
         await _departmentCacheHandler.RemoveGetAsync(create.Id);
+
+
+
 
         return result;
     }
