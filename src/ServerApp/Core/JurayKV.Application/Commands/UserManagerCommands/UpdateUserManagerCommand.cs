@@ -5,6 +5,7 @@ using JurayKV.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using TanvirArjel.ArgumentChecker;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace JurayKV.Application.Commands.UserManagerCommands
 {
@@ -23,12 +24,14 @@ namespace JurayKV.Application.Commands.UserManagerCommands
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserManagerCacheHandler _userManagerCacheHandler;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public UpdateUserManagerCommandHandler(
-UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCacheHandler)
+UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCacheHandler, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _userManagerCacheHandler = userManagerCacheHandler;
+            _signInManager = signInManager;
         }
 
         public async Task Handle(UpdateUserManagerCommand request, CancellationToken cancellationToken)
@@ -42,8 +45,11 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.PhoneNumber = request.Data.PhoneNumber;
             user.AccountStatus = request.Data.AccountStatus;
             user.DisableEmailNotification = request.Data.DisableEmailNotification;
+            user.Tier = request.Data.Tier;
+            user.DateUpgraded = request.Data.DateUpgraded;
             await _userManager.UpdateAsync(user);
-
+            //
+            //await _signInManager.sign;
             //remove catch
             await _userManagerCacheHandler.RemoveListAsync();
             await _userManagerCacheHandler.RemoveDetailsByIdAsync(user.Id);

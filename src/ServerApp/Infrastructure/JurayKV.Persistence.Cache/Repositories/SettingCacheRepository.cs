@@ -44,6 +44,12 @@ namespace JurayKV.Persistence.Cache.Repositories
                     SendCount = d.SendCount,
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
+                    DisableAirtime = d.DisableAirtime,
+                    DisableBetting = d.DisableBetting,
+                    DisableData = d.DisableData,
+                    DisableElectricity = d.DisableElectricity,
+                    DisableReferralBonus = d.DisableReferralBonus,
+                    DisableTV = d.DisableTV,
                 };
 
                 list = await _repository.GetListAsync(selectExp);
@@ -69,6 +75,13 @@ namespace JurayKV.Persistence.Cache.Repositories
                     PaymentGateway = d.PaymentGateway,
                     BillGateway = d.BillGateway,
                     SendCount = d.SendCount,
+
+                    DisableAirtime = d.DisableAirtime,
+                    DisableBetting = d.DisableBetting,
+                    DisableData = d.DisableData,
+                    DisableElectricity = d.DisableElectricity,
+                    DisableReferralBonus = d.DisableReferralBonus,
+                    DisableTV = d.DisableTV,
                 };
 
                 setting = await _repository.GetByIdAsync(settingId, selectExp);
@@ -82,19 +95,26 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<SettingDetailsDto> GetSettingAsync()
         {
-           
+
             var d = await _settingRepository.GetSettingAsync();
-            if(d != null) { 
-            var setting = new SettingDetailsDto
+            if (d != null)
             {
-                Id = d.Id,
-                DefaultAmountPerView = d.DefaultAmountPerView,
-                MinimumAmountBudget = d.MinimumAmountBudget,
-                PaymentGateway = d.PaymentGateway,
-                BillGateway = d.BillGateway,
-                DefaultReferralAmmount = d.DefaultReferralAmmount,
-                SendCount = d.SendCount
-            };
+                var setting = new SettingDetailsDto
+                {
+                    Id = d.Id,
+                    DefaultAmountPerView = d.DefaultAmountPerView,
+                    MinimumAmountBudget = d.MinimumAmountBudget,
+                    PaymentGateway = d.PaymentGateway,
+                    BillGateway = d.BillGateway,
+                    DefaultReferralAmmount = d.DefaultReferralAmmount,
+                    SendCount = d.SendCount,
+                    DisableAirtime = d.DisableAirtime,
+                    DisableBetting = d.DisableBetting,
+                    DisableData = d.DisableData,
+                    DisableElectricity = d.DisableElectricity,
+                    DisableReferralBonus = d.DisableReferralBonus,
+                    DisableTV = d.DisableTV,
+                };
                 return setting;
             }
             return null;

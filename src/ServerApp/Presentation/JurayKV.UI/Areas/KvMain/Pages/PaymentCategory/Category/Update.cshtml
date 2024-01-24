@@ -52,6 +52,16 @@
                         <input asp-for="CategoryVariation.Charge" class="form-control" />
                     </div>
                     <div class="form-group">
+                        <label asp-for="CategoryVariation.BillGateway" class="control-label"></label>
+                        @Html.DropDownListFor(model => model.CategoryVariation.BillGateway, new SelectList(Enum.GetValues(typeof(JurayKV.Domain.Primitives.Enum.BillGateway))), new { @class = "form-control" })
+                        <span asp-validation-for="CategoryVariation.BillGateway" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryVariation.Tier" class="control-label"></label>
+                        @Html.DropDownListFor(model => model.CategoryVariation.Tier, new SelectList(Enum.GetValues(typeof(JurayKV.Domain.Primitives.Enum.Tier))), new { @class = "form-control" })
+                        <span asp-validation-for="CategoryVariation.Tier" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>
 

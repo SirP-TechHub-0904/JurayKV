@@ -86,9 +86,12 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             cleanedPhone = cleanedPhone.Substring(Math.Max(0, cleanedPhone.Length - 10));
 
             // Check if the cleaned phone number is unique in the database
-            var checkphone = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == cleanedPhone);
-
-            return checkphone == null;
+            var checkphone = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber.Contains(cleanedPhone));
+            if(checkphone == null)
+            {
+                return false;
+            }
+            return true;
 
         }
  

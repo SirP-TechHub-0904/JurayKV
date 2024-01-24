@@ -92,6 +92,10 @@
                     <tr>
                         <th>S/N</th>
                         <th>
+                            ID
+ 
+                        </th>
+                        <th>
                             Fullname
 
                             @if (Model.ShowAll == true || Model.ShowWithoutDate == true)
@@ -103,6 +107,7 @@
                                 <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-startdate="@Model.StartDate" asp-route-enddate="@Model.EndDate" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="0" class=""><i class="fa fa-arrow-down"></i></a>
                             }
                         </th>
+
                         <th>
                             Email
 
@@ -187,6 +192,30 @@
                             else
                             {
                                 <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-startdate="@Model.StartDate" asp-route-enddate="@Model.EndDate" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="14" class=""><i class="fa fa-arrow-down"></i></a>
+                            }
+                        </th>
+                        <th>
+                            Tie
+
+                            @if (Model.ShowAll == true || Model.ShowWithoutDate == true)
+                            {
+                                <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber)" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="15"><i class="fa fa-arrow-down"></i></a>
+                            }
+                            else
+                            {
+                                <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-startdate="@Model.StartDate" asp-route-enddate="@Model.EndDate" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="15" class=""><i class="fa fa-arrow-down"></i></a>
+                            }
+                        </th>
+                        <th>
+                            Request Date
+
+                            @if (Model.ShowAll == true || Model.ShowWithoutDate == true)
+                            {
+                                <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber)" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="16"><i class="fa fa-arrow-down"></i></a>
+                            }
+                            else
+                            {
+                                <a asp-page="./Index" asp-route-pageNumber="@Model.PageNumber" asp-route-pageSize="@Model.PageSize" asp-route-status="@Model.Status" asp-route-startdate="@Model.StartDate" asp-route-enddate="@Model.EndDate" asp-route-searchstring="@Model.Searchstring" asp-route-sortOrder="16" class=""><i class="fa fa-arrow-down"></i></a>
                             }
                         </th>
                         <th>
@@ -285,6 +314,9 @@
                                 @sn
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.IdNumber)
+                            </td>
+                            <td>
                                 <a asp-page="./Info" asp-route-id="@item.Id">
                                     @Html.DisplayFor(modelItem => item.Fullname)
                                 </a>
@@ -322,6 +354,12 @@
                                     string dttans = string.Format("₦{0:F0}", item.TotalTransactionDebit).Replace(".00", "");
                                 }
                                 @dttans
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tier)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RequestDateTie2Upgraded)
                             </td>
                             <td>
                                 @{

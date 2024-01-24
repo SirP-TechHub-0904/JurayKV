@@ -9,7 +9,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string SurName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
+    public string IdNumber {  get; set; }
     public AccountStatus AccountStatus { get; set; }
 
     public DateTime? LastLoggedInAtUtc { get; set; }
@@ -31,6 +31,12 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? Address { get; set; }
     public string? State { get; set; }
     public string? LGA { get; set; }
+
+    public DateTime? DateOfBirth { get; set; }
+    public string? StateOfOrigin { get; set; }
+    public string? LGA_Of_Origin { get; set; }
+    public string? NinNumber { get; set; }
+
     public string? Occupation { get; set; }
     public string? FbHandle { get; set; }
     public string? InstagramHandle { get; set; }
@@ -45,7 +51,8 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? AccountName { get; set; }
     public string? BankName { get; set; }
     public string? BVN { get; set; }
-    public DateTime DateTie2Upgraded { get; set; }
+    public DateTime? RequestDateTie2Upgraded { get; set; }
+    //public DateTime DateTie2Upgraded { get; set; }
     public string? ResponseOnCsaRequest { get;set; }
     public string? ResponseOnTieRequest { get;set; }
     public bool CsaRequest { get;set; }

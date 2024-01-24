@@ -4,6 +4,7 @@ using JurayKV.Persistence.RelationalDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JurayKV.Persistence.RelationalDB.Migrations
 {
     [DbContext(typeof(JurayDbContext))]
-    partial class JurayDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240123115806_uniqId")]
+    partial class uniqId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +97,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int>("BillGateway")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Charge")
                         .HasColumnType("decimal(18,2)");
 
@@ -108,9 +108,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Tier")
-                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
@@ -769,24 +766,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<decimal>("DefaultReferralAmmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("DisableAirtime")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DisableBetting")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DisableData")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DisableElectricity")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DisableReferralBonus")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DisableTV")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("MinimumAmountBudget")
                         .HasColumnType("decimal(18,2)");
 
@@ -999,9 +978,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<string>("Amount")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BillGateway")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("CategoryVariationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1013,9 +989,6 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Tier")
-                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");

@@ -119,21 +119,7 @@ else
                  var stateId = $(this).val();
                  console.log("check ID");
                  console.log(stateId);
-                 //$.ajax({
-                 //    type: "GET",
-                 //    url: "/User/Account/CSA?handler=LGAs",
-                 //    contentType: "application/json; charset=utf-8",
-                 //    dataType: "json",
-                 //    data: { stateId: stateId },
-
-                 //    success: function (data) {
-                 //        $("#lgas").empty();
-                 //        $.each(data, function (index, item) {
-                 //            $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
-                 //        });
-                 //    }
-
-                 //});
+                  
 
                  // Make sure to wrap this code within a function or an event handler
                  async function loadLGAs(stateId) {

@@ -85,6 +85,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
                 data.Active = Variation.Active;
                 data.Amount = Variation.Amount;
                 data.Name = Variation.Name;
+                data.BillGateway = Variation.BillGateway;
+                data.Tier = Variation.Tier;
                 await _variationRepository.UpdateAsync(data);
                 TempData["success"] = "Updated Successfuly";
 

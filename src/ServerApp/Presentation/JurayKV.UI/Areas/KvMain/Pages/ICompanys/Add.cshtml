@@ -28,7 +28,15 @@
                         <span asp-validation-for="AmountPerPoint" class="text-danger"></span>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" asp-for="Input.Fullname" placeholder="Rep. Full name" onkeyup="myUppercase()">
+                        <input type="text" class="form-control" asp-for="Input.Surname" placeholder="Surname" onkeyup="myUppercaseName(this)" required="required">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="Input.FirstName" placeholder="Firstname" onkeyup="myUppercaseNameTwo(this)" required="required">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -92,4 +100,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    function myUppercaseName(input) {
+        input.value = input.value.toUpperCase();
+    }
+    function myUppercaseNameTwo(input) {
+        input.value = input.value.toUpperCase();
+    }
+</script>
 }

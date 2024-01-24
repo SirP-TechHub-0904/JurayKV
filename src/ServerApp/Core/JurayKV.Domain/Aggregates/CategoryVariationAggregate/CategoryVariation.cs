@@ -27,6 +27,8 @@ namespace JurayKV.Domain.Aggregates.CategoryVariationAggregate
         public VariationType VariationType { get; set; }
         public bool Active { get; set; }
         public decimal Charge { get; set; }
+        public BillGateway BillGateway { get; set; }
+        public Tier Tier { get; set; }
 
         public string? Url { get; set; }
         public string? Key { get; set; }

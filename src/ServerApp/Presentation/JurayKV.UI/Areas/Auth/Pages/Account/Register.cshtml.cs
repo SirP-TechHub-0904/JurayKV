@@ -70,7 +70,11 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
             [Required]
             [MaxLength(100, ErrorMessage = "The {1} can't be more than {1} characters long.")]
-            public string Fullname { get; set; }
+            public string Surname { get; set; }
+
+            [Required]
+            [MaxLength(100, ErrorMessage = "The {1} can't be more than {1} characters long.")]
+            public string FirstName { get; set; }
             [Required]
             [ValidatePhoneNumber]
             [MinLength(8, ErrorMessage = "The {1} can't be less than {1} characters long.")]
@@ -131,7 +135,8 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 try
                 {
                     CreateUserDto create = new CreateUserDto();
-                    create.Fullname = Input.Fullname;
+                    create.Surname = Input.Surname;
+                    create.Firstname = Input.FirstName;
                     create.Email = Input.Email;
                     create.Password = Input.Password;
                     create.PhoneNumber = Input.PhoneNumber;

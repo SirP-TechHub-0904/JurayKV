@@ -11,6 +11,9 @@
     }
 </style>
 <p class="login-box-msg">Register a new Account</p>
+<p>
+    Kindly register your names as they appear on your official documents because our AI has the ability to block irregular and very unconventional names.  Hence, may affect you from receiving your incentives.
+</p>
 <div asp-validation-summary="All" class="text-danger"></div>
 @if (Model.CheckVerified == true)
 {
@@ -27,110 +30,118 @@
 }
 else
 {
-    <form id="registrationForm" method="post">
-        <input type="hidden" asp-for="RefPhone" />
-        @if (Model.RefName != null)
-        {
-            <div class="row">
-                <div class="col-12">
-                    <div class="">
-                        <label for="">
-                            Referred by (@Model.RefName)
-                        </label>
-                    </div>
-                </div>
-            </div>
-        }
-
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" asp-for="Input.Fullname" placeholder="Full name" onkeyup="myUppercaseName(this)" required="required">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-user"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email" required="required">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" asp-for="Input.PhoneNumber" id="phoneNumberInput" placeholder="Valid Whatsapp Phone Number" required="required" oninput="removeSpaces()">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-phone"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password" required="required">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="password" class="form-control" asp-for="Input.ConfirmPassword" placeholder="Retype password" required="required">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group mb-4" style="margin-bottom:0px !important;">
-            <p>Kindly confirm that you are a human by entering the code below in the box</p>
-        </div>
-        <div class="form-group mb-4" style="margin-bottom:0px !important;">
-
-            <div id="errCaptcha" class="errmsg"></div>
-            <div class="row">
-
-                <div class="col-sm-4" style="">
-                    <div class="restart">
-                        <a href="#captcha" id="cliik" onclick="createCaptcha()">Change Code</a>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="input">
-                        <input type="text"
-                               name="reCaptcha"
-                               id="reCaptcha"
-                               placeholder="Enter Sum" style="border-radius:8px;padding-left:10px;width:100px;" />
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div id="captcha" class="captcha">
-                        <script>createCaptcha();</script>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <p style="margin-bottom:0 !important;color:white;">
-
-                    </p>
-                </div>
-            </div>
-        </div>
+<form id="registrationForm" method="post">
+    <input type="hidden" asp-for="RefPhone" />
+    @if (Model.RefName != null)
+    {
         <div class="row">
-            <div class="col-8">
-                <div class="icheck-primary">
-                    <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                    <label for="agreeTerms">
-                        I agree to the <a href="#">terms</a>
+            <div class="col-12">
+                <div class="">
+                    <label for="">
+                        Referred by (@Model.RefName)
                     </label>
                 </div>
             </div>
-            <!-- /.col -->
-            <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-            </div>
-            <!-- /.col -->
         </div>
-    </form>
+    }
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="Input.Surname" placeholder="Surname" onkeyup="myUppercaseName(this)" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-user"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="Input.FirstName" placeholder="Firstname" onkeyup="myUppercaseNameTwo(this)" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-user"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="email" class="form-control" asp-for="Input.Email" placeholder="Email" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="Input.PhoneNumber" id="phoneNumberInput" placeholder="Valid Whatsapp Phone Number" required="required" oninput="removeSpaces()">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-phone"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" asp-for="Input.Password" placeholder="Password" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" asp-for="Input.ConfirmPassword" placeholder="Retype password" required="required">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group mb-4" style="margin-bottom:0px !important;">
+        <p>Kindly confirm that you are a human by entering the code below in the box</p>
+    </div>
+    <div class="form-group mb-4" style="margin-bottom:0px !important;">
+
+        <div id="errCaptcha" class="errmsg"></div>
+        <div class="row">
+
+            <div class="col-sm-4" style="">
+                <div class="restart">
+                    <a href="#captcha" id="cliik" onclick="createCaptcha()">Change Code</a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="input">
+                    <input type="text"
+                           name="reCaptcha"
+                           id="reCaptcha"
+                           placeholder="Enter Sum" style="border-radius:8px;padding-left:10px;width:100px;" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div id="captcha" class="captcha">
+                    <script>createCaptcha();</script>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <p style="margin-bottom:0 !important;color:white;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="icheck-primary">
+                <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                <label for="agreeTerms">
+                    I agree to the <a href="#">terms</a>
+                </label>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </div>
+        <!-- /.col -->
+    </div>
+</form>
 
 }
 <a asp-page="./Login" class="text-center">I already have an Account</a>
@@ -219,6 +230,9 @@ else
         }
 
         function myUppercaseName(input) {
+            input.value = input.value.toUpperCase();
+        }
+        function myUppercaseNameTwo(input) {
             input.value = input.value.toUpperCase();
         }
     </script>

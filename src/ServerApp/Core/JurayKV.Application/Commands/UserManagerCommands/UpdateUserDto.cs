@@ -12,9 +12,9 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         public string SurName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public DateTime DateUpgraded { get; set; }
         public AccountStatus AccountStatus { get; set; }
-
+        public Tier Tier { get; set; }
         public DateTime? LastLoggedInAtUtc { get; set; }
         public DateTime CreationUTC { get; set; }
         public string Email { get; set; }

@@ -56,9 +56,9 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             return Page();
         }
         [BindProperty]
-        public IFormFile? passportfile { get; set; }
+        public IFormFile passportfile { get; set; }
         [BindProperty]
-        public IFormFile? iDcardfile { get; set; }
+        public IFormFile iDcardfile { get; set; }
         public ResponseCsaUpgrade ResponseCsaUpgrade { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {

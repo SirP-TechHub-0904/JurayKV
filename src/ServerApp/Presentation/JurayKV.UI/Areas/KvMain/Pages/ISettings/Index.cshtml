@@ -2,92 +2,105 @@
 @model JurayKV.UI.Areas.KvMain.Pages.ISetting.IndexModel
 @{
 }
-<div class="card">
+<div class="card card-default">
     <div class="card-header">
-        <h3 class="card-title">SETTING</h3>
-
-
-        @*<a asp-page="./Add" class="btn bg-gradient-warning btn-sm" style="float:right;">Add New</a>*@
+        <h3 class="card-title">SETTING DETAILS</h3>
 
     </div>
     <!-- /.card-header -->
+
     <div class="card-body">
-        <div class="table-responsive">
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>S/N</th>
+        <div class="row">
+            <div class="col-md-12">
 
-                        <th>
-                            @Html.DisplayNameFor(model => model.Setting[0].MinimumAmountBudget)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Setting[0].DefaultAmountPerView)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Setting[0].DefaultReferralAmmount)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Setting[0].BillGateway)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Setting[0].PaymentGateway)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
+                <dl class="row">
 
-                @{
-                    int sn = 0;
-                }
-                <tbody>
-                    @foreach (var item in Model.Setting)
-                    {
-                        <tr>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.MinimumAmountBudget)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.MinimumAmountBudget)
+                    </dd>
 
-                            <td>
-                                @{
-                                    sn++;
-                                }
-                                @sn
-                            </td>
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MinimumAmountBudget)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DefaultAmountPerView)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DefaultReferralAmmount)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BillGateway)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PaymentGateway)
-                            </td>
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-success">Action</button>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DefaultAmountPerView)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DefaultAmountPerView)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DefaultReferralAmmount)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DefaultReferralAmmount)
+                    </dd>
 
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                                        </button>
-                                        <div class="dropdown-menu" style="">
 
-                                            <a class="dropdown-item" asp-page="./Update" asp-route-id="@item.Id">Edit</a>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.BillGateway)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.BillGateway)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.PaymentGateway)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.PaymentGateway)
+                    </dd>
 
-                                        </div>
-                                    </div>
-                                </div>
 
-                            </td>
 
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableReferralBonus)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableReferralBonus)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableAirtime)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableAirtime)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableData)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableData)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableElectricity)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableElectricity)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableBetting)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableBetting)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Setting.DisableTV)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Setting.DisableTV)
+                    </dd>
+                </dl>
+            </div>
         </div>
+
+
+        <!-- /.row -->
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <a class="btn btn-warning" asp-page="./Update" asp-route-id="@Model.Setting.Id">Update</a>
     </div>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

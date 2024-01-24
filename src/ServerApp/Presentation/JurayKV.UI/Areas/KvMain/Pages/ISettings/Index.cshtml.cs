@@ -18,16 +18,16 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISetting
             _mediator = mediator;
         }
 
-        public List<SettingDetailsDto> Setting = new List<SettingDetailsDto>();
-        public SettingDetailsDto SettingDetails { get; set; }
+        public List<SettingDetailsDto> Settingx = new List<SettingDetailsDto>();
+        public SettingDetailsDto Setting { get; set; }
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             GetSettingListQuery command = new GetSettingListQuery();
-            Setting = await _mediator.Send(command);
+            Settingx= await _mediator.Send(command);
 
 
             GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
-            SettingDetails = await _mediator.Send(settingcommand);
+            Setting = await _mediator.Send(settingcommand);
 
             return Page();
         }

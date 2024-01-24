@@ -21,6 +21,12 @@
                         @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.Fullname)
                     </dd>
                     <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.IdNumber)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.IdNumber)
+                    </dd>
+                    <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.Email)
                     </dt>
                     <dd class="col-sm-6">
@@ -156,16 +162,18 @@
                         ID Card
                     </dt>
                     <dd class="col-sm-6">
-                        @if(Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl != null) { 
-                        <img src="@Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl" height="200" />
+                        @if (Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl != null)
+                        {
+                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.IDCardUrl" height="200" />
                         }
                     </dd>
                     <dt class="col-sm-4">
                         Passport
                     </dt>
                     <dd class="col-sm-6">
-                        @if(Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl != null) { 
-                        <img src="@Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl" height="200" />
+                        @if (Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl != null)
+                        {
+                            <img src="@Model.UpdateUserManager.UserManagerDetailsDto.PassportUrl" height="200" />
                         }
                     </dd>
 
@@ -198,10 +206,10 @@
                         @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.BVN)
                     </dd>
                     <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.DateTie2Upgraded)
+                        @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.RequestDateTie2Upgraded)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.DateTie2Upgraded)
+                        @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.RequestDateTie2Upgraded)
                     </dd>
 
                     <dt class="col-sm-4">

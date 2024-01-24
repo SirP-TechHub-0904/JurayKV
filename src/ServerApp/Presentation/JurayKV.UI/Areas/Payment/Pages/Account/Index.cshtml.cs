@@ -53,7 +53,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
             if (SettingDetails.BillGateway == Domain.Primitives.Enum.BillGateway.VTU)
             {
-                GetVariationCategoryCommand categorycommand = new GetVariationCategoryCommand();
+                GetVariationCategoryCommand categorycommand = new GetVariationCategoryCommand(Domain.Primitives.Enum.BillGateway.VTU);
                 CategoryVariations = await _mediator.Send(categorycommand);
             }
             else

@@ -66,7 +66,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
                     RefferedBy = reff.Fullname,
                     PhoneOfRefferedBy = user.RefferedBy,
                     Tier = user.Tier,
-                    DateTie2Upgraded = user.DateTie2Upgraded,
+                    RequestDateTie2Upgraded = user.RequestDateTie2Upgraded,
                     About = user.About,
                     AlternativePhone = user.AlternativePhone,
                     Address = user.Address,

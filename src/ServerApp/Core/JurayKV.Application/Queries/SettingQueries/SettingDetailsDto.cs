@@ -24,6 +24,11 @@ namespace JurayKV.Application.Queries.SettingQueries
         public PaymentGateway PaymentGateway { get; set; }
         public BillGateway BillGateway { get; set; }
         public int SendCount { get; set; }
-
+        public bool DisableReferralBonus { get; set; }
+        public bool DisableAirtime { get; set; }
+        public bool DisableData { get; set; }
+        public bool DisableElectricity { get; set; }
+        public bool DisableBetting { get; set; }
+        public bool DisableTV { get; set; }
     }
 }

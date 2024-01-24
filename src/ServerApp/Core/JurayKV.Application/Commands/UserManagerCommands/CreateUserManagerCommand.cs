@@ -7,6 +7,7 @@ using JurayKV.Domain.Aggregates.WalletAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -56,30 +57,30 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             ResponseCreateUserDto response = new ResponseCreateUserDto();
             try
             {
-                // Split the full name into parts
-                string[] nameParts = request.Data.Fullname.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                //// Split the full name into parts
+                //string[] nameParts = request.Data.Fullname.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                string firstName = "";
-                string middleName = "";
-                string lastName = "";
+                //string firstName = "";
+                //string middleName = "";
+                //string lastName = "";
 
-                // Check if we have at least one part (FirstName)
-                if (nameParts.Length >= 1)
-                {
-                    firstName = nameParts[0];
-                }
+                //// Check if we have at least one part (FirstName)
+                //if (nameParts.Length >= 1)
+                //{
+                //    firstName = nameParts[0];
+                //}
 
-                // Check if we have at least two parts (FirstName and LastName)
-                if (nameParts.Length >= 2)
-                {
-                    lastName = nameParts[nameParts.Length - 1];
-                }
+                //// Check if we have at least two parts (FirstName and LastName)
+                //if (nameParts.Length >= 2)
+                //{
+                //    lastName = nameParts[nameParts.Length - 1];
+                //}
 
-                // Check if we have at least three parts (FirstName, MiddleName, and LastName)
-                if (nameParts.Length >= 3)
-                {
-                    middleName = string.Join(" ", nameParts, 1, nameParts.Length - 2);
-                }
+                //// Check if we have at least three parts (FirstName, MiddleName, and LastName)
+                //if (nameParts.Length >= 3)
+                //{
+                //    middleName = string.Join(" ", nameParts, 1, nameParts.Length - 2);
+                //}
 
                 // Create a random number generator
                 Random random = new Random();
@@ -108,7 +109,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                     return response;
                 }
 
-                
+
                 int randomNumber = RandomNumberGenerator.GetInt32(0, 1000000);
                 string vCode = randomNumber.ToString("D6", CultureInfo.InvariantCulture);
                 string verificationCode = string.Join("", vCode.ToCharArray());
@@ -116,13 +117,12 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 string vcode = $"Your Koboview OTP is {verificationCode}";
                 string numbercode = verificationCode;
 
-                
+
 
                 ApplicationUser applicationUser = new ApplicationUser
                 {
-                    SurName = firstName,
-                    FirstName = middleName,
-                    LastName = lastName,
+                    SurName = request.Data.Surname,
+                    FirstName = request.Data.Firstname,
                     UserName = request.Data.Email,
                     PhoneNumber = request.Data.PhoneNumber,
                     Email = request.Data.Email,
@@ -139,6 +139,23 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
 
                 if (identityResult.Succeeded == true)
                 {
+                    var lastUser = await _userManager.Users
+                                  .OrderByDescending(u => u.CreationUTC)
+                                  .FirstOrDefaultAsync(x => x.IdNumber != null);
+
+                    if (lastUser != null)
+                    {
+                        // Increment the last user's IdNumber by 1
+                        int newIdNumber = int.Parse(lastUser.IdNumber) + 1;
+
+                        // Update the IdNumber for the current user
+                        var currentUser = await _userManager.FindByIdAsync(applicationUser.Id.ToString());
+                        currentUser.IdNumber = newIdNumber.ToString("00000000");
+                        await _userManager.UpdateAsync(currentUser);
+
+                    }
+
+
                     await _userManager.AddToRoleAsync(applicationUser, request.Data.Role);
                     response.Id = applicationUser.Id;
                     response.Succeeded = true;
@@ -154,6 +171,8 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
 
                     return response;
                 }
+
+
                 var user = await _userManager.FindByEmailAsync(applicationUser.Email);
                 //create wallet
                 CreateWalletCommand walletcommand = new CreateWalletCommand(user.Id, "", "wallet created on " + DateTime.UtcNow, 0);

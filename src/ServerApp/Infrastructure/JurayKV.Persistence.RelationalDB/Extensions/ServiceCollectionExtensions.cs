@@ -85,7 +85,7 @@ public static class ServiceCollectionExtensions
             options.User.RequireUniqueEmail = true;
           
             options.SignIn.RequireConfirmedEmail = true;
-        })
+         })
         .AddEntityFrameworkStores<JurayDbContext>()
         .AddDefaultTokenProviders();
 

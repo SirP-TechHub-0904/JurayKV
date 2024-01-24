@@ -54,6 +54,9 @@
 
                         </th>
                         <th>
+                            ID
+                        </th>
+                        <th>
                             Email
                         </th>
                         <th>Phone </th>
@@ -96,6 +99,9 @@
                                 </a>
 
 
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdNumber)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
@@ -156,7 +162,7 @@
                                     <span>verified</span>
                                 }
                             </td>
-                           
+
                             <td>
                                 <div class="btn-group">
 

@@ -24,6 +24,9 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
          
         [BindProperty]
         public string Name { get; set; }
+
+        [BindProperty]
+        public string IdNx { get; set; }
         public async Task<IActionResult> OnGetAsync(string id = null)
         {
             if(id == null)
@@ -33,7 +36,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             string userId = _userManager.GetUserId(HttpContext.User);
             var getuser = await _userManager.FindByIdAsync(id);
             Name = getuser.SurName + " " + getuser.FirstName;
-
+            IdNx = getuser.Id.ToString();
             // Clear the existing external cookie to ensure a clean login process
 
             return Page();

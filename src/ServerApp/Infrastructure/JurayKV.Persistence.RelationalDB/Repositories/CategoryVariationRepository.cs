@@ -88,6 +88,10 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         {
             return await _dbContext.CategoryVariations.ToListAsync();
         }
+        public async Task<List<CategoryVariation>> GetAllListByBillerAsync(BillGateway biller)
+        {
+            return await _dbContext.CategoryVariations.Where(x=>x.BillGateway == biller).ToListAsync();
+        }
     }
 
 }

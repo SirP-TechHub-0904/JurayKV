@@ -43,7 +43,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
 
              
             user.Tier = Domain.Primitives.Enum.Tier.Tier2;
-            user.DateTie2Upgraded = DateTime.UtcNow.AddHours(1);
+            user.RequestDateTie2Upgraded = DateTime.UtcNow.AddHours(1);
 
             var result = await _userManager.UpdateAsync(user);
 

@@ -28,6 +28,7 @@
                         <th>Amount </th>
                         <th>Active </th>
                         <th>Image</th>
+                        <th>Biller</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -62,6 +63,9 @@
                                     <img src="@item.Url" height="50" />
 
                                 </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BillGateway)
                             </td>
                             <td>
                                 <div class="btn-group">

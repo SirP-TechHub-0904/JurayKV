@@ -47,15 +47,17 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.PhoneNumber = UpdateUserManager.PhoneNumber;
                 update.SurName = UpdateUserManager.Surname;
                 update.FirstName = UpdateUserManager.Firstname;
-                    update.LastName = UpdateUserManager.Lastname;
+                update.LastName = UpdateUserManager.Lastname;
                 update.DisableEmailNotification = UpdateUserManager.DisableEmailNotification;
+                update.Tier = UpdateUserManager.Tier;
+                update.DateUpgraded = DateTime.UtcNow.AddHours(1);
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfuly";
             }
             catch (Exception ex)
             {
-                TempData["error"] = "error. adding new bucket";
+                TempData["error"] = "error. adding updating";
             }
             return RedirectToPage("./Index");
         }

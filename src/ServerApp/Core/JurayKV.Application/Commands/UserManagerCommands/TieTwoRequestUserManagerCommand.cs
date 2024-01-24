@@ -24,8 +24,8 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         }
         public TieTwoRequestDto Data { get; set; }
         public Guid Id { get; set; }
-        public IFormFile? IDcard { get; set; }
-        public IFormFile? Passport { get; set; }
+        public IFormFile IDcard { get; set; }
+        public IFormFile Passport { get; set; }
     }
 
     internal class TieTwoRequestUserManagerCommandHandler : IRequestHandler<TieTwoRequestUserManagerCommand, ResponseCsaUpgrade>
@@ -92,7 +92,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.BankName = request.Data.BankName;
             user.AccountNumber = request.Data.AccountNumber;
             user.AccountName = request.Data.AccountName; 
-            user.DateTie2Upgraded = DateTime.UtcNow.AddHours(1);
+            user.RequestDateTie2Upgraded = DateTime.UtcNow.AddHours(1);
             user.Tie2Request = true;
             user.ResponseOnTieRequest = "Your Information has been received and is undergoing review with 24hr.";
 

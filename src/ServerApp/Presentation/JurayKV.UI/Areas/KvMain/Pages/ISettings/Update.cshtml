@@ -42,6 +42,38 @@
                         @Html.DropDownListFor(model => model.Setting.PaymentGateway, new SelectList(Enum.GetValues(typeof(JurayKV.Domain.Primitives.Enum.PaymentGateway))), new { @class = "form-control" })
                         <span asp-validation-for="Setting.PaymentGateway" class="text-danger"></span>
                     </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableReferralBonus" /> @Html.DisplayNameFor(model => model.Setting.DisableReferralBonus)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableAirtime" /> @Html.DisplayNameFor(model => model.Setting.DisableAirtime)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableData" /> @Html.DisplayNameFor(model => model.Setting.DisableData)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableElectricity" /> @Html.DisplayNameFor(model => model.Setting.DisableElectricity)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableBetting" /> @Html.DisplayNameFor(model => model.Setting.DisableBetting)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Setting.DisableTV" /> @Html.DisplayNameFor(model => model.Setting.DisableTV)
+                        </label>
+                    </div>
+                    
                     <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>

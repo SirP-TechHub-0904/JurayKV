@@ -41,7 +41,7 @@
             <!-- lockscreen credentials (contains the form) -->
             <form class="lockscreen-credentials">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Account Locked">
+                    <input type="text" class="form-control" placeholder="">
 
                     <div class="input-group-append">
                         <button type="button" class="btn">
@@ -55,8 +55,14 @@
         </div>
         <!-- /.lockscreen-item -->
         <div class="help-block text-center">
-            <h3>Unussua</h3>
-            Your account has been suspended. send a mail to help@koboview.com
+            <h4>Your account has been suspended.</h4>
+            <h6>Unusual Activity</h6>
+
+            <p><strong>Step 1: Click the link to check and update your information <a asp-page="./UpdateUserData">Update</a></strong></p>
+            @{ 
+                TempData["id"] = Model.IdNx;
+            }
+            <p><strong>Step 2:</strong> <a href="https://wa.me/message/6SQ57ENNZMRPB1" class="btn btn-primary">Chat Support on whatsapp</a></p>
         </div>
         <div class="text-center">
             <a asp-page="./Login">Or sign in as a different user</a>

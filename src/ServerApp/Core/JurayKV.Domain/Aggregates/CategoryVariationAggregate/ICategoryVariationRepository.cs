@@ -21,5 +21,6 @@ namespace JurayKV.Domain.Aggregates.CategoryVariationAggregate
         Task<List<CategoryVariation>> GetByTypeAsync(VariationType variationType);
         Task<List<CategoryVariation>> GetByTypeByActiveAsync(Domain.Primitives.Enum.VariationType variationType);
         Task<List<CategoryVariation>> GetAllListAsync();
+        Task<List<CategoryVariation>> GetAllListByBillerAsync(BillGateway biller);
     }
 }

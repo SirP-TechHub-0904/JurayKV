@@ -3,6 +3,7 @@ using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Commands.DepartmentCommands;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Services;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.StateLgaAggregate;
 using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Infrastructure.Flutterwave.Repositories;
@@ -11,9 +12,12 @@ using JurayKV.Infrastructure.Services;
 using JurayKV.Infrastructure.VTU.Repository;
 using JurayKV.Persistence.Cache;
 using JurayKV.Persistence.Cache.Repositories;
+using JurayKV.Persistence.RelationalDB;
 using JurayKV.Persistence.RelationalDB.Extensions;
 using JurayKV.UI.Jobs;
+using JurayKV.UI.Services;
 using JurayKvV.Infrastructure.Interswitch.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;
@@ -36,6 +40,8 @@ namespace JurayKV.UI
             string sendGridApiKey = "yourSendGridKey";
             builder.Services.AddSendGrid(sendGridApiKey);
             builder.Services.AddRelationalDbContext(connectionString);
+             
+
             builder.Services.AddHostedService<BackgroundTask>();
             builder.Services.AddScoped<BackgroundActivity>();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
@@ -214,6 +220,7 @@ namespace JurayKV.UI
                 app.UseHsts();
             }
             // Use the CORS policy in your application
+            app.UseUserStatusMiddleware();
             app.UseCors("AllowKoboView");
             app.UseHttpsRedirection();
             app.UseStaticFiles();

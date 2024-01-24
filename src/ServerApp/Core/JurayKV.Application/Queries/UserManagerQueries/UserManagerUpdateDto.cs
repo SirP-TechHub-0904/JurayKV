@@ -1,15 +1,20 @@
-﻿using static JurayKV.Domain.Primitives.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.Queries.UserManagerQueries
 {
-    public class UserManagerDetailsDto
+    public class UserManagerUpdateDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Fullname { get; set; }
         public string IdNumber { get; set; }
 
-        public string Surname { get; set; } 
-        public string Firstname { get; set; } 
+        public string Surname { get; set; }
+        public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
@@ -19,16 +24,15 @@ namespace JurayKV.Application.Queries.UserManagerQueries
 
         public DateTime? LastLoggedInAtUtc { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
-        public string? StateOfOrigin { get; set; }
-        public string? LGA_Of_Origin { get; set; }
-        public decimal WalletBalance { get;set; }
+        public decimal WalletBalance { get; set; }
         public bool DisableEmailNotification { get; set; }
-        public bool IsCompany {  get; set; }
+        public bool IsCompany { get; set; }
         public string RefferedBy { get; set; }
         public string PhoneOfRefferedBy { get; set; }
         public bool IsCSARole { get; set; }
-
+        public DateTime? DateOfBirth { get; set; }
+        public string? StateOfOrigin { get; set; }
+        public string? LGA_Of_Origin { get; set; }
         public Tier Tier { get; set; }
         public DateTime DateUpgraded { get; set; }
         public string? About { get; set; }

@@ -65,6 +65,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             {
                 Id = entity.Id,
                 Date = entity.CreationUTC,
+                IdNumber = entity.IdNumber,
                 Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                 AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
@@ -93,6 +94,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             {
                 Id = entity.Id,
                 Date = entity.CreationUTC,
+                IdNumber = entity.IdNumber,
                 Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                 AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
@@ -151,7 +153,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             // Step 3: Find duplicates
             var duplicates = cleanedPhoneNumbers.GroupBy(phone => phone).Where(g => g.Count() > 1).ToList();
 
-            
+
             if (status == AccountStatus.NotDefind)
             {
                 if (startdate != null)
@@ -206,20 +208,18 @@ namespace JurayKV.Persistence.Cache.Repositories
                 var referralCount = await GetListReferralCountAsync(entity.PhoneNumber);
                 var walletbalance = await _walletCacheRepository.GetByUserIdAsync(entity.Id);
                 var gettotalTransactions = await _transactionCacheRepository.GetListByUserIdAsync(entity.Id);
-                var totaltransactionDebit = gettotalTransactions.Where(x=>x.TransactionType == TransactionTypeEnum.Debit).Sum(x=>x.Amount);
-                var totaltransactionCredit = gettotalTransactions.Where(x=>x.TransactionType == TransactionTypeEnum.Credit).Sum(x=>x.Amount);
+                var totaltransactionDebit = gettotalTransactions.Where(x => x.TransactionType == TransactionTypeEnum.Debit).Sum(x => x.Amount);
+                var totaltransactionCredit = gettotalTransactions.Where(x => x.TransactionType == TransactionTypeEnum.Credit).Sum(x => x.Amount);
                 var totaltransactionCount = gettotalTransactions.Count();
                 var referraltransaction = await _transactionCacheRepository.GetReferralListByUserIdAsync(entity.Id);
-
-
-                var totalRefTransaction = referraltransaction.Sum(x=>x.Amount);
-
+                var totalRefTransaction = referraltransaction.Sum(x => x.Amount);
                 var totalpoints = await _kvPointCacheRepository.GetListByUserIdAsync(entity.Id);
-                var sumpoints = totalpoints.Sum(x=>x.Point);
+                var sumpoints = totalpoints.Sum(x => x.Point);
                 var dto = new UserManagerListDto
                 {
                     Id = entity.Id,
                     Date = entity.CreationUTC,
+                    IdNumber = entity.IdNumber,
                     Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                     AccountStatus = entity.AccountStatus,
                     Email = entity.Email,
@@ -234,15 +234,21 @@ namespace JurayKV.Persistence.Cache.Repositories
                     TotalTransactionCredit = totaltransactionCredit,
                     TotalTransactionDebit = totaltransactionDebit,
                     TotalPoints = sumpoints,
-                    TotalReferralAmount = totalRefTransaction
+                    TotalReferralAmount = totalRefTransaction,
+                    Tier = entity.Tier,
+                    RequestDateTie2Upgraded = entity.RequestDateTie2Upgraded
                 };
 
                 list.Add(dto);
             }
-            if(sortOrder == 1 || sortOrder == 0)
+            if (sortOrder == 1)
             {
-                data.UserManagerListDto = list.OrderBy(x=>x.Fullname).ToList();
-            }else if (sortOrder == 2)
+                data.UserManagerListDto = list.OrderBy(x => x.Fullname).ToList();
+            }else if (sortOrder == 0)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.CreationUTC).ToList();
+            }
+            else if (sortOrder == 2)
             {
                 data.UserManagerListDto = list.OrderBy(x => x.Email).ToList();
             }
@@ -294,6 +300,20 @@ namespace JurayKV.Persistence.Cache.Repositories
             {
                 data.UserManagerListDto = list.OrderBy(x => x.Verified).ToList();
             }
+            else if (sortOrder == 15)
+            {
+                data.UserManagerListDto = list.OrderByDescending(x => x.Tier).ToList();
+            }
+            else if (sortOrder == 16)
+            {
+                data.UserManagerListDto = list.OrderBy(x => x.RequestDateTie2Upgraded).ToList();
+            }
+     //       else if (sortOrder == 17)
+     //       { 
+     //           data.UserManagerListDto = list
+     //.OrderByDescending(x => int.Parse(x.IdNumber.TrimStart('0')))
+     //.ToList();
+     //       }
             data.TotalCount = userlist.Count;
 
             // Combine emails and counts into a string
@@ -303,9 +323,9 @@ namespace JurayKV.Persistence.Cache.Repositories
             {
                 phoneNumberResult += $" ({group.Key} - {group.Count()})";
             }
-           
 
-            data.DistintPhone = phoneNumberResult; 
+
+            data.DistintPhone = phoneNumberResult;
             data.DistintPhoneCountActive = filteredUsers.Where(x => x.PhoneNumber == data.DistintPhone && x.AccountStatus == AccountStatus.Active).Count();
             data.DistintEmailCountActive = filteredUsers.Where(x => x.Email == data.DistintEmail && x.AccountStatus == AccountStatus.Active).Count();
 
@@ -320,8 +340,8 @@ namespace JurayKV.Persistence.Cache.Repositories
             }
 
             // Remove non-digit characters and take the last 10 digits
-            
-               string xphoneNumber = new string(phoneNumber.Replace(" ", "")).Substring(Math.Max(0, phoneNumber.Length - 10));
+
+            string xphoneNumber = new string(phoneNumber.Replace(" ", "")).Substring(Math.Max(0, phoneNumber.Length - 10));
             return xphoneNumber;
         }
         public async Task<List<UserManagerListDto>> GetListAsync()
@@ -337,6 +357,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             {
                 Id = entity.Id,
                 Date = entity.CreationUTC,
+                IdNumber = entity.IdNumber,
                 Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                 AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
@@ -401,6 +422,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Id = entity.Id,
                     CreationUTC = entity.CreationUTC,
+                    IdNumber = entity.IdNumber,
                     Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                     AccountStatus = entity.AccountStatus,
                     Email = entity.Email,
@@ -414,7 +436,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     IsCSARole = await _userManager.IsInRoleAsync(entity, "CSA"),
 
                     Tier = entity.Tier,
-                    DateTie2Upgraded = entity.DateTie2Upgraded,
+                    RequestDateTie2Upgraded = entity.RequestDateTie2Upgraded,
                     About = entity.About,
                     AlternativePhone = entity.AlternativePhone,
                     Address = entity.Address,
@@ -458,6 +480,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 userManager = new UserManagerDetailsDto
                 {
                     Id = entity.Id,
+                    IdNumber = entity.IdNumber,
                     CreationUTC = entity.CreationUTC,
                     Fullname = entity.SurName + " " + entity.FirstName + " " + entity.LastName,
                     AccountStatus = entity.AccountStatus,

@@ -48,6 +48,19 @@
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Variation.CategoryVariation.Name)
                     </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Variation.BillGateway)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Variation.CategoryVariation.BillGateway)
+                    </dd>
+
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Variation.Tier)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Variation.CategoryVariation.Tier)
+                    </dd>
                 </dl>
             </div>
         </div>

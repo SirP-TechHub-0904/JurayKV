@@ -28,6 +28,7 @@
                         <th> Active</th>
                         <th> Image</th>
                         <th>Charge </th>
+                        <th>Biller </th>
                         <th> </th>
 
                     </tr>
@@ -67,7 +68,9 @@
                             <td>
                                 @Html.DisplayFor(model => item.Charge)
                             </td>
-
+                            <td>
+                                @Html.DisplayFor(model => item.BillGateway)
+                            </td>
                             <td>
                                 <div class="btn-group">
 

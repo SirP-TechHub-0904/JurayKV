@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Domain.Aggregates.VariationAggregate
 {
@@ -28,7 +29,8 @@ namespace JurayKV.Domain.Aggregates.VariationAggregate
 
         public string? Url { get; set; }
         public string? Key { get; set; }
-
+        public BillGateway BillGateway { get; set; }
+        public Tier Tier { get; set; }
         public Guid CategoryVariationId { get; set; }
         public CategoryVariation CategoryVariation { get; set; }
 

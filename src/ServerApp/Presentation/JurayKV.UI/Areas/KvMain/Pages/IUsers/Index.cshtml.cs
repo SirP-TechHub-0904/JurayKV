@@ -88,26 +88,11 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 }
                 else
                 {
-
-
-                    //DateTime queryStartDate = DateTime.UtcNow.AddHours(1);
-                    //DateTime queryEndDate = DateTime.UtcNow.AddHours(1);
-                    //if (startdate != null)
-                    //{
-                    //    queryStartDate = startdate.Value;
-                    //}
-                    //if (enddate != null)
-                    //{
-                    //    queryEndDate = enddate.Value;
-                    //}
+                     
                     StartDate = startdate;
                     EndDate = enddate;
                 }
-                //
-                //
-               
-
-                //
+                // 
                 GetUserByStatusListQuery command = new GetUserByStatusListQuery(status, StartDate, EndDate, PageSize, PageNumber, searchstring, sortOrder);
                 var getUserManagers = await _mediator.Send(command);
                 UserManagers = getUserManagers.UserManagerListDto.ToList();

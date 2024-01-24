@@ -51,6 +51,13 @@ internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingComman
             getupdate.BillGateway = request.Setting.BillGateway;
             getupdate.PaymentGateway = request.Setting.PaymentGateway;
 
+            getupdate.DisableReferralBonus = request.Setting.DisableReferralBonus;
+            getupdate.DisableAirtime = request.Setting.DisableAirtime;
+            getupdate.DisableData = request.Setting.DisableData;
+            getupdate.DisableElectricity = request.Setting.DisableElectricity;
+            getupdate.DisableBetting = request.Setting.DisableBetting;
+            getupdate.DisableTV = request.Setting.DisableTV;
+
             await _settingRepository.UpdateAsync(getupdate);
 
             await _settingCacheHandler.RemoveListAsync();

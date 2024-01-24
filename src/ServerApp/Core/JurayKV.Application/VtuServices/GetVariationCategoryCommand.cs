@@ -1,20 +1,19 @@
 ﻿using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static JurayKV.Domain.Primitives.Enum;
 using TanvirArjel.ArgumentChecker;
+using static JurayKV.Domain.Primitives.Enum;
 
 namespace JurayKV.Application.VtuServices
 {
-      public sealed class GetVariationCategoryCommand : IRequest<List<CategoryVariation>>
+    public sealed class GetVariationCategoryCommand : IRequest<List<CategoryVariation>>
     {
-        
+        public GetVariationCategoryCommand(BillGateway billGateway)
+        {
+            BillGateway = billGateway;
+        }
+        public BillGateway BillGateway { get; set; }
     }
-
+    
     internal class GetVariationCategoryCommandHandler : IRequestHandler<GetVariationCategoryCommand, List<CategoryVariation>>
     {
         private readonly ICategoryVariationRepository _variationRepository;
@@ -29,7 +28,7 @@ namespace JurayKV.Application.VtuServices
         {
             _ = request.ThrowIfNull(nameof(request));
 
-            var result = await _variationRepository.GetAllListAsync();
+            var result = await _variationRepository.GetAllListByBillerAsync(request.BillGateway);
             return result;
         }
     }

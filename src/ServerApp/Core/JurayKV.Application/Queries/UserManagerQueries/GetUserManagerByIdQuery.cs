@@ -58,7 +58,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 RefferedBy = reff.Fullname,
                 PhoneOfRefferedBy = user.RefferedBy,
                 Tier = user.Tier,
-                DateTie2Upgraded = user.DateTie2Upgraded,
+                RequestDateTie2Upgraded = user.RequestDateTie2Upgraded,
                 About = user.About,
                 AlternativePhone = user.AlternativePhone,
                 Address = user.Address,
@@ -81,6 +81,9 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 ResponseOnCsaRequest = user.ResponseOnCsaRequest,
                 CsaRequest = user.CsaRequest, 
                 IsCSARole = user.IsCSARole,
+                DateOfBirth = user.DateOfBirth,
+                StateOfOrigin = user.StateOfOrigin,
+                LGA_Of_Origin = user.LGA_Of_Origin
             };
 
             

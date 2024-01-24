@@ -5,6 +5,8 @@ namespace JurayKV.Application.Queries.UserManagerQueries
     public class UserManagerListDto
     {
         public Guid Id { get; set; }
+        public string IdNumber { get; set; }
+
         public string Fullname {  get; set; }
         public string Email { get;set; }
         public string PhoneNumber { get;set; }
@@ -22,5 +24,9 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public decimal TotalTransactionDebit { get;set; }
         public decimal TotalPoints { get;set; }
         public decimal TotalReferralAmount { get;set; }
+
+        public Tier Tier { get; set; }
+        public DateTime? RequestDateTie2Upgraded { get; set; }
+
     }
 }
