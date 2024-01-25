@@ -50,6 +50,11 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DisableElectricity = d.DisableElectricity,
                     DisableReferralBonus = d.DisableReferralBonus,
                     DisableTV = d.DisableTV,
+
+
+                    AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
+                    AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
+                    AirtimeMinRecharge = d.AirtimeMinRecharge
                 };
 
                 list = await _repository.GetListAsync(selectExp);
@@ -82,6 +87,10 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DisableElectricity = d.DisableElectricity,
                     DisableReferralBonus = d.DisableReferralBonus,
                     DisableTV = d.DisableTV,
+
+                    AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
+                    AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
+                    AirtimeMinRecharge = d.AirtimeMinRecharge
                 };
 
                 setting = await _repository.GetByIdAsync(settingId, selectExp);
@@ -114,6 +123,11 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DisableElectricity = d.DisableElectricity,
                     DisableReferralBonus = d.DisableReferralBonus,
                     DisableTV = d.DisableTV,
+
+
+                    AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
+                    AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
+                    AirtimeMinRecharge = d.AirtimeMinRecharge
                 };
                 return setting;
             }

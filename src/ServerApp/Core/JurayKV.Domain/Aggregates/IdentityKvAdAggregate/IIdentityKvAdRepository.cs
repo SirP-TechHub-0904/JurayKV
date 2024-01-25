@@ -27,5 +27,7 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
         Task<List<IdentityKvAd>> ListNonActive();
         Task<int> AdsCount(Guid userId);
 
+        Task<bool> CheckIdnetityKvIdFirstTime(Guid userId);
+        Task<bool> CheckVideoIdnetityKvIdFirstTime(Guid userId);
     }
 }

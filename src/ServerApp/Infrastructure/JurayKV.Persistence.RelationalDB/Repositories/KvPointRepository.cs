@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TanvirArjel.ArgumentChecker;
 using JurayKV.Domain.Aggregates.KvAdAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories.GenericRepositories;
+using System.Runtime.CompilerServices;
 
 namespace JurayKV.Persistence.RelationalDB.Repositories
 {
@@ -95,6 +96,16 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.CreatedAtUtc).ToListAsync();
             return list;
+        }
+
+        public async Task<bool> CheckFirstPoint(Guid userId)
+        {
+            var data = _dbContext.kvPoints.Where(x=>x.UserId == userId && x.Status == Domain.Primitives.Enum.EntityStatus.Successful).AsEnumerable();
+            if(data.Count() == 1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -23,6 +23,20 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<bool> CheckIdnetityKvIdFirstTime(Guid userId)
+        {
+            var check = _dbContext.IdentityKvAds.Where(x => x.UserId == userId).AsEnumerable();
+            if (check.Count() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
         public Task<bool> ExistsAsync(Expression<Func<IdentityKvAd, bool>> condition)
         {
             IQueryable<IdentityKvAd> queryable = _dbContext.Set<IdentityKvAd>();
@@ -48,7 +62,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             try
             {
                 identityKvAd.ThrowIfNull(nameof(identityKvAd));
-                
+
                 var checkadsforuser = await _dbContext.IdentityKvAds.AsNoTracking()
                     //.Where(x => x.CreatedAtUtc.Hour > nextDay6AM.Hour)
                     .FirstOrDefaultAsync(x => x.UserId == identityKvAd.UserId && x.KvAdId == identityKvAd.KvAdId && x.KvAdHash == identityKvAd.KvAdHash &&
@@ -133,7 +147,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
             var data = _dbContext.IdentityKvAds.Include(x => x.KvAd).Include(x => x.KvAd.ImageFile)
             .Where(x => x.KvAdHash == mdate.Date.ToString("ddMMyyyy"))
-            .Where(x => x.UserId == userId && x.Active == true); 
+            .Where(x => x.UserId == userId && x.Active == true);
 
 
             return data;
@@ -160,7 +174,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             var data = _dbContext.IdentityKvAds
                 .Include(x => x.KvAd)
                 .ThenInclude(x => x.Company).Include(x => x.KvAd.ImageFile)
-                .Include(x=>x.KvAd.Bucket) 
+                .Include(x => x.KvAd.Bucket)
 
                 .Include(x => x.User)
                 .Where(x => x.Active == true && x.KvAdHash == currentDate.ToString("ddMMyyyy"));
@@ -187,7 +201,21 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<int> AdsCount(Guid userId)
         {
-           return await  _dbContext.IdentityKvAds.Where(x=>x.UserId ==  userId).CountAsync();
+            return await _dbContext.IdentityKvAds.Where(x => x.UserId == userId).CountAsync();
+        }
+
+        public async Task<bool> CheckVideoIdnetityKvIdFirstTime(Guid userId)
+        {
+            var check = _dbContext.IdentityKvAds.Where(x => x.UserId == userId && x.VideoUrl != null).AsEnumerable();
+            if (check.Count() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 

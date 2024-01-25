@@ -2,6 +2,8 @@ using Amazon.Runtime.Internal;
 using Azure.Core;
 using JurayKV.Application;
 using JurayKV.Application.Commands.ExchangeRateCommands;
+using JurayKV.Application.Queries.SettingQueries;
+using JurayKV.Application.Queries.TransactionQueries;
 using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Application.VtuServices;
 using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace JurayKV.UI.Areas.Payment.Pages.Account
@@ -63,7 +66,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-
+           
             try
             {
                 string userId = _userManager.GetUserId(HttpContext.User);
@@ -71,6 +74,15 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(userId));
                 WalletDetailsDto = await _mediator.Send(getwalletcommand);
                 decimal Amount = 0;
+
+                GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
+                var setting = await _mediator.Send(settingcommand);
+                if (setting.DisableAirtime == true)
+                {
+                    TempData["error"] = "Unable to process request. Try Again";
+
+                    return Page();
+                }
                 try
                 {
                     Amount = Convert.ToDecimal(Request.Amount); 
@@ -102,8 +114,9 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
                     return Page();
                 }
-
-                AirtimeCommad airtimeCommad = new AirtimeCommad(Request.PhoneNumber, Request.Network, Request.Amount, userId);
+                //check if they recharged above the limit
+                
+                 AirtimeCommad airtimeCommad = new AirtimeCommad(Request.PhoneNumber, Request.Network, Request.Amount, userId);
                 AirtimeResponse Result = await _mediator.Send(airtimeCommad);
 
                 //create transaction and debit wallet
@@ -124,10 +137,19 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
                     }
                     else { 
-                    TempData["error"] = "Failed, Kindly Comfirm the number is correct and its the correct network";
+                    TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
                     }
                     return Page();
                 }
+                else if (Result.code == "limit")
+                {
+                    
+                        TempData["error"] = "Kindly upgrade to Tier 2 from your profile. Thanks";
+                        TempData["response"] = "Kindly upgrade to Tier 2. Thanks";
+
+                    return Page();
+                }
+                
             }
             catch (Exception ex)
             {

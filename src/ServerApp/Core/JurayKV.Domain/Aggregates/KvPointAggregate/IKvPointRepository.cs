@@ -20,5 +20,8 @@ namespace JurayKV.Domain.Aggregates.KvPointAggregate
 
         Task<List<KvPoint>> LastTenByUserId (int toplistcount, Guid userId);
         Task<List<KvPoint>> LastByUserId (Guid userId);
+
+
+        Task<bool> CheckFirstPoint (Guid userId);
     }
 }

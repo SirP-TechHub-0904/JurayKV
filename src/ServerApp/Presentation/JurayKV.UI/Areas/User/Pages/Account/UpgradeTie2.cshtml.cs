@@ -26,6 +26,8 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         }
         
         public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ListStates { get; set; }
+        public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ListStatesOfOrigin { get; set; }
+
         [BindProperty]
         public TieTwoRequestDto TieTwoRequestDto { get; set; } = new TieTwoRequestDto();
 
@@ -49,10 +51,22 @@ namespace JurayKV.UI.Areas.User.Pages.Account
                    Value = data.Id.ToString(), // Assuming Id is an integer
                    Text = data.State
                }).ToList();
+
+            ListStatesOfOrigin = listStates.Select(data =>
+                     new SelectListItem
+                     {
+                         Value = data.Id.ToString(), // Assuming Id is an integer
+                         Text = data.State
+                     }).ToList();
             TieTwoRequestDto.State = userdata.State;
             TieTwoRequestDto.LGA   = userdata.LGA;
             TieTwoRequestDto.Address = userdata.Address;
-           Passport = userdata.PassportUrl;
+            TieTwoRequestDto.Surname = userdata.SurName;
+            TieTwoRequestDto.Firstname = userdata.FirstName;
+            TieTwoRequestDto.Lastname = userdata.LastName;
+            TieTwoRequestDto.Occupation = userdata.Occupation;
+            TieTwoRequestDto.About = userdata.About;
+            Passport = userdata.PassportUrl;
             IdCard = userdata.IDCardUrl;
             return Page();
         }

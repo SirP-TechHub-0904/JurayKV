@@ -1,4 +1,5 @@
-using JurayKV.Application;
+﻿using JurayKV.Application;
+using JurayKV.Application.Queries.SettingQueries;
 using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Application.VtuServices;
 using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
@@ -68,7 +69,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                     new SelectListItem
                     {
                         Value = x.Id.ToString(), // Assuming Id is an integer
-                        Text = x.Name
+                        Text = x.Name + " (₦" + x.Amount + ")"
                     }).ToList();
                 //
                 return Page();
@@ -132,7 +133,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
             try
             {
                 string userId = _userManager.GetUserId(HttpContext.User);
-
+                var user = await _userManager.FindByIdAsync(userId);
 
                 GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(userId));
                 WalletDetailsDto = await _mediator.Send(getwalletcommand);
@@ -157,7 +158,21 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
                     return Page();
                 }
+                GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
+                var setting = await _mediator.Send(settingcommand);
+                if (setting.DisableTV == true)
+                {
+                    TempData["error"] = "Unable to process request. Try Again";
 
+                    return Page();
+                }
+                if (user.Tier != variationData.Tier && user.Tier != Domain.Primitives.Enum.Tier.Tier2)
+                {
+                    if (user.Tier == Domain.Primitives.Enum.Tier.Tier1)
+                        TempData["error"] = "Unable to process request. Upgrade to Tier 2";
+
+                    return Page();
+                }
                 SubcribeCommand dataCommad = new SubcribeCommand(CableTvRequest.PhoneNumber, CableTvRequest.CustomerId,
                     CableTvRequest.VariationId, CableTvRequest.ServiceId, userId);
                 CableTvResponse Result = await _mediator.Send(dataCommad);
@@ -175,14 +190,14 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                 else if (Result.code == "failure")
                 {
 
-                    TempData["error"] = "Failed, Kindly Comfirm the number is correct and its the correct network";
+                    TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
 
                     return Page();
                 }
             }
             catch (Exception ex)
             {
-                TempData["error"] = "error. validation failed";
+                TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
             }
             return RedirectToPage("/Account/Index", new { area = "User" });
         }

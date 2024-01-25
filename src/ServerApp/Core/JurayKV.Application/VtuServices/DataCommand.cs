@@ -55,10 +55,11 @@ namespace JurayKV.Application.VtuServices
             //get variation amount
             var variationData = await _variationRepository.GetByIdAsync(Guid.Parse(request.VariationId));
             DataRequest data = new DataRequest();
+            DataResponse result = new DataResponse();
             data.PhoneNumber = request.PhoneNumber;
             data.Network = request.Network;
             data.VariationId = variationData.Code;
-            var result = await _vtuService.DataRequest(data);
+            result = await _vtuService.DataRequest(data);
             //getwallet
             GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(request.UserId));
             var userwallet = await _mediator.Send(getwalletcommand);
@@ -66,14 +67,42 @@ namespace JurayKV.Application.VtuServices
             {
                 //send log request
             }
-              if (result.code == "success")
+            if (result != null)
             {
-                try
+                if (result.code == "success")
                 {
+                    try
+                    {
 
 
+                        //create transaction
+                        CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "DATA", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Successful, result.data.order_id, "DATA PURCHASE", result.data.order_id);
+                        var transaction = await _mediator.Send(createtransaction);
+
+                        //get the transaction by id
+                        GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                        var thetransaction = await _mediator.Send(gettranCommand);
+                        //update wallet
+
+
+                        userwallet.Amount = userwallet.Amount - Convert.ToDecimal(variationData.Amount);
+
+                        var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                        userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                        //userwallet = null;
+                        UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
+                        await _mediator.Send(updatewalletcommand);
+
+                    }
+                    catch (Exception c)
+                    {
+                        //loog error
+                    }
+                }
+                else if (result.code == "processing")
+                {
                     //create transaction
-                    CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "DATA", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Successful, result.data.order_id, "DATA PURCHASE", result.data.order_id);
+                    CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "DATA", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "DATA PURCHASE", "XXXXXX");
                     var transaction = await _mediator.Send(createtransaction);
 
                     //get the transaction by id
@@ -81,7 +110,7 @@ namespace JurayKV.Application.VtuServices
                     var thetransaction = await _mediator.Send(gettranCommand);
                     //update wallet
 
-                    
+
                     userwallet.Amount = userwallet.Amount - Convert.ToDecimal(variationData.Amount);
 
                     var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
@@ -89,34 +118,16 @@ namespace JurayKV.Application.VtuServices
                     //userwallet = null;
                     UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
                     await _mediator.Send(updatewalletcommand);
-
                 }
-                catch (Exception c)
+                else
                 {
-                    //loog error
+                    result.code = "null";
                 }
             }
-            else if (result.code == "processing")
+            else
             {
-                //create transaction
-                CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "DATA", "", Convert.ToDecimal(variationData.Amount), TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "DATA PURCHASE", "XXXXXX");
-                var transaction = await _mediator.Send(createtransaction);
-
-                //get the transaction by id
-                GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
-                var thetransaction = await _mediator.Send(gettranCommand);
-                //update wallet
-
-
-                userwallet.Amount = userwallet.Amount - Convert.ToDecimal(variationData.Amount);
-
-                var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
-                //userwallet = null;
-                UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
-                await _mediator.Send(updatewalletcommand);
+                result.code = "null";
             }
-
             return result;
         }
     }

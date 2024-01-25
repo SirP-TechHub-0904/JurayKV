@@ -61,6 +61,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
         public async Task<IActionResult> OnPostAsync()
         {
             var data = await _variationRepository.GetByIdAsync(Id);
+            if(imagefile != null) { 
             try
             {
 
@@ -76,6 +77,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
             catch (Exception c)
             {
 
+            }
             }
             try
             {

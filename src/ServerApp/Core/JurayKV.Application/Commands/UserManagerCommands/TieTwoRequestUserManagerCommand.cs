@@ -88,7 +88,18 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             {
                 response.Message += "<br>Unable to Upload passport";
             }
-            user.BVN = request.Data.BVN;
+            user.SurName = request.Data.Surname;
+            user.FirstName = request.Data.Firstname;
+            user.LastName = request.Data.Lastname;
+            user.Address = request.Data.Address;
+            user.State = request.Data.State;
+
+            user.LGA = request.Data.LGA;
+            user.DateOfBirth = request.Data.DateOfBirth;
+            user.Occupation = request.Data.Occupation;
+            user.About = request.Data.About;
+            user.StateOfOrigin = request.Data.StateOfOrigin;
+             
             user.BankName = request.Data.BankName;
             user.AccountNumber = request.Data.AccountNumber;
             user.AccountName = request.Data.AccountName; 

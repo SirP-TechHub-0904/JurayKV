@@ -42,7 +42,7 @@
                     <div class="col-md-12">
                         <form method="post" enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="UpdateUserManager.Id" value="@Model.IDD"/> 
+                            <input type="hidden" asp-for="UpdateUserManager.Id" value="@Model.IDD" />
                             <div class="form-group">
                                 <label asp-for="UpdateUserManager.Surname" class="control-label"></label>
                                 <input asp-for="UpdateUserManager.Surname" class="form-control" id="upper" onkeyup="myUppercase()" required="required" />
@@ -54,8 +54,13 @@
                                 <span asp-validation-for="UpdateUserManager.Firstname" class="text-danger"></span>
                             </div>
                             <div class="form-group">
+                                <label asp-for="UpdateUserManager.Lastname" class="control-label"></label>
+                                <input asp-for="UpdateUserManager.Lastname" class="form-control" id="upper" onkeyup="myUppercase()" required="required" />
+                                <span asp-validation-for="UpdateUserManager.Lastname" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
                                 <label asp-for="UpdateUserManager.Address" class="control-label"></label>
-                                <input asp-for="UpdateUserManager.Address" class="form-control"  required="required"/>
+                                <input asp-for="UpdateUserManager.Address" class="form-control" required="required" />
                                 <span asp-validation-for="UpdateUserManager.Address" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -94,22 +99,22 @@
                                     <option>Please select state of origin</option>
                                 </select>
                             </div>
-                           
+
 
 
                             <div class="form-group">
                                 <label class="control-label">Passport</label><br />
-                                <input type="file" class="control-label" asp-for="IDcard"  required="required"/>
+                                <input type="file" class="control-label" asp-for="Passport" required="required" />
                             </div>
 
 
                             <div class="form-group">
-                                <label class="control-label">Valid ID Card</label><br />
-                                <input type="file" class="control-label" asp-for="Passport"  required="required"/>
+                                <label class="control-label">NIN ID Card</label><br />
+                                <input type="file" class="control-label" asp-for="IDcard" required="required" />
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" value="Submit" class="btn btn-primary" /> 
+                                <input type="submit" value="Submit" class="btn btn-primary" />
 
                             </div>
                         </form>

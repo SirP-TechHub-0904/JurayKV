@@ -51,6 +51,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
 
                         Surname = user.Surname,
                         Firstname = user.Firstname,
+                        Lastname = user.Lastname,
                         DateOfBirth = user.DateOfBirth,
                         StateOfOrigin = user.StateOfOrigin,
                         LGA_Of_Origin = user.LGA_Of_Origin,

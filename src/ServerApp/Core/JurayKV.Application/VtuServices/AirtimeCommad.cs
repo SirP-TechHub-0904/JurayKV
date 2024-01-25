@@ -53,73 +53,91 @@ namespace JurayKV.Application.VtuServices
         public async Task<AirtimeResponse> Handle(AirtimeCommad request, CancellationToken cancellationToken)
         {
             _ = request.ThrowIfNull(nameof(request));
-            decimal Amount = 0;
-            try { 
-            Amount = Convert.ToDecimal(request.Amount);
-            }catch(Exception c)
+            AirtimeResponse result = new AirtimeResponse();
+            GetTransactionSumAirtimeAboveThousand tieCommand = new GetTransactionSumAirtimeAboveThousand("AIRTIME", Guid.Parse(request.UserId));
+            var reachLimit = await _mediator.Send(tieCommand);
+            if (reachLimit == false)
             {
-                return null;
-            }
-            AirtimeRequest data = new AirtimeRequest();
-            data.PhoneNumber = request.PhoneNumber;
-            data.Network = request.Network;
-            data.Amount = request.Amount;
-            var result = await _vtuService.Airtime(data);
-            //getwallet
-            GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(request.UserId));
-            var userwallet = await _mediator.Send(getwalletcommand);
-            if (userwallet == null)
-            {
-                //send log request
-            }
-            if (result.code == "success")
-            {
-                try { 
-                
-               
-                //create transaction
-                CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "AIRTIME", "", Amount, TransactionTypeEnum.Debit, EntityStatus.Successful, result.data.order_id, "AIRTIME PURCHASE", result.data.order_id);
-                var transaction = await _mediator.Send(createtransaction);
-
-                //get the transaction by id
-                GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
-                var thetransaction = await _mediator.Send(gettranCommand);
-                //update wallet
-
-
-                userwallet.Amount = userwallet.Amount - Amount;
-                 
-                var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
-                //userwallet = null;
-                UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
-                await _mediator.Send(updatewalletcommand);
-
-                }catch(Exception c)
+                decimal Amount = 0;
+                try
                 {
-                    //loog error
+                    Amount = Convert.ToDecimal(request.Amount);
                 }
-            }else if(result.code == "processing")
-            {
-                //create transaction
-                CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "AIRTIME", "", Amount, TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "AIRTIME PURCHASE", "XXXXXX");
-                var transaction = await _mediator.Send(createtransaction);
+                catch (Exception c)
+                {
+                    return null;
+                }
+                AirtimeRequest data = new AirtimeRequest();
+                data.PhoneNumber = request.PhoneNumber;
+                data.Network = request.Network;
+                data.Amount = request.Amount;
+                 result = await _vtuService.Airtime(data);
+                //getwallet
+                GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(request.UserId));
+                var userwallet = await _mediator.Send(getwalletcommand);
+                if (userwallet == null)
+                {
+                    //send log request
+                }
+                if (result.code == "success")
+                {
+                    try
+                    {
+                        Guid transaction = Guid.NewGuid();
+                        try { 
+                        //create transaction
+                        CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "AIRTIME", "", Amount, TransactionTypeEnum.Debit, EntityStatus.Successful, result.data.order_id, "AIRTIME PURCHASE", result.data.order_id);
+                         transaction = await _mediator.Send(createtransaction);
+                        }catch(Exception c)
+                        {
 
-                //get the transaction by id
-                GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
-                var thetransaction = await _mediator.Send(gettranCommand);
-                //update wallet
+                        }
+                        //get the transaction by id
+                       
+                        GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                        var thetransaction = await _mediator.Send(gettranCommand);
+                        //update wallet
 
 
-                userwallet.Amount = userwallet.Amount - Amount;
+                        userwallet.Amount = userwallet.Amount - Amount;
 
-                var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
-                //userwallet = null;
-                UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
-                await _mediator.Send(updatewalletcommand);
+                        var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                        userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                        //userwallet = null;
+                        UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
+                        await _mediator.Send(updatewalletcommand);
+
+                    }
+                    catch (Exception c)
+                    {
+                        //loog error
+                    }
+                }
+                else if (result.code == "processing")
+                {
+                    //create transaction
+                    CreateTransactionCommand createtransaction = new CreateTransactionCommand(userwallet.Id, userwallet.UserId, "AIRTIME", "", Amount, TransactionTypeEnum.Debit, EntityStatus.Pending, "XXXXXXX", "AIRTIME PURCHASE", "XXXXXX");
+                    var transaction = await _mediator.Send(createtransaction);
+
+                    //get the transaction by id
+                    GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                    var thetransaction = await _mediator.Send(gettranCommand);
+                    //update wallet
+
+
+                    userwallet.Amount = userwallet.Amount - Amount;
+
+                    var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                    userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    //userwallet = null;
+                    UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
+                    await _mediator.Send(updatewalletcommand);
+                }
             }
-
+            else
+            {
+                result.code = "limit";
+            }
             return result;
         }
     }

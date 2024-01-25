@@ -18,7 +18,7 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         Task UpdateAsync(Transaction transaction);
 
         Task DeleteAsync(Transaction transaction);
-
+        Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId);
         Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId);
         Task<List<Transaction>> GetListByUserId(Guid userId);
         Task<List<Transaction>> GetReferralListByUserId(Guid userId);

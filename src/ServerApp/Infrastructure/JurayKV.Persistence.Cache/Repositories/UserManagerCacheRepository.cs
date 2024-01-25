@@ -68,7 +68,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 SuccessPoint = entity.SuccessPoint,
             }).ToList();
 
-            return list;
+            return list.OrderByDescending(x=>x.CreationUTC).ToList();
         }
         public async Task<List<UserManagerListDto>> GetListByStatusAsync(AccountStatus status)
         {
@@ -513,6 +513,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 IdNumber = entity.IdNumber,
                 Surname = entity.SurName,
                 Firstname = entity.FirstName,
+                Lastname = entity.LastName,
                 AccountStatus = entity.AccountStatus,
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,

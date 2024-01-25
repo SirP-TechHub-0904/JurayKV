@@ -29,6 +29,7 @@
                         <th> Image</th>
                         <th>Charge </th>
                         <th>Biller </th>
+                        <th>Tier </th>
                         <th> </th>
 
                     </tr>
@@ -71,6 +72,10 @@
                             <td>
                                 @Html.DisplayFor(model => item.BillGateway)
                             </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Tier)
+                            </td>
+                            
                             <td>
                                 <div class="btn-group">
 

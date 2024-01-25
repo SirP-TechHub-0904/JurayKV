@@ -1,4 +1,12 @@
 ﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Caching.Repositories;
+using JurayKV.Application.Commands.TransactionCommands;
+using JurayKV.Application.Commands.WalletCommands;
+using JurayKV.Application.Queries.SettingQueries;
+using JurayKV.Application.Queries.TransactionQueries;
+using JurayKV.Application.Queries.UserManagerQueries;
+using JurayKV.Application.Queries.WalletQueries;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.Aggregates.KvPointAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
@@ -6,6 +14,7 @@ using JurayKV.Domain.Aggregates.WalletAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 using TanvirArjel.ArgumentChecker;
@@ -46,6 +55,9 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
     private readonly IRepository _repository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly ITransactionCacheHandler _transactionCacheHandler;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ISettingCacheRepository _settingCacheRepository;
+    private readonly IMediator _mediator;
 
     public CreateKvPointCommandHandler(
             IKvPointRepository kvPointRepository,
@@ -57,7 +69,10 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
             IIdentityKvAdCacheHandler identityKvAdCacheHandler,
             IRepository repository,
             ITransactionRepository transactionRepository,
-            ITransactionCacheHandler transactionCacheHandler)
+            ITransactionCacheHandler transactionCacheHandler,
+            UserManager<ApplicationUser> userManager,
+            ISettingCacheRepository settingCacheRepository,
+            IMediator mediator)
     {
         _kvPointRepository = kvPointRepository;
         _kvPointCacheHandler = kvPointCacheHandler;
@@ -69,6 +84,9 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
         _repository = repository;
         _transactionRepository = transactionRepository;
         _transactionCacheHandler = transactionCacheHandler;
+        _userManager = userManager;
+        _settingCacheRepository = settingCacheRepository;
+        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(CreateKvPointCommand request, CancellationToken cancellationToken)
@@ -153,6 +171,62 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
 
                     // Persist to the database
                     await _transactionRepository.InsertAsync(Companytransaction);
+                    //
+                    //
+                    //check if its firsttime
+                    var checkSuccess = await _kvPointRepository.CheckFirstPoint(request.UserId);
+                    if (checkSuccess == true)
+                    {
+                        var userUpdate = await _userManager.FindByIdAsync(request.UserId.ToString());
+                        if (userUpdate != null)
+                        {
+                            userUpdate.SuccessPoint = true;
+                            var datacheck = await _userManager.UpdateAsync(userUpdate);
+                            if (datacheck.Succeeded)
+                            {
+                                var settings = await _settingCacheRepository.GetSettingAsync();
+                                if (settings.DisableReferralBonus == false)
+                                {
+                                    //if the referral is not null, credit the referral
+                                    //get user by id
+                                    GetUserManagerByPhoneQuery getuserbyphonecommand = new GetUserManagerByPhoneQuery(userUpdate.RefferedByPhoneNumber);
+                                    var UserWHoReferredTheseAccount = await _mediator.Send(getuserbyphonecommand);
+                                    if (UserWHoReferredTheseAccount != null)
+                                    {
+                                        //get settings
+                                        GetSettingDefaultQuery settingscommand = new GetSettingDefaultQuery();
+                                        var settingData = await _mediator.Send(settingscommand);
+
+
+                                        //if transaction is debit.
+                                        GetWalletUserByIdQuery walletcommand = new GetWalletUserByIdQuery(UserWHoReferredTheseAccount.Id);
+                                        var getwalletReff = await _mediator.Send(walletcommand);
+
+                                        //create the transaction
+
+                                        CreateTransactionCommand transactioncreatecommand = new CreateTransactionCommand(getwalletReff.Id, getwalletReff.UserId, "Referral Bonus", null,
+                                            settingData.DefaultReferralAmmount,
+                                        TransactionTypeEnum.Credit, EntityStatus.Successful, Guid.NewGuid().ToString(), "Referral Bonus", Guid.NewGuid().ToString() + "-REFERRAL " + userUpdate.IdNumber);
+                                        var transaction = await _mediator.Send(transactioncreatecommand);
+                                        //GET transaction information to update wallet
+                                        //get the transaction by id
+                                        GetTransactionByIdQuery gettranCommand = new GetTransactionByIdQuery(transaction);
+                                        var thetransaction = await _mediator.Send(gettranCommand);
+                                        //update walet
+                                        getwalletReff.Amount = getwalletReff.Amount + settingData.DefaultReferralAmmount;
+
+                                        var loguserIdReff = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+                                        getwalletReff.Log = getwalletReff.Log + "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwalletReff.Amount + " :: Date: " + getwalletReff.LastUpdateAtUtc + ":: Loggedin User: " + loguserIdReff;
+                                        //getwallet = null;
+                                        UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwalletReff.UserId, "Validate Transaction", getwalletReff.Log, getwalletReff.Amount);
+                                        await _mediator.Send(updatewalletcommand);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
                     // Remove the cache
                     await _transactionCacheHandler.RemoveListAsync();
                     await _transactionCacheHandler.RemoveGetAsync(Companytransaction.Id);

@@ -31,21 +31,85 @@ else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.No
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.Surname" class="control-label"></label>
+                            <input asp-for="TieTwoRequestDto.Surname" class="form-control" id="upper" onkeyup="myUppercase()" required="required" />
+                            <span asp-validation-for="TieTwoRequestDto.Surname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.Firstname" class="control-label"></label>
+                            <input asp-for="TieTwoRequestDto.Firstname" class="form-control" id="upper2" onkeyup="myUppercase2()" required="required" />
+                            <span asp-validation-for="TieTwoRequestDto.Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.Lastname" class="control-label"></label>
+                            <input asp-for="TieTwoRequestDto.Lastname" class="form-control" id="upper3" onkeyup="myUppercase3()" required="required" />
+                            <span asp-validation-for="TieTwoRequestDto.Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="TieTwoRequestDto.Address" class="control-label"></label>
-                            <textarea asp-for="TieTwoRequestDto.Address" class="form-control"></textarea>
+                            <input asp-for="TieTwoRequestDto.Address" class="form-control" required="required" />
                             <span asp-validation-for="TieTwoRequestDto.Address" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="">Select State</label>
-                            <select asp-for="TieTwoRequestDto.State" class="form-control" id="states" asp-items="Model.ListStates">
+                            <label for="">Current State of your address</label>
+                            <select asp-for="TieTwoRequestDto.State" class="form-control" id="states" asp-items="Model.ListStates" required="required">
 
                                 <option>Please select a State</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="lgas">Select LGA:</label>
-                            <select id="lgas" asp-for="TieTwoRequestDto.LGA" class="form-control">
+                            <label for="lgas">Current LGA of your address</label>
+                            <select id="lgas" asp-for="TieTwoRequestDto.LGA" class="form-control" required="required">
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.DateOfBirth" class="control-label">Date of Birth</label>
+                            <input asp-for="TieTwoRequestDto.DateOfBirth" class="form-control" required="required" type="date" />
+                            <span asp-validation-for="TieTwoRequestDto.BankName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.Occupation" class="control-label">Occupation</label>
+                            <input asp-for="TieTwoRequestDto.Occupation" class="form-control" required="required" />
+                            <span asp-validation-for="TieTwoRequestDto.Occupation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TieTwoRequestDto.About" class="control-label"></label>
+                            <textarea asp-for="TieTwoRequestDto.About" class="form-control" required="required"></textarea>
+                            <span asp-validation-for="TieTwoRequestDto.About" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="">Select State of Origin</label>
+                            <select asp-for="TieTwoRequestDto.StateOfOrigin" class="form-control" id="statesx" asp-items="Model.ListStatesOfOrigin" required="required">
+
+                                <option>Please select state of origin</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            @if (!String.IsNullOrEmpty(Model.IdCard))
+                            {
+                                <img class="" style="max-height:200px;" src="@Model.IdCard" alt="User Avatar">
+
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Passport</label><br />
+                            <input type="file" class="control-label" asp-for="passportfile" required="required" />
+                        </div>
+                        <div class="form-group">
+                            @if (!String.IsNullOrEmpty(Model.Passport))
+                            {
+                                <img class="" style="max-height:200px;" src="@Model.Passport" alt="User Avatar">
+
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">NIN ID Card</label><br />
+                            <input type="file" class="control-label" asp-for="iDcardfile" required="required" />
                         </div>
                         <div class="form-group">
                             <label asp-for="TieTwoRequestDto.BankName" class="control-label">Bank Name</label>
@@ -62,34 +126,7 @@ else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.No
                             <input asp-for="TieTwoRequestDto.AccountName" class="form-control" />
                             <span asp-validation-for="TieTwoRequestDto.AccountName" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="TieTwoRequestDto.BVN" class="control-label">BVN</label>
-                            <input asp-for="TieTwoRequestDto.BVN" class="form-control" />
-                            <span asp-validation-for="TieTwoRequestDto.BVN" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            @if (!String.IsNullOrEmpty(Model.Passport))
-                            {
-                                <img class="" style="max-height:200px;" src="@Model.Passport" alt="User Avatar">
-
-                            }
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Passport</label><br />
-                            <input type="file" class="control-label" asp-for="passportfile" />
-                        </div>
-                        <div class="form-group">
-                            @if (!String.IsNullOrEmpty(Model.IdCard))
-                            {
-                                <img class="" style="max-height:200px;" src="@Model.IdCard" alt="User Avatar">
-
-                            }
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Valid ID Card</label><br />
-                            <input type="file" class="control-label" asp-for="iDcardfile" />
-                        </div>
+                        
 
                         <div class="form-group">
                             <input type="submit" value="Submit" class="btn btn-primary" />

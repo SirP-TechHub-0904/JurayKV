@@ -36,6 +36,13 @@ namespace JurayKV.UI.Areas.User.Pages.Account
         {
             string userId = _userManager.GetUserId(HttpContext.User);
             var userdata = await _userManager.FindByIdAsync(userId);
+            //UserUpgradeDto.About = userdata.About ?? "";
+            //UserUpgradeDto.AlternativePhone = userdata.AlternativePhone ?? "";
+            //UserUpgradeDto.Address = userdata.Address ?? "";
+            //UserUpgradeDto.FbHandle = userdata.FbHandle ?? "";
+            //UserUpgradeDto.InstagramHandle = userdata.InstagramHandle ?? "";
+            //UserUpgradeDto.TwitterHandle = userdata.TwitterHandle ?? "";
+            //UserUpgradeDto.TiktokHandle = userdata.TiktokHandle ?? "";
             UserRequest = userdata.CsaRequest;
             UserRequestMessage = userdata.ResponseOnCsaRequest;
             //

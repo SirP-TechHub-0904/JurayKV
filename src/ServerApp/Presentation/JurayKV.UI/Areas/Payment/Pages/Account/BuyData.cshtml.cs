@@ -1,4 +1,5 @@
-using JurayKV.Application;
+﻿using JurayKV.Application;
+using JurayKV.Application.Queries.SettingQueries;
 using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Application.VtuServices;
 using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
@@ -59,7 +60,7 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                     new SelectListItem
                     {
                         Value = x.Id.ToString(), // Assuming Id is an integer
-                        Text = x.Name
+                        Text = x.Name + " (₦" + x.Amount +")",
                     }).ToList();
                 //
                 return Page();
@@ -78,27 +79,44 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
             {
                 string userId = _userManager.GetUserId(HttpContext.User);
                 CategoryVariation = await _categoryRepository.GetByIdAsync(CategoryId);
-
+                var user = await _userManager.FindByIdAsync(userId);
                 //get variation amount
                 var variationData = await _variationRepository.GetByIdAsync(Guid.Parse(Request.VariationId));
+                //
+
+                Variations = await _variationRepository.GetByCategoryByActiveIdAsync(CategoryId);
+
+                // Map CompanyDropdownListDto to SelectListItem
+                ListVariations = Variations.Where(x => x.Active == true).Select(x =>
+                    new SelectListItem
+                    {
+                        Value = x.Id.ToString(), // Assuming Id is an integer
+                        Text = x.Name + " (₦" + x.Amount + ")",
+                    }).ToList();
+                //
+
+
                 GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(userId));
                 WalletDetailsDto = await _mediator.Send(getwalletcommand);
-                decimal Amount = Convert.ToDecimal(variationData.Amount);
-                //try
-                //{
-                //    Amount = Convert.ToDecimal(0);
-                //    if (Amount > WalletDetailsDto.Amount)
-                //    {
-                //        TempData["error"] = "Insufficient Balance";
-                //        return Page();
-                //    }
-                //}
-                //catch (Exception c)
-                //{
 
-                //    TempData["error"] = "Invalid Amount";
-                //    return Page();
-                //}
+                GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
+                var setting = await _mediator.Send(settingcommand);
+                if (setting.DisableData == true)
+                {
+                    TempData["error"] = "Unable to process request. Try Again";
+
+                    return Page();
+                }
+
+
+                decimal Amount = Convert.ToDecimal(variationData.Amount);
+                if (user.Tier != variationData.Tier && user.Tier != Domain.Primitives.Enum.Tier.Tier2)
+                {
+                    if(user.Tier == Domain.Primitives.Enum.Tier.Tier1)
+                    TempData["error"] = "Unable to process request. Upgrade to Tier 2";
+
+                    return Page();
+                }
                 if (WalletDetailsDto != null)
                 {
                     if (WalletDetailsDto.Amount < Amount)
@@ -138,14 +156,20 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
                     }
                     else
                     {
-                        TempData["error"] = "Failed, Kindly Comfirm the number is correct and its the correct network";
+                        TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
                     }
                     return Page();
                 }
+                else if (Result.code == "null")
+                {
+                    TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
+
+                    return Page();
             }
+                }
             catch (Exception ex)
             {
-                TempData["error"] = "error. validation failed";
+                TempData["error"] = "Network unavailable or Kindly Comfirm the number is correct and try again";
             }
             return RedirectToPage("/Account/Index", new { area = "User" });
         }

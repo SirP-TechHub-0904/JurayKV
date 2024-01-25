@@ -216,6 +216,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             return list;
         }
+
+        public async Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId)
+        {
+            return await _transactionRepository.CheckTransactionAboveTieOne(uniqueId, userId);
+        }
     }
 
 }

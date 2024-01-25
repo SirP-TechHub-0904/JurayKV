@@ -33,5 +33,9 @@ namespace JurayKV.Domain.Aggregates.SettingAggregate
         public bool DisableElectricity {  get; set; }
         public bool DisableBetting {  get; set; }
         public bool DisableTV {  get; set; }
+
+        public decimal AirtimeMaxRechargeTieOne { get; set; }
+        public decimal AirtimeMaxRechargeTieTwo { get; set; }
+        public decimal AirtimeMinRecharge { get; set; }
     }
 }

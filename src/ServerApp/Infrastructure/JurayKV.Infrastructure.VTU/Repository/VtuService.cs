@@ -135,7 +135,8 @@ namespace JurayKV.Infrastructure.VTU.Repository
                     // Handle error response
                     string errorContent = await response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error response: {errorContent}");
-                    return null;
+                    dataResult.code = "null";
+                    return dataResult;
                 }
             }
         }

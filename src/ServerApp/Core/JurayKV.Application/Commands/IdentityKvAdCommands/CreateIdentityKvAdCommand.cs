@@ -1,4 +1,5 @@
 ﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Caching.Repositories;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.IdentityKvAdAggregate;
 using JurayKV.Domain.ValueObjects;
@@ -38,16 +39,20 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
     private readonly IRepository _repository;
     private readonly UserManager<ApplicationUser> _userManager;
 
+    private readonly IIdentityKvAdCacheRepository _kvAdCacheRepository;
+
     public CreateIdentityKvAdCommandHandler(
             IIdentityKvAdRepository departmentRepository,
             IIdentityKvAdCacheHandler departmentCacheHandler,
             IRepository repository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IIdentityKvAdCacheRepository kvAdCacheRepository)
     {
         _departmentRepository = departmentRepository;
         _departmentCacheHandler = departmentCacheHandler;
         _repository = repository;
         _userManager = userManager;
+        _kvAdCacheRepository = kvAdCacheRepository;
     }
 
     public async Task<Guid> Handle(CreateIdentityKvAdCommand request, CancellationToken cancellationToken)
@@ -63,18 +68,29 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
         create.VideoKey = videokey;
         create.Active = true;
         create.KvAdHash = request.Date.ToString("ddMMyyyy");
-       create.AdsStatus = Domain.Primitives.Enum.AdsStatus.Pending;
+        create.AdsStatus = Domain.Primitives.Enum.AdsStatus.Pending;
         await semaphoreSlim.WaitAsync();
         Guid result = Guid.Empty;
         try
         {
-           result = await DoWorkAsync(create);
+            result = await DoWorkAsync(create);
         }
         finally
         {
             semaphoreSlim.Release();
         }
-        
+
+        //
+        var check = await _kvAdCacheRepository.CheckIdnetityKvIdFirstTime(request.UserId);
+        if (check == true)
+        {
+            var userUpdate = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (userUpdate != null)
+            {
+                userUpdate.Posted = true;
+                await _userManager.UpdateAsync(userUpdate);
+            }
+        }
         // Remove the cache
         await _departmentCacheHandler.RemoveListAsync();
         await _departmentCacheHandler.RemoveListActiveTodayAsync();
@@ -123,7 +139,7 @@ internal class CreateIdentityKvAdCommandHandler : IRequestHandler<CreateIdentity
             },
             TransactionScopeAsyncFlowOption.Enabled))
         {
-           Guid result = await _departmentRepository.InsertAsync(create);
+            Guid result = await _departmentRepository.InsertAsync(create);
             scope.Complete(); // Mark the transaction as complete
 
             return result;

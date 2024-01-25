@@ -626,6 +626,18 @@
         }
     </script>
     <script>
+        function myUppercase2() {
+            var x = document.getElementById("upper2");
+            x.value = x.value.toUpperCase();
+        }
+    </script>
+    <script>
+        function myUppercase3() {
+            var x = document.getElementById("upper3");
+            x.value = x.value.toUpperCase();
+        }
+    </script>
+    <script>
         $(function () {
             /* ChartJS
              * -------
@@ -815,8 +827,16 @@
             $('form').submit(function () {
                 // Show the loading modal
                 $('#loading1234Modal').modal('show');
+
+
             });
+
+            function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+                // More code to handle the form submission
+            }
         });
-    </script>
+    </script> 
 </body>
 </html>

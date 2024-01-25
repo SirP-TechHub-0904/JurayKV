@@ -182,6 +182,11 @@ namespace JurayKV.Persistence.Cache.Repositories
             }).ToList();
             return list;
         }
+
+        public async Task<bool> CheckFirstPoint(Guid userId)
+        {
+            return await _kvPointRepository.CheckFirstPoint(userId);
+        }
     }
 
 }

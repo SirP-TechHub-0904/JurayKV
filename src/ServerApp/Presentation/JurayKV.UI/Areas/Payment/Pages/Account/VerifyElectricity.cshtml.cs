@@ -1,4 +1,5 @@
 using JurayKV.Application;
+using JurayKV.Application.Queries.SettingQueries;
 using JurayKV.Application.Queries.WalletQueries;
 using JurayKV.Application.VtuServices;
 using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
@@ -86,6 +87,9 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
             try
             {
                 string userId = _userManager.GetUserId(HttpContext.User);
+                var user = await _userManager.FindByIdAsync(userId);
+
+
                 CategoryVariation = await _categoryRepository.GetByIdAsync(CategoryId);
                 GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(userId));
                 WalletDetailsDto = await _mediator.Send(getwalletcommand);
@@ -93,6 +97,16 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
                 VerifyCustomerCommand verifyCommad = new VerifyCustomerCommand(Request.CustomerId, Request.ServiceId, Request.VariationId);
                 VerifyResponseData = await _mediator.Send(verifyCommad);
+
+                var variationData = await _variationRepository.GetByIdAsync(Guid.Parse(Request.VariationId));
+
+                if (user.Tier != variationData.Tier && user.Tier != Domain.Primitives.Enum.Tier.Tier2)
+                {
+                    if (user.Tier == Domain.Primitives.Enum.Tier.Tier1)
+                        TempData["error"] = "Unable to process request. Upgrade to Tier 2";
+
+                    return Page();
+                }
 
                 //create transaction and debit wallet
                 if (VerifyResponseData.code == "success")
@@ -128,6 +142,17 @@ namespace JurayKV.UI.Areas.Payment.Pages.Account
 
                 GetWalletUserByIdQuery getwalletcommand = new GetWalletUserByIdQuery(Guid.Parse(userId));
                 WalletDetailsDto = await _mediator.Send(getwalletcommand);
+
+
+                GetSettingDefaultQuery settingcommand = new GetSettingDefaultQuery();
+                var setting = await _mediator.Send(settingcommand);
+                if (setting.DisableElectricity == true)
+                {
+                    TempData["error"] = "Unable to process request. Try Again";
+
+                    return Page();
+                }
+
                 decimal Amount = Convert.ToDecimal(ElectricityRequest.Amount);
                 try
                 {

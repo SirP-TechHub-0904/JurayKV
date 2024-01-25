@@ -73,7 +73,24 @@
                             <input class="form-check-input" asp-for="Setting.DisableTV" /> @Html.DisplayNameFor(model => model.Setting.DisableTV)
                         </label>
                     </div>
-                    
+
+
+                    <div class="form-group">
+                        <label asp-for="Setting.AirtimeMaxRechargeTieOne" class="control-label"></label>
+                        <input asp-for="Setting.AirtimeMaxRechargeTieOne" class="form-control" />
+                        <span asp-validation-for="Setting.AirtimeMaxRechargeTieOne" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Setting.AirtimeMaxRechargeTieTwo" class="control-label"></label>
+                        <input asp-for="Setting.AirtimeMaxRechargeTieTwo" class="form-control" />
+                        <span asp-validation-for="Setting.AirtimeMaxRechargeTieTwo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Setting.AirtimeMinRecharge" class="control-label"></label>
+                        <input asp-for="Setting.AirtimeMinRecharge" class="form-control" />
+                        <span asp-validation-for="Setting.AirtimeMinRecharge" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>

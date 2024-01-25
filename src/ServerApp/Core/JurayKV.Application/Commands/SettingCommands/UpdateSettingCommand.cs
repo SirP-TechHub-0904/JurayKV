@@ -58,6 +58,10 @@ internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingComman
             getupdate.DisableBetting = request.Setting.DisableBetting;
             getupdate.DisableTV = request.Setting.DisableTV;
 
+            getupdate.AirtimeMaxRechargeTieOne = request.Setting.AirtimeMaxRechargeTieOne;
+            getupdate.AirtimeMaxRechargeTieTwo = request.Setting.AirtimeMaxRechargeTieTwo;
+            getupdate.AirtimeMinRecharge = request.Setting.AirtimeMinRecharge;
+
             await _settingRepository.UpdateAsync(getupdate);
 
             await _settingCacheHandler.RemoveListAsync();

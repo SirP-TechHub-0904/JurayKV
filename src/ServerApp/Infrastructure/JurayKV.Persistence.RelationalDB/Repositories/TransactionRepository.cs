@@ -81,7 +81,16 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             _dbContext.Remove(transaction);
             await _dbContext.SaveChangesAsync();
         }
-
+        public async Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId)
+        {
+            var setting = await _dbContext.Settings.FirstOrDefaultAsync();
+            var checktransaction = await _dbContext.Transactions.Where(x=>x.UniqueReference.Contains(uniqueId) && x.UserId == userId).SumAsync(x=>x.Amount);
+            if(checktransaction > setting.AirtimeMaxRechargeTieOne)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId)
         {
             var list = await _dbContext.Transactions

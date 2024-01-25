@@ -20,6 +20,6 @@ namespace JurayKV.Application.Caching.Repositories
         Task<List<TransactionListDto>> GetReferralListByUserIdAsync(Guid userId);
 
         Task<int> TransactionCount(Guid userId);
-
+        Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId);
     }
 }

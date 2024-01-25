@@ -20,5 +20,8 @@ namespace JurayKV.Application.Caching.Repositories
         Task<KvPointDetailsDto> GetByIdAsync(Guid modelId);
 
         Task<KvPointDetailsDto> GetDetailsByIdAsync(Guid modelId);
+
+        Task<bool> CheckFirstPoint(Guid userId);
+
     }
 }

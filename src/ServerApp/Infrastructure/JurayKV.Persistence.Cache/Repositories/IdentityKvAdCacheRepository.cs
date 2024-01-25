@@ -32,6 +32,12 @@ namespace JurayKV.Persistence.Cache.Repositories
             _kvPointRepository = kvPointRepository;
         }
 
+        public async Task<bool> CheckIdnetityKvIdFirstTime(Guid userId)
+        {
+            return await _adRepository.CheckIdnetityKvIdFirstTime(userId);
+        }
+
+
         public async Task<List<IdentityKvAdListDto>> GetListAsync()
         {
 
@@ -59,7 +65,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             //    }).ToList();
             //    await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
             //}
-        
+
             var mainlist = await _adRepository.ListNonActive();
 
             var list = new List<IdentityKvAdListDto>();
@@ -176,7 +182,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Active = d.Active,
             };
 
-           var identityKvAd = await _repository.GetByIdAsync(identityKvAdId, selectExp);
+            var identityKvAd = await _repository.GetByIdAsync(identityKvAdId, selectExp);
             return identityKvAd;
         }
 
@@ -187,29 +193,29 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (list == null)
             //{
-                var mainlist = await _adRepository.GetListByUserId(userId);
+            var mainlist = await _adRepository.GetListByUserId(userId);
 
-               var list = new List<IdentityKvAdListDto>();
+            var list = new List<IdentityKvAdListDto>();
 
-                foreach (var d in mainlist)
+            foreach (var d in mainlist)
+            {
+                var adListDto = new IdentityKvAdListDto
                 {
-                    var adListDto = new IdentityKvAdListDto
-                    {
-                        Id = d.Id,
-                        Activity = d.Activity,
-                        CreatedAtUtc = d.CreatedAtUtc,
-                        KvAdId = d.KvAdId,
-                        LastModifiedAtUtc = d.LastModifiedAtUtc,
-                        UserId = d.UserId,
-                        VideoUrl = d.VideoUrl,
-                        Active = d.Active,
-                        ImageUrl = d.KvAd.ImageFile.ImageUrl,
-                        Points = await PointByIdentityId(d.Id, d.UserId),
-                        AdsStatus = d.AdsStatus
-                    };
+                    Id = d.Id,
+                    Activity = d.Activity,
+                    CreatedAtUtc = d.CreatedAtUtc,
+                    KvAdId = d.KvAdId,
+                    LastModifiedAtUtc = d.LastModifiedAtUtc,
+                    UserId = d.UserId,
+                    VideoUrl = d.VideoUrl,
+                    Active = d.Active,
+                    ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                    Points = await PointByIdentityId(d.Id, d.UserId),
+                    AdsStatus = d.AdsStatus
+                };
 
-                    list.Add(adListDto);
-                }
+                list.Add(adListDto);
+            }
 
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
@@ -312,22 +318,22 @@ namespace JurayKV.Persistence.Cache.Repositories
             //if (list == null)
             //{
 
-                var mainlist = await _adRepository.ListActiveToday();
-                var list = mainlist.Select(d => new IdentityKvAdListDto
-                {
-                    Id = d.Id,
-                    Activity = d.Activity,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    KvAdId = d.KvAdId,
-                    LastModifiedAtUtc = d.LastModifiedAtUtc,
-                    UserId = d.UserId,
-                    VideoUrl = d.VideoUrl,
-                    Active = d.Active,
-                    ImageUrl = d.KvAd.ImageFile.ImageUrl,
-                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
-                    Company = d.KvAd.Company.Name,
-                    KvAdName = d.KvAd.Bucket.Name
-                }).ToList();
+            var mainlist = await _adRepository.ListActiveToday();
+            var list = mainlist.Select(d => new IdentityKvAdListDto
+            {
+                Id = d.Id,
+                Activity = d.Activity,
+                CreatedAtUtc = d.CreatedAtUtc,
+                KvAdId = d.KvAdId,
+                LastModifiedAtUtc = d.LastModifiedAtUtc,
+                UserId = d.UserId,
+                VideoUrl = d.VideoUrl,
+                Active = d.Active,
+                ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+                Company = d.KvAd.Company.Name,
+                KvAdName = d.KvAd.Bucket.Name
+            }).ToList();
             //    await _distributedCache.SetAsync(cacheKey, list.OrderByDescending(x => x.CreatedAtUtc));
             //}
 
@@ -337,6 +343,11 @@ namespace JurayKV.Persistence.Cache.Repositories
         public async Task<int> AdsCount(Guid userId)
         {
             return _adRepository.AdsCount(userId).Result;
+        }
+
+        public async Task<bool> CheckVideoIdnetityKvIdFirstTime(Guid userId)
+        {
+            return await _adRepository.CheckVideoIdnetityKvIdFirstTime(userId);
         }
     }
 
