@@ -66,6 +66,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Posted = entity.Posted,
                 VideoUpload = entity.VideoUpload,
                 SuccessPoint = entity.SuccessPoint,
+                Role = entity.Role,
             }).ToList();
 
             return list.OrderByDescending(x=>x.CreationUTC).ToList();
@@ -206,7 +207,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     TotalPoints = sumpoints,
                     TotalReferralAmount = totalRefTransaction,
                     Tier = entity.Tier,
-                    RequestDateTie2Upgraded = entity.RequestDateTie2Upgraded
+                    RequestDateTie2Upgraded = entity.RequestDateTie2Upgraded, 
                 };
 
                 list.Add(dto);
@@ -330,9 +331,11 @@ namespace JurayKV.Persistence.Cache.Repositories
                 LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
                 CreationUTC = entity.CreationUTC,
                 Verified = entity.EmailConfirmed,
-                VerificationCode = entity.VerificationCode
-                // Map other properties as needed
-            }).ToList();
+                VerificationCode = entity.VerificationCode,
+                 Role = entity.Role,
+                 Tier = entity.Tier,
+                 // Map other properties as needed
+             }).ToList();
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
 
@@ -423,6 +426,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     DateUpgraded = entity.DateUpgraded,
                     ResponseOnCsaRequest = entity.ResponseOnCsaRequest,
                     CsaRequest = entity.CsaRequest,
+                    Role = entity.Role, 
                 };
             }
 
@@ -452,6 +456,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Email = entity.Email,
                     PhoneNumber = entity.PhoneNumber,
                     LastLoggedInAtUtc = entity.LastLoggedInAtUtc,
+                    Role = entity.Role,
+                    Tier = entity.Tier,
                 };
             }
 
@@ -522,7 +528,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                 Verified = entity.EmailConfirmed,
                 VerificationCode = entity.VerificationCode,
                 Tie2Request = entity.Tie2Request,
-                
+                Role = entity.Role,
+                Tier = entity.Tier,
             }).AsEnumerable();
             }
             else
@@ -543,6 +550,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     Verified = entity.EmailConfirmed,
                     VerificationCode = entity.VerificationCode,
                     Tie2Request = entity.Tie2Request,
+                    Role = entity.Role,
+                    Tier = entity.Tier,
                 }).AsEnumerable();
             }
         }

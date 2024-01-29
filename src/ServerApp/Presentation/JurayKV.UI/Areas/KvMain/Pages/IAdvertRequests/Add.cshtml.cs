@@ -16,7 +16,7 @@ using static JurayKV.Domain.Primitives.Enum;
 namespace JurayKV.UI.Areas.KvMain.Pages.IAdvertRequests
 {
 
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.AdvertPolicy)]
     public class AddModel : PageModel
     {
 

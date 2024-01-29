@@ -14,6 +14,7 @@ using SendGrid.Helpers.Mail;
 using JurayKV.Domain.ValueObjects;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using static JurayKV.Domain.Primitives.Enum;
+using System.Runtime.Intrinsics.Arm;
 
 namespace JurayKV.Infrastructure.Services;
 
@@ -100,7 +101,23 @@ public sealed class EmailSender : IEmailSender
                     
                     message.Subject = model.Subject.Replace("\r\n", "");
                     message.Body = emailTemplate;
-                    message.IsBodyHtml = true; // change to true if body msg is in html
+                    message.IsBodyHtml = true;
+
+
+                    message.From = new MailAddress("noreply@koboview.com", "koboview"); //IMPORTANT: This must be same as your smtp authentication address.
+                         
+                        SmtpClient smtp = new SmtpClient("mail.koboview.com");
+                        NetworkCredential Credentials = new NetworkCredential("noreply@koboview.com", "Admin@123");
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = Credentials;
+                        smtp.Port = 25;    //alternative port number is 8889
+                        smtp.EnableSsl = false;
+                        smtp.Send(message);
+                         return true;
+                   
+
+
+                    // change to true if body msg is in html
                     //using (var client = new SmtpClient("smtp.gmail.com"))
                     //{
                     //    client.UseDefaultCredentials = false;
@@ -151,29 +168,29 @@ public sealed class EmailSender : IEmailSender
                     //else
                     //{
 
-                    message.From = new MailAddress("noreply@koboview.com", "Koboview");
-                    using (var client = new SmtpClient("smtppro.zoho.com"))
-                    {
-                        client.UseDefaultCredentials = false;
-                        client.Port = 587;
-                        client.Credentials = new NetworkCredential("noreply@koboview.com", "d4W?qpsu");
-                        client.EnableSsl = true;
+                    //message.From = new MailAddress("noreply@koboview.com", "Koboview");
+                    //using (var client = new SmtpClient("smtppro.zoho.com"))
+                    //{
+                    //    client.UseDefaultCredentials = false;
+                    //    client.Port = 587;
+                    //    client.Credentials = new NetworkCredential("noreply@koboview.com", "d4W?qpsu");
+                    //    client.EnableSsl = true;
 
-                        try
-                        {
-                            await client.SendMailAsync(message); // Email sent
-                            _logger.Log($"outlook mail sent to {model.Email}");
+                    //    try
+                    //    {
+                    //        await client.SendMailAsync(message); // Email sent
+                    //        _logger.Log($"outlook mail sent to {model.Email}");
 
-                            return true;
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.Log($"outlook failed mail to {model.Email} {e.ToString()}");
-                            // Email not sent, log exception
-                            return false;
-                        }
+                    //        return true;
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        _logger.Log($"outlook failed mail to {model.Email} {e.ToString()}");
+                    //        // Email not sent, log exception
+                    //        return false;
+                    //    }
 
-                    }
+                    //}
                     //    message.From = new MailAddress("noreply@koboview.com", "Koboview");
                     //    using (var client = new SmtpClient("smtp.office365.com"))
                     //    {

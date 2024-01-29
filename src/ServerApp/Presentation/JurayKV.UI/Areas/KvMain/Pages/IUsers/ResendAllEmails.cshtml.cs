@@ -9,9 +9,13 @@ using JurayKV.Domain.Aggregates.IdentityAggregate;
 using MediatR;
 using JurayKV.Application.Infrastructures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using JurayKV.Application;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
+    [Authorize(Policy = Constants.UsersManagerPolicy)]
+
     public class ResendAllEmailsModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

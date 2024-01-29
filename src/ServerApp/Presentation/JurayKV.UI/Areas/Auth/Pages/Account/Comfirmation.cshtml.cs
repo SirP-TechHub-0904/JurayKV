@@ -153,7 +153,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 {
                     identityResult.EmailConfirmed = true;
                     identityResult.AccountStatus = AccountStatus.Active;
-                    identityResult.Role = "User";
+                    identityResult.Role = "SMA";
                     await _userManager.UpdateAsync(identityResult);
 
 

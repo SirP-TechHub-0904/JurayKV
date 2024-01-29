@@ -23,6 +23,6 @@ namespace JurayKV.Domain.Aggregates.UserMessageAggregate
 
         public bool Disable {  get; set; }
         public bool All { get;set;}
-        
+        public string? AllUserIdRead { get; set; }
     }
 }

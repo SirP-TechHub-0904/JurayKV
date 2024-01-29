@@ -971,6 +971,9 @@ namespace JurayKV.Persistence.RelationalDB.Migrations
                     b.Property<bool>("All")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AllUserIdRead")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 

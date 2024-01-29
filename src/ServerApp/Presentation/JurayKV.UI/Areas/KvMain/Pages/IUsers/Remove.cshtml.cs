@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.UsersManagerPolicy)]
     public class RemoveModel : PageModel
     {
 

@@ -102,7 +102,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.InstagramHandle = request.Data.InstagramHandle;
             user.TwitterHandle = request.Data.TwitterHandle;
             user.TiktokHandle = request.Data.TiktokHandle;  
-            user.ResponseOnCsaRequest = "Your Information has been received and is undergoing review with 24hr.";
+            user.ResponseOnCsaRequest = "Your Information has been received and is undergoing review within 24hrs.";
             user.CsaRequest = true;
            var result = await _userManager.UpdateAsync(user);
 
@@ -114,7 +114,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 response.Success = true;
                 UserMessage ms = new UserMessage();
                 ms.UserId = user.Id;
-                ms.Message = "Your Information has been received and is undergoing review with 24hr.";
+                ms.Message = "Your Information has been received and is undergoing review within 24hrs.";
                 ms.Title = "Client Support Assistant (CSA) Upgrade";
                 ms.Date = DateTime.UtcNow.AddHours(1);
                 CreateUserMessageCommand umessage = new CreateUserMessageCommand(ms, null);

@@ -14,7 +14,7 @@ using JurayKV.Infrastructure.Flutterwave.Dtos;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.UsersManagerPolicy)]
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,6 +36,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         public int RequestedTieTwo { get;set;}
         public int ApprovedTieTwo { get;set; }
         public int NotYetTieTwo { get;set; }
+        public int Cancelled { get;set; }
 
         public async Task<IActionResult> OnGetAsync(AccountStatus status = AccountStatus.NotDefind)
         {
@@ -51,6 +52,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             RequestedTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Requested).Count();
             ApprovedTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Approved).Count();
             NotYetTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.None).Count();
+            Cancelled = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Cancelled).Count();
             return Page();
         }
     }

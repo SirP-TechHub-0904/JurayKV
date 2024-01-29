@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.ISetting
 {
-    [Authorize(Policy = Constants.AdvertPolicy)]
+    [Authorize(Policy = Constants.AdminPolicy)]
     public class InfoModel : PageModel
     {
 

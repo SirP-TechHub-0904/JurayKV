@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IRates
 {
-    [Authorize(Policy = Constants.AdvertPolicy)]
+    [Authorize(Policy = Constants.Transaction)]
     public class AddModel : PageModel
     {
 

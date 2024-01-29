@@ -16,13 +16,13 @@ namespace JurayKV.Application.Commands.UserMessageCommands
     
 public sealed class UpdateUserMessageCommand : IRequest
     {
-        public UpdateUserMessageCommand(UserMessageDto userMessage, IFormFile file)
+        public UpdateUserMessageCommand(UserMessage userMessage, IFormFile file)
         {
             UserMessage = userMessage;
             File = file;  
         }
 
-        public UserMessageDto UserMessage { get; }
+        public UserMessage UserMessage { get; }
         public IFormFile? File { get; set; } 
     }
 

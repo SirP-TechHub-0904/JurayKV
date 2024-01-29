@@ -80,7 +80,12 @@
                     <dd class="col-sm-6">
                         @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.IsCSARole)
                     </dd>
-
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.Tie2Request)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.UpdateUserManager.UserManagerDetailsDto.Tie2Request)
+                    </dd>
 
                     <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.UpdateUserManager.UserManagerDetailsDto.Tier)
@@ -626,11 +631,15 @@
     </div>
     <div class="card-footer">
         <a class="btn btn-warning" asp-page="./Update" asp-route-id="@Model.UpdateUserManager.UserManagerDetailsDto.Id">Update</a>
-        @if (User.IsInRole("Validator"))
+        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.ValidatorPolicy))
         {
 
 
             <a class="btn btn-warning" asp-page="./ValidateTransaction" asp-route-userId="@Model.UpdateUserManager.UserManagerDetailsDto.Id">Validate Transaction</a>
+        }
+        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.Permission))
+        {
+            <a class="btn btn-warning" asp-page="/IPermissions/UserRoles" asp-route-id="@Model.UpdateUserManager.UserManagerDetailsDto.Id">Manage Roles</a>
         }
     </div>
 </div>

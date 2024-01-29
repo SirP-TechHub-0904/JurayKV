@@ -83,7 +83,9 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 IsCSARole = user.IsCSARole,
                 DateOfBirth = user.DateOfBirth,
                 StateOfOrigin = user.StateOfOrigin,
-                LGA_Of_Origin = user.LGA_Of_Origin
+                LGA_Of_Origin = user.LGA_Of_Origin,
+                ResponseOnTieRequest = user.ResponseOnTieRequest,
+                Tie2Request = user.Tie2Request,
             };
 
             

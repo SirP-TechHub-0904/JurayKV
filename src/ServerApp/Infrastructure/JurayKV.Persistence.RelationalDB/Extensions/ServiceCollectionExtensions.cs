@@ -109,7 +109,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAdvertRequestRepository, AdvertRequestRepository>();
         services.AddScoped<IVariationRepository, VariationRepository>();
         services.AddScoped<ICategoryVariationRepository, CategoryVariationRepository>();
-
+        //services.AddScoped<IUserMessageRepository, UserMessageRepository>();
+        
 
         services.AddScoped<IStateRepository, StateRepository>();
         services.AddScoped<ILgaRepository, LgaRepository>();

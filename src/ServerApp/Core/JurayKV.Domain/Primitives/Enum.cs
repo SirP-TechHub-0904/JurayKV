@@ -182,7 +182,9 @@ namespace JurayKV.Domain.Primitives
 
             [Description("Approved")]
             Approved = 2,
-             
+            [Description("Cancelled")]
+            Cancelled = 3,
+
         }
 
         public enum AccountStatus

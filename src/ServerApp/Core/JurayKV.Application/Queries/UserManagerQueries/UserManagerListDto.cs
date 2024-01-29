@@ -29,8 +29,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
 
         public Tier Tier { get; set; }
         public DateTime? RequestDateTie2Upgraded { get; set; }
-        public TieRequestStatus Tie2Request { get; set; }
-
+        public TieRequestStatus Tie2Request { get; set; } 
 
 
         public bool Posted { get; set; }

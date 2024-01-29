@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IRates
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.Transaction)]
 
     public class IndexModel : PageModel
     {

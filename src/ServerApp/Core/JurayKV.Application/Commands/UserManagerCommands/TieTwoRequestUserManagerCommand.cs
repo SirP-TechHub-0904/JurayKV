@@ -105,7 +105,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.AccountName = request.Data.AccountName; 
             user.RequestDateTie2Upgraded = DateTime.UtcNow.AddHours(1);
             user.Tie2Request  = Domain.Primitives.Enum.TieRequestStatus.Requested;
-            user.ResponseOnTieRequest = "Your Information has been received and is undergoing review with 24hr.";
+            user.ResponseOnTieRequest = "Your Information has been received and is undergoing review within 24hrs.";
 
             var result = await _userManager.UpdateAsync(user);
 

@@ -28,7 +28,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public string RefferedBy { get; set; }
         public string PhoneOfRefferedBy { get; set; }
         public bool IsCSARole { get; set; }
-
+        public string? Role { get;set;}
         public Tier Tier { get; set; }
         public DateTime DateUpgraded { get; set; }
         public string? About { get; set; }
@@ -53,5 +53,8 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public DateTime? RequestDateTie2Upgraded { get; set; }
         public string? ResponseOnCsaRequest { get; set; }
         public bool CsaRequest { get; set; }
+         
+        public string? ResponseOnTieRequest { get; set; } 
+        public TieRequestStatus Tie2Request { get; set; }
     }
 }

@@ -89,6 +89,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
                     ResponseOnCsaRequest = user.ResponseOnCsaRequest,
                     CsaRequest = user.CsaRequest,
                     IsCSARole = user.IsCSARole,
+                    Tie2Request = user.Tie2Request
                 };
                 data.UserManagerDetailsDto = outcome;
                 if (outcome.IsCompany)

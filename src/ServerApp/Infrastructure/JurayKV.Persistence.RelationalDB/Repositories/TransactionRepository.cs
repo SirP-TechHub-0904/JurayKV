@@ -10,16 +10,20 @@ using System.Threading.Tasks;
 using TanvirArjel.ArgumentChecker;
 using JurayKV.Domain.Aggregates.NotificationAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories.GenericRepositories;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
+using Microsoft.AspNetCore.Identity;
 
 namespace JurayKV.Persistence.RelationalDB.Repositories
 {
     internal sealed class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
     {
         private readonly JurayDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TransactionRepository(JurayDbContext dbContext) : base(dbContext)
+        public TransactionRepository(JurayDbContext dbContext, UserManager<ApplicationUser> userManager) : base(dbContext)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public Task<bool> ExistsAsync(Expression<Func<Transaction, bool>> condition)
@@ -84,8 +88,13 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         public async Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId)
         {
             var setting = await _dbContext.Settings.FirstOrDefaultAsync();
-            var checktransaction = await _dbContext.Transactions.Where(x=>x.UniqueReference.Contains(uniqueId) && x.UserId == userId).SumAsync(x=>x.Amount);
-            if(checktransaction > setting.AirtimeMaxRechargeTieOne)
+            var checktransaction = await _dbContext.Transactions.Where(x => x.UniqueReference.Contains(uniqueId) && x.UserId == userId).SumAsync(x => x.Amount);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user.Tier == Domain.Primitives.Enum.Tier.Tier2)
+            {
+                return false;
+            }
+            if (checktransaction > setting.AirtimeMaxRechargeTieOne)
             {
                 return true;
             }
@@ -101,14 +110,14 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
 
         public async Task<int> TransactionCount(Guid userId)
         {
-           return await _dbContext.Transactions.Where(x=>x.UserId == userId).CountAsync();
+            return await _dbContext.Transactions.Where(x => x.UserId == userId).CountAsync();
         }
 
         public async Task<List<Transaction>> GetListByUserId(Guid userId)
         {
             var list = await _dbContext.Transactions
-                .Include(x=>x.User)
-                .Include(x=>x.Wallet)
+                .Include(x => x.User)
+                .Include(x => x.Wallet)
                  .Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAtUtc)
                   .ToListAsync();
             return list;

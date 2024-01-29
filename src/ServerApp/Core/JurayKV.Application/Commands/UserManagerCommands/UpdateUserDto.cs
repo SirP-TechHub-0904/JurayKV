@@ -21,5 +21,7 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         public string PhoneNumber { get; set; }
         public bool DisableEmailNotification { get; set; }
 
+        public string? ResponseOnTieRequest { get; set; }
+        public TieRequestStatus Tie2Request { get; set; }
     }
 }

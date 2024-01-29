@@ -168,127 +168,172 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a asp-page="/IAdvertRequests/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Advert Request
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IUserAds/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Posted Adverts
-                                </p>
-                            </a>
-                        </li>
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdvertPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IAdvertRequests/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Advert Request
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.PointPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IUserAds/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Posted Adverts
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdvertPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IBuckets/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Bucket
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.CompanyPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/ICompanys/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Company
+                                    </p>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a asp-page="/IBuckets/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Bucket
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/ICompanys/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Company
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IAds/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Adverts
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/ImagePage/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Images
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IUsers/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Users
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/ITransactions/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Transactions
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IWallet/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Wallet
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IRates/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Exchange Rates
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/IPermissions/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Permission
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/PaymentCategory/Category/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Variation Category
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/PaymentCategory/VariationData/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Variation
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/ISlider/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Sliders
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/ISettings/Index" asp-area="KvMain" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    Settings
-                                </p>
-                            </a>
-                        </li>
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdvertPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IAds/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Adverts
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdminPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/ImagePage/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Images
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.UsersManagerPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IUsers/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Users
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.Transaction))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/ITransactions/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Transactions
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a asp-page="/IWallet/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Wallet
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/IRates/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Exchange Rates
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/IPermissions/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Permission
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.Permission))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/PaymentCategory/Category/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Variation Category
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/PaymentCategory/VariationData/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Variation
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.SliderPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/ISlider/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Sliders
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdminPolicy))
+                        {
+                            <li class="nav-item">
+                                <a asp-page="/ISettings/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        Settings
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-page="/IUserMessages/Index" asp-area="KvMain" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        User Messages
+                                    </p>
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a asp-page="/IHelp/Index" asp-area="KvMain" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>

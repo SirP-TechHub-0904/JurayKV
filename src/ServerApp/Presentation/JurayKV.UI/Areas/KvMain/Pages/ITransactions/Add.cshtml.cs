@@ -13,7 +13,7 @@ using static JurayKV.Domain.Primitives.Enum;
 namespace JurayKV.UI.Areas.KvMain.Pages.ITransactions
 {
 
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.Transaction)]
     public class AddModel : PageModel
     {
 

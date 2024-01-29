@@ -45,7 +45,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ISlider
             }
             catch (Exception ex)
             {
-                TempData["error"] = "error. adding new bucket";
+                TempData["error"] = "error. adding new data";
             }
             return RedirectToPage("./Index");
         }

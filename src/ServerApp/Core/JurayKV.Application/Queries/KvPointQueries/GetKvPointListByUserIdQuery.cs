@@ -31,4 +31,3 @@ public sealed class GetKvPointListByUserIdQuery : IRequest<List<KvPointListDto>>
     }
 }
 
- 

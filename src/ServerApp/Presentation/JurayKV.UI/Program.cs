@@ -65,7 +65,7 @@ namespace JurayKV.UI
             builder.Services.AddScoped<ISliderCacheRepository, SliderCacheRepository>();
             builder.Services.AddScoped<IImageCacheRepository, ImageCacheRepository>();
             builder.Services.AddScoped<ISettingCacheRepository, SettingCacheRepository>();
-            builder.Services.AddScoped<IAdvertRequestCacheRepository, AdvertRequestCacheRepository>();
+            builder.Services.AddScoped<IAdvertRequestCacheRepository, AdvertRequestCacheRepository>(); 
 
             builder.Services.AddTransient<IExceptionLogger, ExceptionLogger>();
             builder.Services.AddTransient<ViewRenderService>();
@@ -159,7 +159,7 @@ namespace JurayKV.UI
                 });
                 options.AddPolicy(Constants.PointPolicy, policy =>
                 {
-                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.AdminPolicy, Constants.ManagerPolicy);
+                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.PointPolicy);
                 });
 
                 options.AddPolicy(Constants.UserPolicy, policy =>
@@ -168,11 +168,23 @@ namespace JurayKV.UI
                 });
                 options.AddPolicy(Constants.Dashboard, policy =>
                 {
-                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.UserPolicy, Constants.ManagerPolicy,
-                        Constants.AdminPolicy, Constants.CompanyPolicy, Constants.BucketPolicy, Constants.ExchangeRatePolicy,
-                        Constants.AdvertPolicy, Constants.UsersManagerPolicy, Constants.ClientPolicy, Constants.UserPolicy
-                                                );
+                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.Dashboard);
                 });
+                options.AddPolicy(Constants.Transaction, policy =>
+                {
+                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.Transaction);
+                });
+                options.AddPolicy(Constants.Permission, policy =>
+                {
+                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.Permission);
+                });
+                //options.AddPolicy(Constants.Dashboard, policy =>
+                //{
+                //    policy.RequireRole(Constants.SuperAdminPolicy, Constants.UserPolicy, Constants.ManagerPolicy,
+                //        Constants.AdminPolicy, Constants.CompanyPolicy, Constants.BucketPolicy, Constants.ExchangeRatePolicy,
+                //        Constants.AdvertPolicy, Constants.UsersManagerPolicy, Constants.ClientPolicy, Constants.UserPolicy
+                //                                );
+                //});
                 options.AddPolicy(Constants.ValidatorPolicy, policy =>
                 {
                     policy.RequireRole(Constants.ValidatorPolicy);

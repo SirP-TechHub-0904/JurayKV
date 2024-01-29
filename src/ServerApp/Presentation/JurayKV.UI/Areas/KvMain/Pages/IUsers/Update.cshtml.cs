@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.UsersManagerPolicy)]
     public class UpdateModel : PageModel
     {
 
@@ -51,6 +51,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.DisableEmailNotification = UpdateUserManager.DisableEmailNotification;
                 update.Tier = UpdateUserManager.Tier;
                 update.DateUpgraded = DateTime.UtcNow.AddHours(1);
+                update.Tie2Request = UpdateUserManager.Tie2Request; 
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfuly";
@@ -59,7 +60,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             {
                 TempData["error"] = "error. adding updating";
             }
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Info", new {id = UpdateUserManager.Id});
         }
     }
 }

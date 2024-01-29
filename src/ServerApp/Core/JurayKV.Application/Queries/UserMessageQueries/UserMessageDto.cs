@@ -20,6 +20,7 @@ namespace JurayKV.Application.Queries.UserMessageQueries
 
         public Guid? UserId { get; set; }
         public ApplicationUser User { get; set; }
+        public string? AllUserIdRead { get; set; }
 
         public bool Disable { get; set; }
         public bool All { get; set; }

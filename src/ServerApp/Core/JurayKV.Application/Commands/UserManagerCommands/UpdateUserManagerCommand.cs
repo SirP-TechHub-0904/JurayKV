@@ -37,7 +37,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
         public async Task Handle(UpdateUserManagerCommand request, CancellationToken cancellationToken)
         {
             request.ThrowIfNull(nameof(request));
- var user = await _userManager.FindByIdAsync(request.Id.ToString());
+            var user = await _userManager.FindByIdAsync(request.Id.ToString());
             user.SurName = request.Data.SurName;
             user.FirstName = request.Data.FirstName;
             user.LastName = request.Data.LastName;
@@ -46,6 +46,8 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.AccountStatus = request.Data.AccountStatus;
             user.DisableEmailNotification = request.Data.DisableEmailNotification;
             user.Tier = request.Data.Tier;
+            user.Tie2Request = request.Data.Tie2Request;
+
             user.DateUpgraded = request.Data.DateUpgraded;
             await _userManager.UpdateAsync(user);
             //

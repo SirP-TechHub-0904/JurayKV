@@ -14,7 +14,7 @@ using Microsoft.Identity.Client.Extensions.Msal;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
 {
-    [Authorize(Policy = Constants.AdvertPolicy)]
+    [Authorize(Policy = Constants.Permission)]
     public class UpdateModel : PageModel
     {
         private readonly IVariationRepository _variationRepository;

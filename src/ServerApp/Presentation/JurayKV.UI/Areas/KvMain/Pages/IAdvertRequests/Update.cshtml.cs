@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IAdvertRequests
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.AdvertPolicy)]
     public class UpdateModel : PageModel
     {
 

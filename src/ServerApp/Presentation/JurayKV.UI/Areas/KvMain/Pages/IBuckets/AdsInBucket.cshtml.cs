@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IBuckets
 {
-    [Authorize(Policy = Constants.AdvertPolicy)]
+    [Authorize(Policy = Constants.BucketPolicy)]
     public class AdsInBucketModel : PageModel
     {
 

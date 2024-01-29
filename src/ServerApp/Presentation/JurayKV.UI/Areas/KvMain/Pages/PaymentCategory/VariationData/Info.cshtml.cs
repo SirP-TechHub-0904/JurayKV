@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace JurayKV.UI.Areas.KvMain.Pages.PaymentCategory.VariationData
 {
 
-    [Authorize(Policy = Constants.AdvertPolicy)]
+    [Authorize(Policy = Constants.Permission)]
     public class InfoModel : PageModel
     {
 

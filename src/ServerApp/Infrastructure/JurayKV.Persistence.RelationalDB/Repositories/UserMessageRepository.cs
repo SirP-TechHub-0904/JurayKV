@@ -46,7 +46,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             {
                 throw new ArgumentException("userMessageId cannot be empty.", nameof(userMessageId));
             }
-            UserMessage data = await _dbContext.UserMessages.FirstOrDefaultAsync(x => x.Id == userMessageId);
+            UserMessage data = await _dbContext.UserMessages.Include(x=>x.User).FirstOrDefaultAsync(x => x.Id == userMessageId);
             return data;
         }
 

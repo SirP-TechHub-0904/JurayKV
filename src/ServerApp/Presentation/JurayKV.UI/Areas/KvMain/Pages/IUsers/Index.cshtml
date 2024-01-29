@@ -30,16 +30,19 @@
 
     <div class="card-header">
         <h5>TIE TWO STATUS</h5>
-        
-        <a  class="btn btn-primary">
+
+        <a class="btn btn-primary">
             None Upgrade (@Model.NotYetTieTwo)
         </a>
 
         <a class="btn btn-danger">
             Upgrade Request (@Model.RequestedTieTwo)
         </a>
-        <a  class="btn btn-success">
+        <a class="btn btn-success">
             Approved Request (@Model.ApprovedTieTwo)
+        </a>
+        <a class="btn btn-warning">
+            Cancelled Request (@Model.Cancelled)
         </a>
     </div>
     <!-- /.card-header -->
@@ -150,7 +153,10 @@
                                 {
                                     <span class="btn btn-warning btn-xs">requested</span>
                                 }
-                               
+                                else if (item.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.Cancelled)
+                                {
+                            <span class="btn btn-danger btn-xs">cancelled</span>
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Role)
@@ -190,6 +196,7 @@
 
                                             <a class="dropdown-item" asp-page="./Info" asp-route-id="@item.Id">Details</a>
                                             <a class="dropdown-item" asp-page="./Update" asp-route-id="@item.Id">Update</a>
+                                            <a class="dropdown-item" asp-page="/IUserMessages/Add" asp-route-id="@item.Id">Send a Message</a>
 
                                         </div>
                                     </div>

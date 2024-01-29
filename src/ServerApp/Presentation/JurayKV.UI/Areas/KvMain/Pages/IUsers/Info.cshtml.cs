@@ -1,21 +1,25 @@
 using JurayKV.Application;
 using JurayKV.Application.Queries.CompanyQueries;
 using JurayKV.Application.Queries.UserManagerQueries;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-    [Authorize(Policy = Constants.AdminPolicy)]
+    [Authorize(Policy = Constants.UsersManagerPolicy)]
     public class InfoModel : PageModel
     {
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly IMediator _mediator;
-        public InfoModel(IMediator mediator)
+        public InfoModel(IMediator mediator, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -29,12 +33,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 GetFullUserManagerByIdQuery command = new GetFullUserManagerByIdQuery(id);
                 UpdateUserManager = await _mediator.Send(command);
 
-
-                //if (UpdateUserManager.IsCompany == true)
-                //{
-                //    GetCompanyByUserIdQuery xcommand = new GetCompanyByUserIdQuery(id);
-                //    UpdateCompany = await _mediator.Send(xcommand);
-                //}
+                 
                 return Page();
             }
             catch (Exception ex)
