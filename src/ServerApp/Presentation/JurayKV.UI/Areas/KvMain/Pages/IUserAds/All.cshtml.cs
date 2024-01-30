@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUserAds
 {
-     [Authorize(Policy = Constants.AdvertPolicy)]
+     [Authorize(Policy = Constants.PointPolicy)]
     public class AllModel : PageModel
     {
 

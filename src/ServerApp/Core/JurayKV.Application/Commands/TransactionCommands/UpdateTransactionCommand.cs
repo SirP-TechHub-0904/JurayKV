@@ -1,7 +1,9 @@
 ﻿using JurayKV.Application.Caching.Handlers;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
+using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using TanvirArjel.ArgumentChecker;
 using static JurayKV.Domain.Primitives.Enum;
 
@@ -52,13 +54,18 @@ internal class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransacti
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly ITransactionCacheHandler _transactionCacheHandler;
-
+    private readonly IWalletRepository _walletRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     public UpdateTransactionCommandHandler(
         ITransactionRepository transactionRepository,
-        ITransactionCacheHandler transactionCacheHandler)
+        ITransactionCacheHandler transactionCacheHandler,
+        IWalletRepository walletRepository,
+        IHttpContextAccessor httpContextAccessor)
     {
         _transactionRepository = transactionRepository;
         _transactionCacheHandler = transactionCacheHandler;
+        _walletRepository = walletRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task Handle(UpdateTransactionCommand request, CancellationToken cancellationToken)
@@ -82,7 +89,10 @@ internal class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransacti
         transactionToBeUpdated.OptionalNote = request.OptionalNote;
 
         await _transactionRepository.UpdateAsync(transactionToBeUpdated);
-
+        //
+        var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+        string log = transactionToBeUpdated.User.Email + " " + transactionToBeUpdated.Status + " " + transactionToBeUpdated.TransactionReference +" " + transactionToBeUpdated.UniqueReference + " "+ transactionToBeUpdated.Amount;
+        await _walletRepository.LogUserAsync(log, loguserId, transactionToBeUpdated.User.Id);
         // Remove the cache
         await _transactionCacheHandler.RemoveListAsync();
         await _transactionCacheHandler.RemoveGetAsync(transactionToBeUpdated.Id);

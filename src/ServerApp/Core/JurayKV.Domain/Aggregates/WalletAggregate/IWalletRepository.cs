@@ -16,5 +16,6 @@ namespace JurayKV.Domain.Aggregates.WalletAggregate
 
         Task<bool> CheckPhoneUnique(string phone);
         Task<bool> CheckEmailUnique(string email);
+        Task LogUserAsync(string log, string authorizerUserEmail, Guid userId);
     }
 }

@@ -151,21 +151,35 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                         {
                             return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
                         }
-                        else if (roles.Contains(Constants.CompanyPolicy))
+                        else if (roles.Contains(Constants.ClientPolicy))
                         {
                             return RedirectToPage("/Account/Index", new { area = "Client" });
                         }
-                        else if (roles.Contains(Constants.Dashboard))
-                        {
-                            return RedirectToPage("/Account/Index", new { area = "User" });
-                        }
-                        else if (roles.Contains(Constants.ManagerPolicy))
+
+                        else if (roles.Contains(Constants.ManagerPolicy)
+                            || roles.Contains(Constants.AdminPolicy)
+                            || roles.Contains(Constants.CompanyPolicy)
+                            || roles.Contains(Constants.BucketPolicy)
+                            || roles.Contains(Constants.ExchangeRatePolicy)
+                            || roles.Contains(Constants.AdvertPolicy)
+                            || roles.Contains(Constants.UsersManagerPolicy)
+                            || roles.Contains(Constants.PointPolicy)
+                            || roles.Contains(Constants.AdminOne)
+                            || roles.Contains(Constants.AdminTwo)
+                            || roles.Contains(Constants.AdminThree)
+                            || roles.Contains(Constants.SliderPolicy)
+                            || roles.Contains(Constants.ValidatorPolicy)
+                            || roles.Contains(Constants.Transaction)
+                            || roles.Contains(Constants.Permission)
+
+                            )
                         {
                             return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
                         }
-                        else if (roles.Contains(Constants.AdminPolicy))
+
+                        else if (roles.Contains(Constants.Dashboard))
                         {
-                            return RedirectToPage("/Dashboard/ndex", new { area = "KvMain" });
+                            return RedirectToPage("/Account/Index", new { area = "User" });
                         }
                         // Add more role-based redirections as needed
 

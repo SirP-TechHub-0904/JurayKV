@@ -42,7 +42,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
         {
             transactionId.ThrowIfEmpty(nameof(transactionId));
 
-            Transaction transaction = await _dbContext.Set<Transaction>().FindAsync(transactionId);
+            Transaction transaction = await _dbContext.Set<Transaction>().Include(x=>x.User).FirstOrDefaultAsync(x=>x.Id == transactionId);
             return transaction;
         }
 

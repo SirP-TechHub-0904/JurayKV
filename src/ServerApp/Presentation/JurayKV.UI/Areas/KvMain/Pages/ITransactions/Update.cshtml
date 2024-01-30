@@ -18,8 +18,8 @@
                     <input type="hidden" asp-for="Command.Id" />
                     <input type="hidden" asp-for="Command.UserId" />
                     <input type="hidden" asp-for="Command.WalletId" />
-                    <input type="hidden" asp-for="Command.TransactionReference" />
                     <input type="hidden" asp-for="Command.TrackCode" />
+                    <input type="hidden" asp-for="Command.CreatedAtUtc" />
                     <div class="form-group">
                         <label asp-for="Command.Amount" class="control-label"></label>
                         <input asp-for="Command.Amount" class="form-control" />
@@ -29,6 +29,11 @@
                         <label asp-for="Command.UniqueReference" class="control-label"></label>
                         <input asp-for="Command.UniqueReference" class="form-control" id="upper" onkeyup="myUppercase()" />
                         <span asp-validation-for="Command.UniqueReference" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Command.TransactionReference" class="control-label"></label>
+                        <input asp-for="Command.TransactionReference" class="form-control" id="upper" onkeyup="myUppercase()" />
+                        <span asp-validation-for="Command.TransactionReference" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Command.OptionalNote" class="control-label"></label>

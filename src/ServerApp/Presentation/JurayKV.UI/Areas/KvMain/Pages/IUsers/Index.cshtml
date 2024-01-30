@@ -26,22 +26,25 @@
         <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Disabled" class="btn btn-warning">
             Disabled Users (@Model.Disabled)
         </a>
+        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.NotDefind" class="btn btn-info">
+            NotDefind Users (@Model.NotDefind)
+        </a>
     </div>
 
     <div class="card-header">
-        <h5>TIE TWO STATUS</h5>
+        <h5>TIER TWO STATUS</h5>
 
-        <a class="btn btn-primary">
+        <a class="btn btn-primary" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.None">
             None Upgrade (@Model.NotYetTieTwo)
         </a>
 
-        <a class="btn btn-danger">
+        <a class="btn btn-warning" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Requested">
             Upgrade Request (@Model.RequestedTieTwo)
         </a>
-        <a class="btn btn-success">
+        <a class="btn btn-success" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Approved">
             Approved Request (@Model.ApprovedTieTwo)
         </a>
-        <a class="btn btn-warning">
+        <a class="btn btn-danger" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Cancelled">
             Cancelled Request (@Model.Cancelled)
         </a>
     </div>

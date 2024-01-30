@@ -51,12 +51,14 @@
                                 @item.CreatedAtUtc.ToString("dd/MM/yyyy")
                             </td>
                             <td>
-                                <a asp-page="./Details" asp-route-id="@item.Id">
+                                <a asp-page="/IUsers/Info" asp-route-id="@item.UserId">
                                     @Html.DisplayFor(modelItem => item.Fullname)
                                 </a>
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.UniqueReference)
+                                <a asp-page="./Info" asp-route-id="@item.Id">
+                                    @Html.DisplayFor(modelItem => item.UniqueReference)
+                                    </a>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Amount)

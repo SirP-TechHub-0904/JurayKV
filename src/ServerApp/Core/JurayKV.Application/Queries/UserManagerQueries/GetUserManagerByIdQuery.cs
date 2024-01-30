@@ -86,6 +86,8 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 LGA_Of_Origin = user.LGA_Of_Origin,
                 ResponseOnTieRequest = user.ResponseOnTieRequest,
                 Tie2Request = user.Tie2Request,
+                TwoFactorEnable = user.TwoFactorEnable,
+                EmailComfirmed = user.EmailComfirmed
             };
 
             

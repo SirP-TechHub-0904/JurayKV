@@ -28,6 +28,7 @@
                 <a asp-page="./UpgradeTie2" class="btn btn-warning">Upgrade</a>
                 }
                 </h5>
+                <h6>ID (@Model.UserData.IdNumber)</h6>
             </div>
             <div class="widget-user-image">
                 @if (User.IsInRole("CSA") || Model.UserData.Tier == JurayKV.Domain.Primitives.Enum.Tier.Tier2)

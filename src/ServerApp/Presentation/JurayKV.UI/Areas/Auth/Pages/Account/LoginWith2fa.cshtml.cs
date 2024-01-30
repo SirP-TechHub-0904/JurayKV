@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using JurayKV.Application.Commands.UserManagerCommands;
+using JurayKV.Application;
+using MediatR;
 
 namespace JurayKV.UI.Areas.Auth.Pages.Account
 {
@@ -19,15 +22,18 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
         private readonly SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _signInManager;
         private readonly UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> _userManager;
         private readonly ILogger<LoginWith2faModel> _logger;
+        private readonly IMediator _mediator;
 
         public LoginWith2faModel(
             SignInManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> signInManager,
             UserManager<JurayKV.Domain.Aggregates.IdentityAggregate.ApplicationUser> userManager,
-            ILogger<LoginWith2faModel> logger)
+            ILogger<LoginWith2faModel> logger,
+            IMediator mediator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -113,7 +119,49 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
-                return LocalRedirect(returnUrl);
+                _logger.LogInformation("User logged in.");
+                LastLoginCommand lst = new LastLoginCommand(user.Id.ToString());
+                await _mediator.Send(lst);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains(Constants.SuperAdminPolicy))
+                {
+                    return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
+                }
+                else if (roles.Contains(Constants.ClientPolicy))
+                {
+                    return RedirectToPage("/Account/Index", new { area = "Client" });
+                }
+               
+                else if (roles.Contains(Constants.ManagerPolicy) 
+                    || roles.Contains(Constants.AdminPolicy)
+                    || roles.Contains(Constants.CompanyPolicy)
+                    || roles.Contains(Constants.BucketPolicy)
+                    || roles.Contains(Constants.ExchangeRatePolicy)
+                    || roles.Contains(Constants.AdvertPolicy)
+                    || roles.Contains(Constants.UsersManagerPolicy)
+                    || roles.Contains(Constants.PointPolicy)
+                    || roles.Contains(Constants.AdminOne)
+                    || roles.Contains(Constants.AdminTwo)
+                    || roles.Contains(Constants.AdminThree)
+                    || roles.Contains(Constants.SliderPolicy)
+                    || roles.Contains(Constants.ValidatorPolicy)
+                    || roles.Contains(Constants.Transaction)
+                    || roles.Contains(Constants.Permission)
+
+                    )
+                {
+                    return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
+                }
+               
+                else if (roles.Contains(Constants.Dashboard))
+                {
+                    return RedirectToPage("/Account/Index", new { area = "User" });
+                }
+                // Add more role-based redirections as needed
+
+                // If none of the role-based redirections match, you can have a default fallback
+                return RedirectToPage("/Index"); 
             }
             else if (result.IsLockedOut)
             {

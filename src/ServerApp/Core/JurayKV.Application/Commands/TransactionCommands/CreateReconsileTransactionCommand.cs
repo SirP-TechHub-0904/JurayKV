@@ -114,7 +114,7 @@ public sealed class CreateReconsileTransactionCommand : IRequest<bool>
 
             }
              var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            getwallet.Log = getwallet.Log + "<br>RRR- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+            getwallet.Log =  "<li>RRR- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + " </li>" + getwallet.Log;
             //getwallet = null;
             UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwallet.UserId, "Validate Transaction", getwallet.Log, getwallet.Amount);
             await _mediator.Send(updatewalletcommand);

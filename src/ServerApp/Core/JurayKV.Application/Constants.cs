@@ -21,7 +21,7 @@ namespace JurayKV.Application
         public const string ClientPolicy = "Client";
         public const string UserPolicy = "User";
         public const string Dashboard = "User";
-        public const string PointPolicy = "User";
+        public const string PointPolicy = "Point";
         public const string AdminOne = "AdminOne";
         public const string AdminTwo = "AdminTwo";
         public const string AdminThree = "AdminThree";

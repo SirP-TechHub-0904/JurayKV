@@ -31,28 +31,32 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         public int ActiveOnly { get; set; }
         public int Suspended { get; set; }
         public int Disabled { get; set; }
+        public int NotDefind { get; set; }
 
+        public int RequestedTieTwo { get; set; }
+        public int ApprovedTieTwo { get; set; }
+        public int NotYetTieTwo { get; set; }
+        public int Cancelled { get; set; }
 
-        public int RequestedTieTwo { get;set;}
-        public int ApprovedTieTwo { get;set; }
-        public int NotYetTieTwo { get;set; }
-        public int Cancelled { get;set; }
-
-        public async Task<IActionResult> OnGetAsync(AccountStatus status = AccountStatus.NotDefind)
+        public async Task<IActionResult> OnGetAsync(AccountStatus status = AccountStatus.NotDefind, TieRequestStatus? tieRequest = null)
         {
 
             ListGetUserByStatusListQuery command = new ListGetUserByStatusListQuery(status);
             UserManagers = await _mediator.Send(command);
-
+            if (tieRequest != null)
+            {
+                UserManagers = UserManagers.Where(x => x.Tie2Request == tieRequest).AsEnumerable();
+            }
             All = UserManagers.Count();
             ActiveOnly = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Active).Count();
             Suspended = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Suspended).Count();
             Disabled = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Disabled).Count();
+            NotDefind = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.NotDefind).Count();
 
-            RequestedTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Requested).Count();
-            ApprovedTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Approved).Count();
-            NotYetTieTwo = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.None).Count();
-            Cancelled = UserManagers.Where(x=>x.Tie2Request == TieRequestStatus.Cancelled).Count();
+            RequestedTieTwo = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.Requested).Count();
+            ApprovedTieTwo = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.Approved).Count();
+            NotYetTieTwo = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.None).Count();
+            Cancelled = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.Cancelled).Count();
             return Page();
         }
     }

@@ -52,6 +52,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.Tier = UpdateUserManager.Tier;
                 update.DateUpgraded = DateTime.UtcNow.AddHours(1);
                 update.Tie2Request = UpdateUserManager.Tie2Request; 
+                update.EmailComfirmed = UpdateUserManager.EmailComfirmed;
+                update.TwoFactorEnable = UpdateUserManager.TwoFactorEnable;
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfuly";

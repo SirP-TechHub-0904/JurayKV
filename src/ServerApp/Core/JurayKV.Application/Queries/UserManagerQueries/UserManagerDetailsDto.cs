@@ -56,5 +56,9 @@ namespace JurayKV.Application.Queries.UserManagerQueries
          
         public string? ResponseOnTieRequest { get; set; } 
         public TieRequestStatus Tie2Request { get; set; }
+
+        public bool EmailComfirmed { get; set; }
+        public bool TwoFactorEnable { get; set; }
+
     }
 }

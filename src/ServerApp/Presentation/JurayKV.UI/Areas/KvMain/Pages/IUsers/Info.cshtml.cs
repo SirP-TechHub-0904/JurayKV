@@ -10,7 +10,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
-    [Authorize(Policy = Constants.UsersManagerPolicy)]
+
+    //[Authorize(Policy = Constants.CompanyPolicy)]
+    //[Authorize(Policy = Constants.UsersManagerPolicy)]
+    [Authorize(Roles = "SuperAdmin,Company,UsersManager,Transaction")]
     public class InfoModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

@@ -52,14 +52,51 @@ else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.No
                         </div>
                         <div class="form-group">
                             <label for="">Current State of your address</label>
-                            <select asp-for="TieTwoRequestDto.State" class="form-control" id="states" asp-items="Model.ListStates" required="required">
-
-                                <option>Please select a State</option>
+                          
+                            <select asp-for="TieTwoRequestDto.State" onchange="toggleLGA(this);" id="state" class="form-control" required="required">
+                                <option value="" selected="selected">- Select -</option>
+                                <option value="Abia">Abia</option>
+                                <option value="Adamawa">Adamawa</option>
+                                <option value="AkwaIbom">AkwaIbom</option>
+                                <option value="Anambra">Anambra</option>
+                                <option value="Bauchi">Bauchi</option>
+                                <option value="Bayelsa">Bayelsa</option>
+                                <option value="Benue">Benue</option>
+                                <option value="Borno">Borno</option>
+                                <option value="Cross River">Cross River</option>
+                                <option value="Delta">Delta</option>
+                                <option value="Ebonyi">Ebonyi</option>
+                                <option value="Edo">Edo</option>
+                                <option value="Ekiti">Ekiti</option>
+                                <option value="Enugu">Enugu</option>
+                                <option value="FCT">FCT</option>
+                                <option value="Gombe">Gombe</option>
+                                <option value="Imo">Imo</option>
+                                <option value="Jigawa">Jigawa</option>
+                                <option value="Kaduna">Kaduna</option>
+                                <option value="Kano">Kano</option>
+                                <option value="Katsina">Katsina</option>
+                                <option value="Kebbi">Kebbi</option>
+                                <option value="Kogi">Kogi</option>
+                                <option value="Kwara">Kwara</option>
+                                <option value="Lagos">Lagos</option>
+                                <option value="Nasarawa">Nasarawa</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Ogun">Ogun</option>
+                                <option value="Ondo">Ondo</option>
+                                <option value="Osun">Osun</option>
+                                <option value="Oyo">Oyo</option>
+                                <option value="Plateau">Plateau</option>
+                                <option value="Rivers">Rivers</option>
+                                <option value="Sokoto">Sokoto</option>
+                                <option value="Taraba">Taraba</option>
+                                <option value="Yobe">Yobe</option>
+                                <option value="Zamfara">Zamafara</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="lgas">Current LGA of your address</label>
-                            <select id="lgas" asp-for="TieTwoRequestDto.LGA" class="form-control" required="required">
+                            <label for="lga">Current LGA of your address</label>
+                            <select id="lga" asp-for="TieTwoRequestDto.LGA" class="form-control select-lga" required="required">
                             </select>
                         </div>
                         <div class="form-group">
@@ -81,10 +118,49 @@ else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.No
 
                         <div class="form-group">
                             <label for="">Select State of Origin</label>
-                            <select asp-for="TieTwoRequestDto.StateOfOrigin" class="form-control" id="statesx" asp-items="Model.ListStatesOfOrigin" required="required">
+                            <select asp-for="TieTwoRequestDto.StateOfOrigin" class="form-control" id="statesx"  required="required">
 
-                                <option>Please select state of origin</option>
+                                <option value="">Please select state of origin</option>
+
+                                <option value="Abia">Abia</option>
+                                <option value="Adamawa">Adamawa</option>
+                                <option value="AkwaIbom">AkwaIbom</option>
+                                <option value="Anambra">Anambra</option>
+                                <option value="Bauchi">Bauchi</option>
+                                <option value="Bayelsa">Bayelsa</option>
+                                <option value="Benue">Benue</option>
+                                <option value="Borno">Borno</option>
+                                <option value="Cross River">Cross River</option>
+                                <option value="Delta">Delta</option>
+                                <option value="Ebonyi">Ebonyi</option>
+                                <option value="Edo">Edo</option>
+                                <option value="Ekiti">Ekiti</option>
+                                <option value="Enugu">Enugu</option>
+                                <option value="FCT">FCT</option>
+                                <option value="Gombe">Gombe</option>
+                                <option value="Imo">Imo</option>
+                                <option value="Jigawa">Jigawa</option>
+                                <option value="Kaduna">Kaduna</option>
+                                <option value="Kano">Kano</option>
+                                <option value="Katsina">Katsina</option>
+                                <option value="Kebbi">Kebbi</option>
+                                <option value="Kogi">Kogi</option>
+                                <option value="Kwara">Kwara</option>
+                                <option value="Lagos">Lagos</option>
+                                <option value="Nasarawa">Nasarawa</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Ogun">Ogun</option>
+                                <option value="Ondo">Ondo</option>
+                                <option value="Osun">Osun</option>
+                                <option value="Oyo">Oyo</option>
+                                <option value="Plateau">Plateau</option>
+                                <option value="Rivers">Rivers</option>
+                                <option value="Sokoto">Sokoto</option>
+                                <option value="Taraba">Taraba</option>
+                                <option value="Yobe">Yobe</option>
+                                <option value="Zamfara">Zamafara</option>
                             </select>
+                            
                         </div>
 
 
@@ -158,52 +234,8 @@ else if (Model.Tie2Request == JurayKV.Domain.Primitives.Enum.TieRequestStatus.Ap
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="path/to/jquery.validate.js"></script>*@
-
-    <script>
-        $(document).ready(function () {
-            $("#states").change(function () {
-                console.log("check in");
-                var stateId = $(this).val();
-                console.log("check ID");
-                console.log(stateId);
-
-
-                // Make sure to wrap this code within a function or an event handler
-                async function loadLGAs(stateId) {
-                    try {
-                        const response = await fetch(`/User/Account/CSA?handler=LGAs&stateId=${stateId}`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json; charset=utf-8'
-                            },
-                            // You can include other options here if needed
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-                        console.log(data);
-                        // Assuming your response is an array of objects with 'text' and 'value' properties
-                        $("#lgas").empty();
-                        $.each(data, function (index, item) {
-                            $("#lgas").append($('<option>').text(item.text).attr('value', item.value));
-                        });
-                    } catch (error) {
-                        console.error('Error fetching LGAs:', error);
-                    }
-                }
-
-                // Call the function with the desired stateId
-                loadLGAs(stateId);
-
-
-                console.log("check out");
-                console.log(stateId);
-            });
-        });
-    </script>
+<script src="~/js/lga.js"></script>
+     
 
 }
 

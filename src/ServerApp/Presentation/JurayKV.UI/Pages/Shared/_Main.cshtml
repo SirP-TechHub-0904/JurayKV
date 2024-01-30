@@ -190,7 +190,7 @@
                                 </a>
                             </li>
                         }
-                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdvertPolicy))
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.BucketPolicy))
                         {
                             <li class="nav-item">
                                 <a asp-page="/IBuckets/Index" asp-area="KvMain" class="nav-link">
@@ -224,7 +224,7 @@
                                 </a>
                             </li>
                         }
-                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdminPolicy))
+                        @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.AdvertPolicy) || User.IsInRole(JurayKV.Application.Constants.BucketPolicy))
                         {
                             <li class="nav-item">
                                 <a asp-page="/ImagePage/Index" asp-area="KvMain" class="nav-link">

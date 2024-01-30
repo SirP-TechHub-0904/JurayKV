@@ -39,6 +39,25 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             Wallet wallet = await _dbContext.Set<Wallet>().FindAsync(walletId);
             return wallet;
         }
+        public async Task LogUserAsync(string log, string authorizerUserEmail, Guid userId)
+        {
+            var wallLog = await _dbContext.Wallets.FirstOrDefaultAsync(x=>x.UserId == userId);
+            if (wallLog != null)
+            { 
+                wallLog.Log = "<li>"+ log+ " :::Authorizer ("+ authorizerUserEmail + ") Date ("+DateTime.UtcNow.AddHours(1) + ")</li>" + wallLog.Log;
+                EntityEntry<Wallet> trackedEntity = _dbContext.ChangeTracker.Entries<Wallet>()
+               .FirstOrDefault(x => x.Entity == wallLog);
+
+                if (trackedEntity == null)
+                {
+                    _dbContext.Update(wallLog);
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
+            
+        }
+
 
         public async Task InsertAsync(Wallet wallet)
         {

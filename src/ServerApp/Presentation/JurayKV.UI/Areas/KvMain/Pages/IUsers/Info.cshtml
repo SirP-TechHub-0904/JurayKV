@@ -274,7 +274,7 @@
                             @Html.DisplayNameFor(model => model.UpdateUserManager.WalletDetailsDto.Log)
                         </dt>
                         <dd class="col-sm-6">
-                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#projectDescription">Read Full Description</button>
+                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#projectDescription">View Log</button>
                         </dd>
 
                     }
@@ -446,6 +446,7 @@
                                 </thead>
                                 @{ int xsn = 0;}
                                 <tbody>
+                                    @if(Model.UpdateUserManager.LastTenPoints != null) { 
                                     @foreach (var item in Model.UpdateUserManager.LastTenPoints)
                                     {
                                         <tr>
@@ -467,6 +468,7 @@
                                             </td>
                                         </tr>
                                     }
+                                                }
                                 </tbody>
                             </table>
                         </div>
@@ -655,8 +657,13 @@
             <div class="modal-header">
                 <h4 class="modal-title">LOGs</h4>
             </div>
-            <div class="modal-body">
-                @Html.Raw(Model.UpdateUserManager.WalletDetailsDto.Log)
+            <div class="modal-body" style="font-size:10px;text-align:justify;">
+                <ul>
+                    @if(Model.UpdateUserManager.WalletDetailsDto != null) { 
+                    @Html.Raw(Model.UpdateUserManager.WalletDetailsDto.Log)
+                    }
+                </ul>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

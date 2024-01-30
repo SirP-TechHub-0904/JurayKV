@@ -48,6 +48,11 @@ namespace JurayKV.Persistence.Cache.Repositories
         }
         public async Task<List<UserManagerListDto>> GetListReferralAsync(string myphone)
         {
+            if(myphone == null)
+            {
+                List<UserManagerListDto> listing = new List<UserManagerListDto>();
+                return listing;
+            }
             string last10DigitsPhoneNumber1 = myphone.Substring(Math.Max(0, myphone.Length - 10));
             var userlist = await _userManager.Users.Where(x => x.RefferedByPhoneNumber.Contains(last10DigitsPhoneNumber1)).ToListAsync();
             // Manual mapping from entities to DTOs
@@ -427,6 +432,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     ResponseOnCsaRequest = entity.ResponseOnCsaRequest,
                     CsaRequest = entity.CsaRequest,
                     Role = entity.Role, 
+                    EmailComfirmed = entity.EmailConfirmed,
+                    TwoFactorEnable = entity.TwoFactorEnabled
                 };
             }
 

@@ -102,7 +102,7 @@ namespace JurayKV.Application.VtuServices
                         userwallet.Amount = userwallet.Amount - Amount;
 
                         var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                        userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                        userwallet.Log = "<li>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + "</li>" + userwallet.Log ;
                         //userwallet = null;
                         UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
                         await _mediator.Send(updatewalletcommand);
@@ -128,7 +128,7 @@ namespace JurayKV.Application.VtuServices
                     userwallet.Amount = userwallet.Amount - Amount;
 
                     var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                    userwallet.Log = userwallet.Log + "<br>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    userwallet.Log = "<li>Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + userwallet.Amount + " :: Date: " + userwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + "</li>" + userwallet.Log;
                     //userwallet = null;
                     UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(userwallet.UserId, "Validate Transaction", userwallet.Log, userwallet.Amount);
                     await _mediator.Send(updatewalletcommand);

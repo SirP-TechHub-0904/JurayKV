@@ -118,7 +118,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     getwallet.Amount += Convert.ToDecimal(request.Point);
                     getwallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
                     var loguserId = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                    getwallet.Log = getwallet.Log + "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    getwallet.Log =  "<li> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + getwallet.Amount + " :: Date: " + getwallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + "</li>"+ getwallet.Log;
 
                     await _walletRepository.UpdateAsync(getwallet);
 
@@ -153,7 +153,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                     var companywallet = await _walletRepository.GetByUserIdAsync(identityKvAdsInfo.KvAd.Company.UserId);
                     companywallet.Amount -= Convert.ToDecimal(request.Point);
                     companywallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
-                    companywallet.Log = "<br> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + companywallet.Amount + " :: Date: " + companywallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId;
+                    companywallet.Log = "<li> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + companywallet.Amount + " :: Date: " + companywallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + "</li>" + companywallet.Log;
 
                     await _walletRepository.UpdateAsync(companywallet);
 
@@ -216,7 +216,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
                                         getwalletReff.Amount = getwalletReff.Amount + settingData.DefaultReferralAmmount;
 
                                         var loguserIdReff = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-                                        getwalletReff.Log = getwalletReff.Log + "<br>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwalletReff.Amount + " :: Date: " + getwalletReff.LastUpdateAtUtc + ":: Loggedin User: " + loguserIdReff;
+                                        getwalletReff.Log = "<li>Referral Bonus- Wallet Update from " + thetransaction.Description + " " + thetransaction.Id + " ::Amount: " + thetransaction.Amount + " ::Balance: " + getwalletReff.Amount + " :: Date: " + getwalletReff.LastUpdateAtUtc + ":: Loggedin User: " + loguserIdReff + "</li>" +getwalletReff.Log;
                                         //getwallet = null;
                                         UpdateWalletCommand updatewalletcommand = new UpdateWalletCommand(getwalletReff.UserId, "Validate Transaction", getwalletReff.Log, getwalletReff.Amount);
                                         await _mediator.Send(updatewalletcommand);
