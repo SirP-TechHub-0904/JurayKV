@@ -13,12 +13,12 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public sealed class ListGetUserByStatusListQuery : IRequest<IEnumerable<UserManagerListDto>>
     {
 
-        public ListGetUserByStatusListQuery(AccountStatus accountStatus)
+        public ListGetUserByStatusListQuery(AccountStatus? accountStatus)
         {
             AccountStatus = accountStatus;
         }
 
-        public AccountStatus AccountStatus { get; }
+        public AccountStatus? AccountStatus { get; }
 
 
         private class ListGetUserByStatusListQueryHandler : IRequestHandler<ListGetUserByStatusListQuery, IEnumerable<UserManagerListDto>>

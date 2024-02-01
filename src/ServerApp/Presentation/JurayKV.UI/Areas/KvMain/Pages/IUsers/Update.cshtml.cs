@@ -45,15 +45,16 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 
         public async Task<IActionResult> OnPostAsync()
         {
-
-            var checknin = await _userManager.Users.FirstOrDefaultAsync(x => x.NinNumber == UpdateUserManager.NinNumber);
-            if (checknin != null)
+            if (!String.IsNullOrEmpty(UpdateUserManager.NinNumber))
             {
-                TempData["error"] = "error. NIN already exist";
+                var checknin = await _userManager.Users.FirstOrDefaultAsync(x => x.NinNumber == UpdateUserManager.NinNumber);
+                if (checknin != null)
+                {
+                    TempData["error"] = "error. NIN already exist";
 
-                return RedirectToPage("./Info", new { id = UpdateUserManager.Id });
+                    return RedirectToPage("./Info", new { id = UpdateUserManager.Id });
+                }
             }
-
             try
             {
                 UpdateUserDto update = new UpdateUserDto();

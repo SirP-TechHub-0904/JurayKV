@@ -39,7 +39,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         public int NotYetTieTwo { get; set; }
         public int Cancelled { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(AccountStatus status = AccountStatus.NotDefind, TieRequestStatus? tieRequest = null)
+        public async Task<IActionResult> OnGetAsync(AccountStatus? status = null, TieRequestStatus? tieRequest = null)
         {
 
             ListGetUserByStatusListQuery command = new ListGetUserByStatusListQuery(status);

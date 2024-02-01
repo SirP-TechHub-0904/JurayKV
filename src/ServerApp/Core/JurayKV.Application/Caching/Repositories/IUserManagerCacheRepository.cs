@@ -15,7 +15,7 @@ namespace JurayKV.Application.Caching.Repositories
     [ScopedService]
     public interface IUserManagerCacheRepository
     {
-        Task<IEnumerable<UserManagerListDto>> ListAsync(AccountStatus status);
+        Task<IEnumerable<UserManagerListDto>> ListAsync(AccountStatus? status);
         Task<List<UserManagerListDto>> GetListAsync();
         Task<UserManagerDetailsDto> GetReferralInfoByPhoneAsync(string phone);
         Task<List<UserManagerListDto>> GetListByStatusAsync(AccountStatus status);

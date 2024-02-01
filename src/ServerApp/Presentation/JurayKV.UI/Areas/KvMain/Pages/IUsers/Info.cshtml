@@ -487,6 +487,7 @@
                 </div>
                 <div class="card-body">
                     <h5>CREDIT BREAKDOWN</h5>
+                    @if(Model.UpdateUserManager.GroupByDescriptionCredit != null) { 
                     @foreach (var cdown in Model.UpdateUserManager.GroupByDescriptionCredit)
                     {
                         <h4>@cdown.Description</h4>
@@ -556,10 +557,11 @@
 
                         <hr />
                     }
-                </div>
+                                                        }  </div>
 
                 <div class="card-body">
                     <h5>DEBIT BREAKDOWN</h5>
+                    @if(Model.UpdateUserManager.GroupByDescriptionDebit != null) { 
                     @foreach (var cdown in Model.UpdateUserManager.GroupByDescriptionDebit)
                     {
                         <h4>@cdown.Description</h4>
@@ -627,7 +629,7 @@
                             </div>
                         </div>
                     }
-                </div>
+                                                        }    </div>
             </div>
         </div>
     </div>

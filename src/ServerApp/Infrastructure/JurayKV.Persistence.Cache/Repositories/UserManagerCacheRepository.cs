@@ -515,9 +515,9 @@ namespace JurayKV.Persistence.Cache.Repositories
             return null;
         }
 
-        public async Task<IEnumerable<UserManagerListDto>> ListAsync(AccountStatus status)
+        public async Task<IEnumerable<UserManagerListDto>> ListAsync(AccountStatus? status)
         {
-            if (status == AccountStatus.NotDefind) { 
+            if (status == null) { 
             var data = _userManager.Users.AsEnumerable();
             return data.Select(entity => new UserManagerListDto
             {
