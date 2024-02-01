@@ -198,7 +198,10 @@ namespace JurayKV.Domain.Primitives
             Disabled = 2,
 
             [Description("Suspended")]
-            Suspended = 3, 
+            Suspended = 3,
+
+            [Description("NotActive")]
+            NotActive = 4,
         }
 
         public enum TransactionTypeEnum

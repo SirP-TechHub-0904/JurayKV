@@ -6,6 +6,7 @@ using JurayKV.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TanvirArjel.ArgumentChecker;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -58,6 +59,10 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             user.DateUpgraded = request.Data.DateUpgraded;
             user.EmailConfirmed = request.Data.EmailComfirmed;
             user.TwoFactorEnabled = request.Data.TwoFactorEnable;
+            user.NinNumber = request.Data.NinNumber;
+           
+
+
             await _userManager.UpdateAsync(user);
             //
 

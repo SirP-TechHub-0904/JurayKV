@@ -26,5 +26,7 @@ namespace JurayKV.Application.Commands.UserManagerCommands
 
         public bool EmailComfirmed { get; set; }
         public bool TwoFactorEnable { get; set; }
+        public string? NinNumber { get; set; }
+
     }
 }

@@ -18,6 +18,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public DateTime CreationUTC { get; set; }
 
         public DateTime? LastLoggedInAtUtc { get; set; }
+        public string? NinNumber { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
         public string? StateOfOrigin { get; set; }

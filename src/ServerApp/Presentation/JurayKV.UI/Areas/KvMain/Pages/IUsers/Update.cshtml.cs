@@ -1,10 +1,13 @@
 using JurayKV.Application;
 using JurayKV.Application.Commands.UserManagerCommands;
 using JurayKV.Application.Queries.UserManagerQueries;
+using JurayKV.Domain.Aggregates.IdentityAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
@@ -13,9 +16,12 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
     {
 
         private readonly IMediator _mediator;
-        public UpdateModel(IMediator mediator)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public UpdateModel(IMediator mediator, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -39,6 +45,15 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 
         public async Task<IActionResult> OnPostAsync()
         {
+
+            var checknin = await _userManager.Users.FirstOrDefaultAsync(x => x.NinNumber == UpdateUserManager.NinNumber);
+            if (checknin != null)
+            {
+                TempData["error"] = "error. NIN already exist";
+
+                return RedirectToPage("./Info", new { id = UpdateUserManager.Id });
+            }
+
             try
             {
                 UpdateUserDto update = new UpdateUserDto();
@@ -51,9 +66,10 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 update.DisableEmailNotification = UpdateUserManager.DisableEmailNotification;
                 update.Tier = UpdateUserManager.Tier;
                 update.DateUpgraded = DateTime.UtcNow.AddHours(1);
-                update.Tie2Request = UpdateUserManager.Tie2Request; 
+                update.Tie2Request = UpdateUserManager.Tie2Request;
                 update.EmailComfirmed = UpdateUserManager.EmailComfirmed;
                 update.TwoFactorEnable = UpdateUserManager.TwoFactorEnable;
+                update.NinNumber = UpdateUserManager.NinNumber;
                 UpdateUserManagerCommand command = new UpdateUserManagerCommand(UpdateUserManager.Id, update);
                 await _mediator.Send(command);
                 TempData["success"] = "Updated Successfuly";
@@ -62,7 +78,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             {
                 TempData["error"] = "error. adding updating";
             }
-            return RedirectToPage("./Info", new {id = UpdateUserManager.Id});
+            return RedirectToPage("./Info", new { id = UpdateUserManager.Id });
         }
     }
 }

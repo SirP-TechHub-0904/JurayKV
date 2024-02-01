@@ -32,6 +32,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         public int Suspended { get; set; }
         public int Disabled { get; set; }
         public int NotDefind { get; set; }
+        public int NotActive { get; set; }
 
         public int RequestedTieTwo { get; set; }
         public int ApprovedTieTwo { get; set; }
@@ -52,6 +53,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
             Suspended = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Suspended).Count();
             Disabled = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.Disabled).Count();
             NotDefind = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.NotDefind).Count();
+            NotActive = UserManagers.Where(x => x.AccountStatus == Domain.Primitives.Enum.AccountStatus.NotActive).Count();
 
             RequestedTieTwo = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.Requested).Count();
             ApprovedTieTwo = UserManagers.Where(x => x.Tie2Request == TieRequestStatus.Approved).Count();
