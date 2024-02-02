@@ -433,7 +433,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                     CsaRequest = entity.CsaRequest,
                     Role = entity.Role, 
                     EmailComfirmed = entity.EmailConfirmed,
-                    TwoFactorEnable = entity.TwoFactorEnabled
+                    TwoFactorEnable = entity.TwoFactorEnabled,
+                    NinNumber = entity.NinNumber
                 };
             }
 

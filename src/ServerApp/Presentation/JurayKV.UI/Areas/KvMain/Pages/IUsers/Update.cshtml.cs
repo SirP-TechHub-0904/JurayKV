@@ -52,7 +52,7 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 {
                     TempData["error"] = "error. NIN already exist";
 
-                    return RedirectToPage("./Info", new { id = UpdateUserManager.Id });
+                    return RedirectToPage("./Update", new { id = UpdateUserManager.Id });
                 }
             }
             try
