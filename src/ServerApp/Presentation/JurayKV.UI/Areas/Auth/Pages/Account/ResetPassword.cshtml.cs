@@ -99,12 +99,14 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             if (user == null)
             {
                 // Don't reveal that the user does not exist
+                TempData["error"] = "Unable to reset password";
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                TempData["success"] = "Successful";
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

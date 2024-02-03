@@ -67,7 +67,7 @@ namespace JurayKV.Infrastructure.Services
 
                     using (HttpClient client = new HttpClient())
                     {
-                        string accessToken = "EAAWZCTKsVyF8BO2NRelOi99jlTznZCrmukOpSoRJpwQrNDBqb3o0BNiW2nBZBJC8SITxpW2xBODYeFZBFHLMmgKaYo4RNnOzPCrTqPt2foxT156q5UoRvB8TGX6SaBLkyHzv5pBHplimwONHZBAbSoj59GPx6Kec55P7dMMZCFNGsZBEPxSZAE8p4M802gmuRxVUAr68heOizdA3H1w6SzxeHqFbj8iyBJxeYccr";
+                        string accessToken = "EAAWZCTKsVyF8BO7VZBfFZBzmsZArtUMlif1Ahw6yRKXDFGQzxFbPcQP9ox6fr8UkFdwrZAG7QkTtZAzpeGpipHfnqPsNhSZBZCnRTw5zru5ZC5pyZCI8XLxxLU3n3ftk8N6IzUY4PauknfJ3BsyCQXQXVFj2sDV5FAW6tFahzo1qoEZBkPw9DQyXzhfEoIZCzdYXmFyeI2h3K0bZAMoR3ZBfz1uFGxNZCBZBfSYPoM2l4clqpNIZD";
                         //string accessToken = "EAAWZCTKsVyF8BO4Dd7Oqzkd4rU7HQCSamFsgPjFZBiPkKgjy0ZAVYlnj75uM0Hroed5n4V89DPPRrGbucO8GimRxYlnmrteAourPeEyKdu6Y6ZBRucBaesq0sUHZCGWnZBivMMCNKZCYbKCHmgeOAKVmPQTZCYbTeZC0YRjh7e5eTHe0ZASNZBh6rwdCQC8Jl25juasJB2cvFJc5BoCp78M";
 
                         //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
