@@ -18,7 +18,7 @@ namespace JurayKV.Application.Queries.DashboardQueries
 
     public sealed class DashboardQuery : IRequest<DashboardDto>
     {
-        private class DashboardQueryHandler : IRequestHandler<DashboardQuery, DashboardDto>
+        public class DashboardQueryHandler : IRequestHandler<DashboardQuery, DashboardDto>
         {
             private readonly IDashboardCacheRepository _dashboardCacheRepository;
 

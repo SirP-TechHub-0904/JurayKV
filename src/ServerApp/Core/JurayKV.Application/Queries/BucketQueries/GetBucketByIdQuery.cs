@@ -17,7 +17,7 @@ public sealed class GetBucketByIdQuery : IRequest<BucketDetailsDto>
     public Guid Id { get; }
 
     // Handler
-    private class GetBucketByIdQueryHandler : IRequestHandler<GetBucketByIdQuery, BucketDetailsDto>
+    public class GetBucketByIdQueryHandler : IRequestHandler<GetBucketByIdQuery, BucketDetailsDto>
     {
         private readonly IQueryRepository _repository;
         private readonly IBucketCacheRepository _bucketCacheRepository;

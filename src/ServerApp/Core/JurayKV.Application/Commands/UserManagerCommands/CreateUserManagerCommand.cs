@@ -1,6 +1,7 @@
 ﻿using JurayKV.Application.Caching.Handlers;
 using JurayKV.Application.Commands.IdentityCommands.UserCommands;
 using JurayKV.Application.Commands.WalletCommands;
+using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Queries.IdentityQueries.UserQueries;
 using JurayKV.Domain.Aggregates.IdentityAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
@@ -38,15 +39,17 @@ namespace JurayKV.Application.Commands.UserManagerCommands
         private readonly IRepository _repository;
         private readonly IWalletRepository _wallet;
         private readonly IMediator _mediator;
+        private readonly IEmailSender _emailSender;
 
         public CreateUserManagerCommandHandler(
-UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCacheHandler, IRepository repository, IMediator mediator, IWalletRepository wallet)
+UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCacheHandler, IRepository repository, IMediator mediator, IWalletRepository wallet, IEmailSender emailSender)
         {
             _userManager = userManager;
             _userManagerCacheHandler = userManagerCacheHandler;
             _repository = repository;
             _mediator = mediator;
             _wallet = wallet;
+            _emailSender = emailSender;
         }
 
         public async Task<ResponseCreateUserDto> Handle(CreateUserManagerCommand request, CancellationToken cancellationToken)
@@ -57,30 +60,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             ResponseCreateUserDto response = new ResponseCreateUserDto();
             try
             {
-                //// Split the full name into parts
-                //string[] nameParts = request.Data.Fullname.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                //string firstName = "";
-                //string middleName = "";
-                //string lastName = "";
-
-                //// Check if we have at least one part (FirstName)
-                //if (nameParts.Length >= 1)
-                //{
-                //    firstName = nameParts[0];
-                //}
-
-                //// Check if we have at least two parts (FirstName and LastName)
-                //if (nameParts.Length >= 2)
-                //{
-                //    lastName = nameParts[nameParts.Length - 1];
-                //}
-
-                //// Check if we have at least three parts (FirstName, MiddleName, and LastName)
-                //if (nameParts.Length >= 3)
-                //{
-                //    middleName = string.Join(" ", nameParts, 1, nameParts.Length - 2);
-                //}
+                 
 
                 // Create a random number generator
                 Random random = new Random();
@@ -132,7 +112,11 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                     CreationUTC = DateTime.UtcNow.AddHours(1),
                     EmailConfirmed = request.Data.Comfirm,
                     RefferedByPhoneNumber = request.Data.RefPhone,
-                    Tier = Domain.Primitives.Enum.Tier.Tier1
+                    Tier = Domain.Primitives.Enum.Tier.Tier1,
+                    State = request.Data.State,
+                    LGA = request.Data.LGA,
+                    Address = request.Data.Address,
+                    AccountStatus = Domain.Primitives.Enum.AccountStatus.New
                 };
 
                 IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, request.Data.Password);
@@ -190,11 +174,16 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 }
                 else
                 {
-                    //UpdateSendEmailVerificationCodeCommand verificationcommand = new UpdateSendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, getexistingVcode.Id, verificationCode, user.Id.ToString());
-                    //bool verificationresult = await _mediator.Send(verificationcommand);
-                    user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}";
+                      user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}";
                 }
+
+
                 await _userManager.UpdateAsync(user);
+                //send email.
+                bool result = await _emailSender.SendAsync(vcode, user.Id.ToString(), "Email Comfirmation");
+
+
+
                 string maskedEmail = EmailMask.MaskEmail(applicationUser.Email);
 
                 response.Id = applicationUser.Id;

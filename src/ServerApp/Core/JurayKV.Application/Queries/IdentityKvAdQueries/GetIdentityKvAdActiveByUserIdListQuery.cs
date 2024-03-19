@@ -18,7 +18,7 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
 
         public Guid UserId { get; }
 
-        private class GetIdentityKvAdActiveByUserIdListQueryHandler : IRequestHandler<GetIdentityKvAdActiveByUserIdListQuery, List<IdentityKvAdListDto>>
+        public class GetIdentityKvAdActiveByUserIdListQueryHandler : IRequestHandler<GetIdentityKvAdActiveByUserIdListQuery, List<IdentityKvAdListDto>>
         {
             private readonly IIdentityKvAdCacheRepository _departmentCacheRepository;
 

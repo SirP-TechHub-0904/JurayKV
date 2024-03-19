@@ -202,6 +202,9 @@ namespace JurayKV.Domain.Primitives
 
             [Description("NotActive")]
             NotActive = 4,
+
+            [Description("New")]
+            New = 5,
         }
 
         public enum TransactionTypeEnum

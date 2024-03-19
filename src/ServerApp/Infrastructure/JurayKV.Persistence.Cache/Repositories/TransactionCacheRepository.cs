@@ -168,7 +168,29 @@ namespace JurayKV.Persistence.Cache.Repositories
         {
            return await _transactionRepository.TransactionCount(userId);
         }
+        public async Task<List<TransactionListDto>> GetListByUserIdAsync(Guid userId, int count)
+        {
+            var mainlist = await _transactionRepository.GetListByUserId(userId, count);
+            var list = mainlist.Select(d => new TransactionListDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.SurName,
+                WalletId = d.WalletId,
+                WalletBalance = d.Wallet.Amount,
+                CreatedAtUtc = d.CreatedAtUtc
+            }).ToList();
 
+            return list;
+        }
         public async Task<List<TransactionListDto>> GetListByUserIdAsync(Guid userId)
         {
             var mainlist = await _transactionRepository.GetListByUserId(userId);

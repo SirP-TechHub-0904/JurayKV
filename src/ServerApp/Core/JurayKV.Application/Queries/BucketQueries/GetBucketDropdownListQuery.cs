@@ -6,7 +6,7 @@ namespace JurayKV.Application.Queries.BucketQueries;
 
 public sealed class GetBucketDropdownListQuery : IRequest<List<BucketDropdownListDto>>
 {
-    private class GetBucketDropdownListQueryHandler : IRequestHandler<GetBucketDropdownListQuery, List<BucketDropdownListDto>>
+    public class GetBucketDropdownListQueryHandler : IRequestHandler<GetBucketDropdownListQuery, List<BucketDropdownListDto>>
     {
         private readonly IBucketCacheRepository _bucketCacheRepository;
 

@@ -125,7 +125,7 @@ namespace JurayKV.Application.Queries.UserManagerQueries
                 catch (Exception e) { }
                 try
                 {
-                    GetTransactionListByUserQuery txtCommand = new GetTransactionListByUserQuery(outcome.Id);
+                    GetTransactionListByUserCountQuery txtCommand = new GetTransactionListByUserCountQuery(outcome.Id, 50);
                     var Transaction = await _mediator.Send(txtCommand);
                     var creditTotal = Transaction
      .Where(x => x.TransactionType == Domain.Primitives.Enum.TransactionTypeEnum.Credit);
@@ -147,14 +147,14 @@ namespace JurayKV.Application.Queries.UserManagerQueries
                         .Select(group => new TransactionDescription
                         {
                             Description = group.Key,
-                            ListTransactions = group.ToList()
+                            ListTransactions = group.Take(30).ToList()
                         })
                         .ToList();
 
 
-                    data.GroupByDescriptionCredit = creditTransactions;
+                    data.GroupByDescriptionCredit = creditTransactions.Take(20).ToList();
                     
-                    data.GroupByDescriptionDebit = debitTransactions;
+                    data.GroupByDescriptionDebit = debitTransactions.Take(20).ToList();
                     
                 }
                 catch { }

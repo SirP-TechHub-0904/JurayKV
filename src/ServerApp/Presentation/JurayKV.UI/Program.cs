@@ -19,6 +19,7 @@ using JurayKV.UI.Services;
 using JurayKvV.Infrastructure.Interswitch.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PostmarkEmailService;
 using Serilog;
 using System.Reflection;
 
@@ -199,6 +200,11 @@ namespace JurayKV.UI
                 return new LoggerLibrary(wwwRootPath);
             });
             builder.Services.AddHttpClient();
+             
+            // Register PostmarkClient and inject the captured authentication header name
+            builder.Services.AddTransient<PostmarkClient>(_ => new PostmarkClient(builder.Configuration.GetSection("PostmarkSettings")["ServerToken"]));
+            builder.Services.AddTransient<SymmetricSecurityKeyService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowKoboView",

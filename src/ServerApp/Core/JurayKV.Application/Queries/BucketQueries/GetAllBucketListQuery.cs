@@ -12,7 +12,7 @@ namespace JurayKV.Application.Queries.BucketQueries
 {
     public sealed class GetAllBucketListQuery : IRequest<List<BucketListDto>>
     {
-        private class GetAllBucketListQueryHandler : IRequestHandler<GetAllBucketListQuery, List<BucketListDto>>
+        public class GetAllBucketListQueryHandler : IRequestHandler<GetAllBucketListQuery, List<BucketListDto>>
         {
             private readonly IBucketCacheRepository _bucketCacheRepository;
 

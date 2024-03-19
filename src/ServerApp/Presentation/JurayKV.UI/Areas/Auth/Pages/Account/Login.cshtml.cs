@@ -174,14 +174,14 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                             {
                                 return RedirectToPage("/Dashboard/Index", new { area = "KvMain" });
                             }
-                            else if (roles.Contains(Constants.ClientPolicy))
+                            else if (roles.Contains(Constants.ClientPolicy) || roles.Contains(Constants.CompanyPolicy))
                             {
                                 return RedirectToPage("/Account/Index", new { area = "Client" });
                             }
 
                             else if (roles.Contains(Constants.ManagerPolicy)
                                 || roles.Contains(Constants.AdminPolicy)
-                                || roles.Contains(Constants.CompanyPolicy)
+                                
                                 || roles.Contains(Constants.BucketPolicy)
                                 || roles.Contains(Constants.ExchangeRatePolicy)
                                 || roles.Contains(Constants.AdvertPolicy)

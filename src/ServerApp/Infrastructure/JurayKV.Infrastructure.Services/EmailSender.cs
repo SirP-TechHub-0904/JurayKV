@@ -15,6 +15,9 @@ using JurayKV.Domain.ValueObjects;
 using JurayKV.Domain.Aggregates.SettingAggregate;
 using static JurayKV.Domain.Primitives.Enum;
 using System.Runtime.Intrinsics.Arm;
+using Twilio.TwiML.Messaging;
+using PostmarkEmailService;
+
 
 namespace JurayKV.Infrastructure.Services;
 
@@ -25,15 +28,22 @@ public sealed class EmailSender : IEmailSender
     private readonly IExceptionLogger _exceptionLogger;
     private readonly LoggerLibrary _logger;
     private readonly ISettingRepository _setting;
-    public EmailSender(IExceptionLogger exceptionLogger, UserManager<ApplicationUser> userManager, IConfiguration configManager, LoggerLibrary logger, ISettingRepository setting)
+    private readonly PostmarkClient _postmarkClient;
+
+    public EmailSender(IExceptionLogger exceptionLogger, UserManager<ApplicationUser> userManager, IConfiguration configManager, LoggerLibrary logger, ISettingRepository setting, PostmarkClient postmarkClient)
     {
         _exceptionLogger = exceptionLogger;
         _userManager = userManager;
         _configManager = configManager;
         _logger = logger;
         _setting = setting;
+        _postmarkClient = postmarkClient;
+        //_postmarkClient = new PostmarkClient(GetServerTokenFromSettings());
     }
-
+    private string GetServerTokenFromSettings()
+    {
+        return _configManager.GetSection("PostmarkSettings")["ServerToken"];
+    }
     public async Task<bool> SendAsync(string smsMessage, string id, string subject)
     {
         try
@@ -94,128 +104,48 @@ public sealed class EmailSender : IEmailSender
                 emailTemplate = emailTemplate.Replace("//Recipient_Name//", request.SurName);
 
 
-                using (var message = new MailMessage())
+                PostmarkResponse response = new PostmarkResponse();
+                var message = new PostmarkMessage
                 {
-                    message.To.Add(new MailAddress(model.Email));
-                    //message.To.Add(new MailAddress("onwukaemeka41@gmail.com"));
-                    
-                    message.Subject = model.Subject.Replace("\r\n", "");
-                    message.Body = emailTemplate;
-                    message.IsBodyHtml = true;
+                    From = "help@koboview.com",
+                    To = model.Email,
+                    Subject = subject,
+                    HtmlBody = emailTemplate
+                };
 
-
-                    message.From = new MailAddress("noreply@koboview.com", "koboview"); //IMPORTANT: This must be same as your smtp authentication address.
-                         
-                        SmtpClient smtp = new SmtpClient("mail.koboview.com");
-                        NetworkCredential Credentials = new NetworkCredential("noreply@koboview.com", "Admin@123");
-                        smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = Credentials;
-                        smtp.Port = 25;    //alternative port number is 8889
-                        smtp.EnableSsl = false;
-                        smtp.Send(message);
-                         return true;
-                   
-
-
-                    // change to true if body msg is in html
-                    //using (var client = new SmtpClient("smtp.gmail.com"))
-                    //{
-                    //    client.UseDefaultCredentials = false;
-                    //    client.Port = 587;
-                    //    //client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
-                    //    client.Credentials = new NetworkCredential("admin@notification.koboview.com", "njibvbdmmixrmljs");
-                    //    client.EnableSsl = true;
-
-                    //    try
-                    //    {
-                    //        await client.SendMailAsync(message); // Email sent
-                    //        _logger.Log($"mail sent to {model.Email}");
-
-                    //        return true;
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        _logger.Log($"failed mail to {model.Email} {e.ToString()}");
-                    //        // Email not sent, log exception
-                    //        return false;
-                    //    }
-                    //}
-                    //if (model.Email.Contains("gmai.com"))
-                    //{
-                    //    message.From = new MailAddress("admin@notification.koboview.com", "Koboview");
-                    //    using (var client = new SmtpClient("smtp.gmail.com"))
-                    //    {
-                    //        client.UseDefaultCredentials = false;
-                    //        client.Port = 587;
-                    //        client.Credentials = new NetworkCredential("admin@notification.koboview.com", "zypreccggmtjhllv");
-                    //        client.EnableSsl = true;
-
-                    //        try
-                    //        {
-                    //            await client.SendMailAsync(message); // Email sent
-                    //            _logger.Log($"gmail mail sent to {model.Email}");
-
-                    //            return true;
-                    //        }
-                    //        catch (Exception e)
-                    //        {
-                    //            _logger.Log($"gmail failed mail to {model.Email} {e.ToString()}");
-                    //            // Email not sent, log exception
-                    //            return false;
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-
-                    //message.From = new MailAddress("noreply@koboview.com", "Koboview");
-                    //using (var client = new SmtpClient("smtppro.zoho.com"))
-                    //{
-                    //    client.UseDefaultCredentials = false;
-                    //    client.Port = 587;
-                    //    client.Credentials = new NetworkCredential("noreply@koboview.com", "d4W?qpsu");
-                    //    client.EnableSsl = true;
-
-                    //    try
-                    //    {
-                    //        await client.SendMailAsync(message); // Email sent
-                    //        _logger.Log($"outlook mail sent to {model.Email}");
-
-                    //        return true;
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        _logger.Log($"outlook failed mail to {model.Email} {e.ToString()}");
-                    //        // Email not sent, log exception
-                    //        return false;
-                    //    }
-
-                    //}
-                    //    message.From = new MailAddress("noreply@koboview.com", "Koboview");
-                    //    using (var client = new SmtpClient("smtp.office365.com"))
-                    //    {
-                    //        client.UseDefaultCredentials = false;
-                    //        client.Port = 587;
-                    //        client.Credentials = new NetworkCredential("noreply@koboview.com", "ahambuPeter@247");
-                    //        client.EnableSsl = true;
-
-                    //        try
-                    //        {
-                    //            await client.SendMailAsync(message); // Email sent
-                    //            _logger.Log($"outlook mail sent to {model.Email}");
-
-                    //            return true;
-                    //        }
-                    //        catch (Exception e)
-                    //        {
-                    //            _logger.Log($"outlook failed mail to {model.Email} {e.ToString()}");
-                    //            // Email not sent, log exception
-                    //            return false;
-                    //        }
-
-                    //}
+               
+                    response = await _postmarkClient.SendMessageAsync(message);
+                if (response.Status == 0)
+                {
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+                    //using (var message = new MailMessage())
+                    //{
+                    //    message.To.Add(new MailAddress(model.Email));
+                    //    //message.To.Add(new MailAddress("onwukaemeka41@gmail.com"));
 
+                    //    message.Subject = model.Subject.Replace("\r\n", "");
+                    //    message.Body = emailTemplate;
+                    //    message.IsBodyHtml = true;
+
+
+                    //    message.From = new MailAddress("noreply@koboview.com", "koboview"); //IMPORTANT: This must be same as your smtp authentication address.
+
+                    //        SmtpClient smtp = new SmtpClient("mail.koboview.com");
+                    //        NetworkCredential Credentials = new NetworkCredential("noreply@koboview.com", "Admin@123");
+                    //        smtp.UseDefaultCredentials = false;
+                    //        smtp.Credentials = Credentials;
+                    //        smtp.Port = 25;    //alternative port number is 8889
+                    //        smtp.EnableSsl = false;
+                    //        smtp.Send(message);
+                    //         return true;
+
+                    //}
+                    
 
             }
             catch (Exception ex)

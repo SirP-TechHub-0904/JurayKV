@@ -14,7 +14,7 @@ public sealed class GetIdentityKvAdByUserIdListQuery : IRequest<List<IdentityKvA
 
     public Guid UserId { get; }
 
-    private class GetIdentityKvAdByUserIdListQueryHandler : IRequestHandler<GetIdentityKvAdByUserIdListQuery, List<IdentityKvAdListDto>>
+    public class GetIdentityKvAdByUserIdListQueryHandler : IRequestHandler<GetIdentityKvAdByUserIdListQuery, List<IdentityKvAdListDto>>
     {
         private readonly IIdentityKvAdCacheRepository _departmentCacheRepository;
 

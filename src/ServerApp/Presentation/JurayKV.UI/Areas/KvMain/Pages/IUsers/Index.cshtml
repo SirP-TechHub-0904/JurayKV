@@ -19,7 +19,9 @@
         <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Active" class="btn btn-primary">
             Active Users (@Model.ActiveOnly)
         </a>
-
+        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.New" class="btn btn-danger">
+            New Users (@Model.New)
+        </a>
         <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Suspended" class="btn btn-danger">
             Suspended Users (@Model.Suspended)
         </a>

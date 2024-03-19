@@ -21,6 +21,7 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId);
         Task<List<Transaction>> LastListByCountByUserId(int toplistcount, Guid userId);
         Task<List<Transaction>> GetListByUserId(Guid userId);
+        Task<List<Transaction>> GetListByUserId(Guid userId, int count);
         Task<List<Transaction>> GetReferralListByUserId(Guid userId);
         Task<int> TransactionCount(Guid userId);
 

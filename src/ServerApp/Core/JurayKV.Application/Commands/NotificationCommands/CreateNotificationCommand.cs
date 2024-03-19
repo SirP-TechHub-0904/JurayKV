@@ -118,19 +118,19 @@ internal class CreateNotificationCommandHandler : IRequestHandler<CreateNotifica
             responseDto.Code = numbercode;
             if (request.NotificationType == NotificationType.SMS)
             {
-                result = await _smsSender.SendAsync(vcode, request.UserId.ToString());
+                result = await _smsSender.SendAsync(user.VerificationCode, request.UserId.ToString());
             }
             else if (request.NotificationType == NotificationType.Email)
             {
-                result = await _emailSender.SendAsync(vcode, request.UserId.ToString(), "Email Comfirmation");
+                result = await _emailSender.SendAsync(user.VerificationCode, request.UserId.ToString(), "Email Comfirmation");
             }
             else if (request.NotificationType == NotificationType.Voice)
             {
-                result = await _voiceSender.SendAsync(vcode, request.UserId.ToString());
+                result = await _voiceSender.SendAsync(user.VerificationCode, request.UserId.ToString());
             }
             else if (request.NotificationType == NotificationType.Whatsapp)
             {
-                result = await _whatsappOtp.SendAsync(vcode, request.UserId.ToString());
+                result = await _whatsappOtp.SendAsync(user.VerificationCode, request.UserId.ToString());
             }
             Notification notification = new Notification();
             notification.UserId = request.UserId;

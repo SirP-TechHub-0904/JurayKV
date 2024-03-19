@@ -22,6 +22,7 @@ using JurayKV.Domain.Aggregates.VariationAggregate;
 using JurayKV.Domain.Aggregates.WalletAggregate;
 using JurayKV.Persistence.RelationalDB.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -120,4 +121,30 @@ public static class ServiceCollectionExtensions
         services.AddGenericRepository<JurayDbContext>();
         services.AddQueryRepository<JurayDbContext>();
     }
+
+    public static void AddWebApiRelationalDbContext(
+        this IServiceCollection services,
+        string connectionString)
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new ArgumentException("Connection string is either null or empty.");
+        }
+
+        services.AddDbContext<JurayDbContext>(options =>
+        {
+          
+            options.UseSqlServer(connectionString);
+        });
+
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        {
+           
+        })
+        .AddEntityFrameworkStores<JurayDbContext>()
+        .AddDefaultTokenProviders();
+
+
+    }
+
 }

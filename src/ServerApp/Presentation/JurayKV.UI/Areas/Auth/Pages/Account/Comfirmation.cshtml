@@ -102,7 +102,7 @@
 <div id="wrapper">
     <div id="dialog">
 
-        <h3 style="font-size: 1.175rem;;">Please enter the 6-digit verification code sent to your whatsapp</h3>
+        <h3 style="font-size: 1.175rem;;">Please enter the 6-digit verification code sent to your email</h3>
         @if (TempData["xsuccess"] != null)
         {
             <div class="alert alert-success">
@@ -118,8 +118,22 @@
             </div>
         }
 
-        <div id="countdown">01:00</div>
+        @*<div id="countdown">01:00</div>
+        Didn't receive the code?
+        <form asp-page-handler="SendEmail" method="post">
+            <input asp-for="Xtxnt" type="hidden" />
+            <input asp-for="NotificationNumber" type="hidden" value="2" />
 
+            <input type="submit" value="Resend" class="" />
+        </form>*@
+        <div id="countdown">01:00</div>
+        <div id="resendForm" style="display: none;">
+            <form asp-page-handler="SendEmail" method="post">
+                <input asp-for="Xtxnt" type="hidden" />
+                <input asp-for="NotificationNumber" type="hidden" value="2" />
+                Didn't receive the code? <input type="submit" value="Resend" class="" style=" background: none !important; border: none !important; color: blue !important;"/>
+            </form>
+        </div>
         <div id="form">
             <form method="post">
                 <input asp-for="Xtxnt" type="hidden" />
@@ -184,19 +198,7 @@
 </div>
 
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-    (function () {
-        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-        s1.async = true;
-        s1.src = 'https://embed.tawk.to/65534d59cec6a912820fb6ad/1hf6mc9hg';
-        s1.charset = 'UTF-8';
-        s1.setAttribute('crossorigin', '*');
-        s0.parentNode.insertBefore(s1, s0);
-    })();
-</script>
-<!--End of Tawk.to Script-->
+ 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -245,14 +247,9 @@
 
             // Check if the countdown has reached zero
             if (remainingTime === 0) {
-                clearInterval(countdownInterval);
-                // Replace the countdown message with the link
-                countdownElement.textContent = "Didn't receive the code? ";
-                const link = document.createElement("a");
-                link.href = "https://wa.me/message/6SQ57ENNZMRPB1";
-                link.target = "_blank";
-                link.textContent = "Click to Chat";
-                countdownElement.appendChild(link);
+                clearInterval(countdownInterval); // Stop the countdown
+                countdownElement.style.display = 'none'; // Hide the countdown
+                resendForm.style.display = 'block'; // Show the resend form
             }
 
             // Decrement the remaining time

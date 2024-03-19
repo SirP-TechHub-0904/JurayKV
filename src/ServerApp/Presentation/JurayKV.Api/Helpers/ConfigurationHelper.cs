@@ -19,7 +19,7 @@ public static class ConfigurationHelper
 		}
 		else
 		{
-			string connectionName = builder.Environment.IsDevelopment() ? "EmployeeDbConnection" : "EmployeeDbConnection";
+			string connectionName = builder.Environment.IsDevelopment() ? "DefaultConnection" : "DefaultConnection";
 			connectionString = builder.Configuration.GetConnectionString(connectionName);
 		}
 

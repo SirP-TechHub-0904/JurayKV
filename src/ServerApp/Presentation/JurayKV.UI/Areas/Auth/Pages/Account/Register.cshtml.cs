@@ -94,6 +94,16 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             [Required]
             [Compare(nameof(Password), ErrorMessage = "Confirm password does match with password.")]
             public string ConfirmPassword { get; set; }
+
+            [Required] 
+            public string State { get; set; }
+
+            [Required] 
+            public string LGA { get; set; }
+
+
+            [Required]
+            public string Address { get; set; }
         }
 
         [BindProperty]
@@ -142,6 +152,9 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                     create.PhoneNumber = Input.PhoneNumber;
                     create.Role = "User";
                     create.RefPhone = RefPhone;
+                    create.State = Input.State;
+                    create.LGA = Input.LGA;
+                    create.Address = Input.Address;
                     CreateUserManagerCommand command = new CreateUserManagerCommand(create);
                     ResponseCreateUserDto Result = await _mediator.Send(command);
                     if (Result.Succeeded == false)

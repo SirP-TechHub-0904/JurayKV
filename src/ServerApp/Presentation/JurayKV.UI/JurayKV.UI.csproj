@@ -96,6 +96,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PostmarkEmailService\PostmarkEmailService.csproj" />
     <ProjectReference Include="..\..\Core\JurayKV.Application\JurayKV.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.Opay\JurayKV.Infrastructure.Opay.csproj" />
     <ProjectReference Include="..\..\Infrastructure\JurayKV.Infrastructure.Services\JurayKV.Infrastructure.Services.csproj" />

@@ -99,6 +99,8 @@
 
             <div class="card-header">
                 <h3 class="card-title">About Me</h3>
+                <a asp-page="./UpdateProfile" class="btn bg-gradient-warning btn-sm" style="float:right;">Update</a>
+
             </div>
             @if (!String.IsNullOrEmpty(Model.UserData.About))
             {
@@ -124,8 +126,8 @@
                 <strong><i class="fas fa-user-alt mr-1"></i> Reffered By</strong>
 
                 <p class="text-muted">@Model.UserData.RefferedBy</p>
-                @if (User.IsInRole("CSA"))
-                {
+                @*@if (User.IsInRole("CSA"))
+                {*@
 
 
                     <hr>
@@ -156,13 +158,14 @@
 
                     <hr>
                     <strong><i class="fas fa-map-marker-alt mr-1"></i> ID Card</strong>
-
+                @if (!String.IsNullOrEmpty(Model.UserData.PassportUrl)) { 
                     <p class="text-muted">
                         <img class="img-fluid" src="@Model.UserData.PassportUrl" alt="User Avatar">
                     </p>
+                }
                     <hr>
 
-                }
+                
 
                 @if (Model.UserData.Tier == JurayKV.Domain.Primitives.Enum.Tier.Tier2)
                 {

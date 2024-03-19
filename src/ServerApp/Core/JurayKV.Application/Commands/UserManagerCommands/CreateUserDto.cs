@@ -1,4 +1,6 @@
-﻿namespace JurayKV.Application.Commands.UserManagerCommands
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JurayKV.Application.Commands.UserManagerCommands
 {
     public class CreateUserDto
     {
@@ -10,5 +12,12 @@
          public bool Comfirm { get; set; }
         public string Role { get; set; }
         public string RefPhone { get; set; }
-     }
+
+         public string State { get; set; }
+
+         public string LGA { get; set; }
+
+
+         public string Address { get; set; }
+    }
 }

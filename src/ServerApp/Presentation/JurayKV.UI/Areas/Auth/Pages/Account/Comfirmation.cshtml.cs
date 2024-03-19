@@ -129,6 +129,61 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
             }
 
         }
+        public async Task<IActionResult> OnPostSendEmailAsync()
+        {
+             
+                try
+                {
+                    var identityResult = await _userManager.FindByIdAsync(Xtxnt.ToString());
+                    NotificationType notificationType = (NotificationType)NotificationNumber;
+                    CreateNotificationCommand command = new CreateNotificationCommand(identityResult.Id, notificationType);
+
+                    DataResponseDto result = await _mediator.Send(command);
+                    //
+
+
+                    if (result.BoolResponse == true)
+                    {
+                        TempData["success"] = "Code Sent Successfuly.";
+
+                    }
+                    else
+                    {
+                        TempData["error"] = "Unable to Send Email. Click Resend Again";
+                    }
+
+                    string maskedEmail = "dxvl-a";
+                    string codetype = "";
+                    if (notificationType == NotificationType.Email)
+                    {
+                        codetype = "Email";
+                    }
+                    else if (notificationType == NotificationType.SMS)
+                    {
+                        codetype = "SMS";
+                    }
+                    else if (notificationType == NotificationType.Voice)
+                    {
+                        codetype = "Voice";
+                    }
+                    else if (notificationType == NotificationType.Whatsapp)
+                    {
+                        codetype = "Whatsapp";
+                    }
+                    TempData["codetype"] = codetype;
+                    //TempData["success"] = "OTP Sent Successfuly";
+                    return RedirectToPage("./Comfirmation", new { xcode = codetype, xmal = maskedEmail, txtd = identityResult.Id });
+                }
+                catch (Exception exception)
+                {
+
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            
+
+            // If we got this far, something failed, redisplay form
+            return Page();
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {

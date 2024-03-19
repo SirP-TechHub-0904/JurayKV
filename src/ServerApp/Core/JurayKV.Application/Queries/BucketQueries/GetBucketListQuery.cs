@@ -7,7 +7,7 @@ namespace JurayKV.Application.Queries.BucketQueries;
 
 public sealed class GetBucketListQuery : IRequest<List<BucketListDto>>
 {
-    private class GetBucketListQueryHandler : IRequestHandler<GetBucketListQuery, List<BucketListDto>>
+    public class GetBucketListQueryHandler : IRequestHandler<GetBucketListQuery, List<BucketListDto>>
     {
         private readonly IBucketCacheRepository _bucketCacheRepository;
 

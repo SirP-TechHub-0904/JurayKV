@@ -1,6 +1,8 @@
 ﻿using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Infrastructures;
+using JurayKV.Application.Queries.BucketQueries;
 using JurayKV.Application.Services;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,8 +18,7 @@ namespace JurayKV.Application
         public static IServiceCollection AddApplicationCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IEmailSender>();
-            
-            //services.AddInterswitch(configuration);
+             //services.AddInterswitch(configuration);
             return services;
         }
     }

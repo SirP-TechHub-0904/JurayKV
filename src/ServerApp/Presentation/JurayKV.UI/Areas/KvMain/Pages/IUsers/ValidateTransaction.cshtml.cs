@@ -7,6 +7,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using JurayKV.Application;
 using JurayKV.Application.Queries.WalletQueries;
+using JurayKV.Application.Queries.UserManagerQueries;
+using Microsoft.AspNetCore.Identity;
+using JurayKV.Application.Caching.Repositories;
 
 namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
 {
@@ -14,12 +17,15 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
     public class ValidateTransactionModel : PageModel
     {
 
-        private readonly IMediator _mediator;
-        public ValidateTransactionModel(IMediator mediator)
+        private readonly IMediator _mediator; 
+        private readonly IUserManagerCacheRepository _userManager;
+
+        public ValidateTransactionModel(IMediator mediator, IUserManagerCacheRepository userManager)
         {
             _mediator = mediator;
+            _userManager = userManager;
         }
-         
+
         [BindProperty]
         public CommandDto Command { get; set; } = new CommandDto();
         public class CommandDto
@@ -39,6 +45,9 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         }
 
         public WalletDetailsDto walet {  get; set; }
+
+        public string Name { get; set; }
+
         public async Task<IActionResult> OnGetAsync(Guid userId)
         {
             GetWalletUserByIdQuery commandwallet = new GetWalletUserByIdQuery(userId);
@@ -53,7 +62,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
                 Command.WalletId = walet.Id;
                 Command.TrackCode = Guid.NewGuid().ToString();
                 Command.TransactionReference = Guid.NewGuid().ToString();
-             
+            var user = await _userManager.GetByIdAsync(walet.UserId);
+            Name = user.Fullname;
             return Page();
         }
 

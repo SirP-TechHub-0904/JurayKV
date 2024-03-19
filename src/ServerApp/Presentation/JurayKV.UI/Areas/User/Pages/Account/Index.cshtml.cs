@@ -31,7 +31,17 @@ namespace JurayKV.UI.Areas.User.Pages.Account
             GetUserDashboardQuery command = new GetUserDashboardQuery(Guid.Parse(userId));
 
             DashboardData = await _mediator.Send(command);
-             
+            var userdata = await _userManager.FindByIdAsync(userId);
+            if(userdata != null)
+            {
+                if(String.IsNullOrEmpty(userdata.State) || String.IsNullOrEmpty(userdata.Address)
+                    )
+                {
+                    TempData["msg"] = "Kindly update your current location";
+                    return RedirectToPage("./UpdateProfile");
+                }
+            }
+
             return Page();
         }
         public UserDashboardDto DashboardData { get; set; }
