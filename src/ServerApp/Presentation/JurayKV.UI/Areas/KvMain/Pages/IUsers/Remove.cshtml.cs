@@ -1,4 +1,5 @@
 using JurayKV.Application;
+using JurayKV.Application.Commands.UserManagerCommands;
 using JurayKV.Application.Queries.UserManagerQueries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -40,8 +41,8 @@ namespace JurayKV.UI.Areas.KvMain.Pages.IUsers
         {
             try
             {
-                //DeleteUserManagerCommand command = new DeleteUserManagerCommand(UpdateUserManager.Id);
-                //await _mediator.Send(command);
+                DeleteUserManagerCommand command = new DeleteUserManagerCommand(UpdateUserManager.Id);
+                await _mediator.Send(command);
                 TempData["success"] = "Deleted Successfuly";
             }
             catch (Exception ex)

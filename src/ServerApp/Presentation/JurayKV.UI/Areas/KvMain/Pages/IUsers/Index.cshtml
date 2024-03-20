@@ -6,52 +6,78 @@
     <div class="card-header">
         <h3 class="card-title">USER MANAGERS</h3>
 
-        <a asp-page="./UserList" class="btn bg-gradient-warning btn-sm" style="float:right;">Users List JQuery</a>
-        <a asp-page="./UserList" class="btn bg-gradient-danger btn-sm" style="float:right;">List JQuery 2</a>
+        @*<a asp-page="./UserList" class="btn bg-gradient-warning btn-sm" style="float:right;">Users List JQuery</a>
+        <a asp-page="./UserList" class="btn bg-gradient-danger btn-sm" style="float:right;">List JQuery 2</a>*@
 
     </div>
 
     <div class="card-header">
-        <a asp-page="./Index" asp-route-all="true" class="btn btn-primary">
-            All Users (@Model.All)
-        </a>
-
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Active" class="btn btn-primary">
-            Active Users (@Model.ActiveOnly)
-        </a>
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.New" class="btn btn-danger">
-            New Users (@Model.New)
-        </a>
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Suspended" class="btn btn-danger">
-            Suspended Users (@Model.Suspended)
-        </a>
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Disabled" class="btn btn-warning">
-            Disabled Users (@Model.Disabled)
-        </a>
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.NotActive" class="btn btn-default">
-            Not Active Users (@Model.NotActive)
-        </a>
-        <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.NotDefind" class="btn btn-info">
-            NotDefind Users (@Model.NotDefind)
-        </a>
+        <div class="row">
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-all="true" class="btn btn-primary" style="width:100%;margin-bottom:10px;">
+                    All Users (@Model.All)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Active" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
+                    Active Users (@Model.ActiveOnly)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.New" class="btn btn-danger" style="width: 100%; margin-bottom: 10px;">
+                    New Users (@Model.New)
+                </a>
+            </div>
+            <div class="col-md-3"><a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Suspended" class="btn btn-danger" style="width: 100%; margin-bottom: 10px;">
+    Suspended Users (@Model.Suspended)
+</a></div>
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.Disabled" class="btn btn-warning" style="width: 100%; margin-bottom: 10px;">
+                    Disabled Users (@Model.Disabled)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.NotActive" class="btn btn-default" style="width: 100%; margin-bottom: 10px;">
+                    Not Active Users (@Model.NotActive)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-page="./Index" asp-route-status="@JurayKV.Domain.Primitives.Enum.AccountStatus.NotDefind" class="btn btn-info" style="width: 100%; margin-bottom: 10px;">
+                    NotDefind Users (@Model.NotDefind)
+                </a>
+            </div>
+             
+        </div>
+       
+       
+        
     </div>
 
     <div class="card-header">
         <h5>TIER TWO STATUS</h5>
+        <div class="row">
+            <div class="col-md-3">
+                <a class="btn btn-primary" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.None" style="width: 100%; margin-bottom: 10px;">
+                    None Upgrade (@Model.NotYetTieTwo)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-warning" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Requested" style="width: 100%; margin-bottom: 10px;">
+                    Upgrade Request (@Model.RequestedTieTwo)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-success" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Approved" style="width: 100%; margin-bottom: 10px;">
+                    Approved Request (@Model.ApprovedTieTwo)
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-danger" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Cancelled" style="width: 100%; margin-bottom: 10px;">
+                    Cancelled Request (@Model.Cancelled)
+                </a>
+            </div>
+        </div>
 
-        <a class="btn btn-primary" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.None">
-            None Upgrade (@Model.NotYetTieTwo)
-        </a>
-
-        <a class="btn btn-warning" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Requested">
-            Upgrade Request (@Model.RequestedTieTwo)
-        </a>
-        <a class="btn btn-success" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Approved">
-            Approved Request (@Model.ApprovedTieTwo)
-        </a>
-        <a class="btn btn-danger" asp-page="./Index" asp-route-tieRequest="@JurayKV.Domain.Primitives.Enum.TieRequestStatus.Cancelled">
-            Cancelled Request (@Model.Cancelled)
-        </a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">

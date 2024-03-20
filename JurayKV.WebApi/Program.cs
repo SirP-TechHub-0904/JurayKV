@@ -24,6 +24,7 @@ using JurayKV.Application.Queries.DashboardQueries;
 using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Application.Caching.Handlers;
 using JurayKV.Persistence.Cache.Handlers;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -64,31 +65,73 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 // Inside ConfigureServices method of Startup.cs
-builder.Services.AddAuthentication(optiones =>
-{
-    optiones.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    optiones.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    optiones.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-            .AddJwtBearer(o =>
-            {
-                o.SaveToken = true;
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidAudience = builder.Configuration["JwtSecurityToken:Audience"],
-                    ValidIssuer = builder.Configuration["JwtSecurityToken:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityToken:Key"])),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                };
-            });
+////builder.Services.AddAuthentication(options =>
+////{
+////    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+////    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+////    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+////})
+////            .AddJwtBearer(o =>
+////            {
+////                o.SaveToken = true;
+////                o.TokenValidationParameters = new TokenValidationParameters
+////                {
+////                    ValidAudience = builder.Configuration["JwtSecurityToken:Audience"],
+////                    ValidIssuer = builder.Configuration["JwtSecurityToken:Issuer"],
+////                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityToken:Key"])),
+////                    ValidateIssuer = true,
+////                    ValidateAudience = true,
+////                    ValidateIssuerSigningKey = true,
+////                    ValidateLifetime = true,
+////                    ClockSkew = TimeSpan.Zero,
+////                };
+////                o.Events = new JwtBearerEvents
+////                {
+////                    OnTokenValidated = context =>
+////                    {
+////                        // Custom token validation logic
+////                        if (!IsTokenValidCheck.IsTokenValid(context.Principal))
+////                        {
+////                            // Log the reason for token invalidation
+////                           // Log.LogError("Token validation failed: Invalid token.");
+                            
+////                        }
+
+////                        return Task.CompletedTask;
+////                    },
+////                    OnAuthenticationFailed = context =>
+////                    {
+////                        // Log authentication failure reason
+////                        string oc = context.Exception.Message;
+////                        return Task.CompletedTask;
+////                    }
+////                };
+
+////            });
+
+
+
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddRelationalDbContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = null; // Set to null to disable redirection
+    options.LogoutPath = null; // Set to null to disable redirection
+    options.AccessDeniedPath = null; // Set to null to disable redirection
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401; // Set status code to indicate unauthorized
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = 403; // Set status code to indicate forbidden
+        return Task.CompletedTask;
+    };
+});
 
- 
+
 // Register SymmetricSecurityKeyService
 builder.Services.AddTransient<SymmetricSecurityKeyService>();
 //builder.Services.AddCaching();
@@ -127,9 +170,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
+ app.UseHttpsRedirection();
+//app.UseCustomJwtMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -207,7 +207,7 @@ namespace JurayKV.UI.Areas.Auth.Pages.Account
                 if (result.Code == VerificationCode)
                 {
                     identityResult.EmailConfirmed = true;
-                    identityResult.AccountStatus = AccountStatus.Active;
+                    identityResult.AccountStatus = AccountStatus.New;
                     identityResult.Role = "SMA";
                     await _userManager.UpdateAsync(identityResult);
 

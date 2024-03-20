@@ -16,6 +16,7 @@ namespace JurayKV.Domain.Aggregates.IdentityKvAdAggregate
         Task UpdateAsync(IdentityKvAd identityKvAd);
 
         Task DeleteAsync(IdentityKvAd identityKvAd);
+        Task DeleteUserAsync(Guid userId);
 
         Task<List<IdentityKvAd>> GetListByUserId(Guid userId);
         Task<IQueryable<IdentityKvAd>> GetActiveListByUserId(Guid userId);

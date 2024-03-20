@@ -217,6 +217,63 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             }
 
         }
+
+        public async Task DeleteUserAsync(Guid userId)
+        {
+            //remove IdentityActivities
+            var IdentityActivities = _dbContext.IdentityActivities.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in IdentityActivities)
+            {
+                _dbContext.Remove(data);
+            }
+
+            //remove IdentityKvAds
+            var IdentityKvAds = _dbContext.IdentityKvAds.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in IdentityKvAds)
+            {
+                _dbContext.Remove(data);
+            }
+
+            //remove kvPoints
+            var kvPoints = _dbContext.kvPoints.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in kvPoints)
+            {
+                _dbContext.Remove(data);
+            }
+
+            //remove Notifications
+            var Notifications = _dbContext.Notifications.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in Notifications)
+            {
+                _dbContext.Remove(data);
+            }
+            //remove Transactions
+            var Transactions = _dbContext.Transactions.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in Transactions)
+            {
+                _dbContext.Remove(data);
+            }
+
+            //remove UserMessages
+            var UserMessages = _dbContext.UserMessages.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in UserMessages)
+            {
+                _dbContext.Remove(data);
+            }
+
+
+            //remove Wallets
+            var Wallets = _dbContext.Wallets.Where(x => x.UserId == userId).AsEnumerable();
+            foreach (var data in Wallets)
+            {
+                _dbContext.Remove(data);
+            }
+
+
+
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
 }

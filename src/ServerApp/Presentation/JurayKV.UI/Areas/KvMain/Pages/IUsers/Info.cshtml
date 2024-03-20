@@ -650,6 +650,7 @@
         @if (User.IsInRole(JurayKV.Application.Constants.SuperAdminPolicy) || User.IsInRole(JurayKV.Application.Constants.Permission))
         {
             <a class="btn btn-warning" asp-page="/IPermissions/UserRoles" asp-route-id="@Model.UpdateUserManager.UserManagerDetailsDto.Id">Manage Roles</a>
+            <a class="btn btn-danger" asp-page="./Remove" asp-route-id="@Model.UpdateUserManager.UserManagerDetailsDto.Id">Remove account</a>
         }
     </div>
 </div>

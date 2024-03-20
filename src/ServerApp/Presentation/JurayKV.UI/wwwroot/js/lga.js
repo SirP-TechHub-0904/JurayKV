@@ -13,7 +13,7 @@ const setAttributes = (el, attrs) => {
 
 const toggleLGA = target => {
     let state = target.value,                                                         // Get value of state
-        //selectLGAOption = ["Select LGA..."],                                            // Define this once so as not to repeat it multiple times
+        selectLGAOption = ["Select LGA..."],                                            // Define this once so as not to repeat it multiple times
         lgaList = {
             Abia: [
                 "Aba North",
@@ -909,10 +909,9 @@ const toggleLGA = target => {
         opt.value = lga;                                                                // Set the value to LGA
 
         // Make option asking you to select unclickable
-        //lga.includes("elect")
-        //    //? setAttributes(opt, { disabled: "disabled", selected: "selected" })
-        //    ? setAttributes(opt, { disabled: "disabled", value:"" })
-        //    : "";
+        lga.includes("elect")
+            ? setAttributes(opt, { disabled: "disabled", selected: "selected" })
+             : "";
 
         // Add this option element to LGA select element
         lgaSelect.appendChild(opt);

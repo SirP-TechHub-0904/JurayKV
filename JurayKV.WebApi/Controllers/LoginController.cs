@@ -1,6 +1,7 @@
 ﻿using JurayKV.Application.Commands.IdentityCommands.UserCommands;
 using JurayKV.WebApi.Dto;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
@@ -9,6 +10,7 @@ namespace JurayKV.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class LoginController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -28,6 +30,7 @@ namespace JurayKV.WebApi.Controllers
 
                 if (token != null)
                 {
+                     
                     return Ok(token);
                 }
                 else
