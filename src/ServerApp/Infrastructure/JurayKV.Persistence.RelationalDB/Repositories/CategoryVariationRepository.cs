@@ -29,8 +29,7 @@ namespace JurayKV.Persistence.RelationalDB.Repositories
             if (categoryVariationId == Guid.Empty)
             {
                 throw new ArgumentException("categoryVariationId cannot be empty.", nameof(categoryVariationId));
-            }
-            //CategoryVariation categoryVariation = await _dbContext.Set<CategoryVariation>().FindAsync(categoryVariationId);
+            } 
             CategoryVariation categoryVariation = await _dbContext.CategoryVariations.FirstOrDefaultAsync(x => x.Id == categoryVariationId);
             return categoryVariation;
         }

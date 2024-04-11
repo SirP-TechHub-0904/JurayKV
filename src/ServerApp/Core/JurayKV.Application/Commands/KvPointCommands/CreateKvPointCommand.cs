@@ -151,7 +151,7 @@ internal class CreateKvPointCommandHandler : IRequestHandler<CreateKvPointComman
 
                     //debit wallet from company
                     var companywallet = await _walletRepository.GetByUserIdAsync(identityKvAdsInfo.KvAd.Company.UserId);
-                    companywallet.Amount -= Convert.ToDecimal(request.Point);
+                    companywallet.Amount -= (Convert.ToDecimal(request.Point) * identityKvAdsInfo.KvAd.Company.AmountPerPoint);
                     companywallet.LastUpdateAtUtc = DateTime.UtcNow.AddHours(1);
                     companywallet.Log = "<li> Wallet Update from User Advert id " + request.IdentityKvAdId + " ::Amount: " + request.Point + " ::Balance: " + companywallet.Amount + " :: Date: " + companywallet.LastUpdateAtUtc + ":: Loggedin User: " + loguserId + "</li>" + companywallet.Log;
 

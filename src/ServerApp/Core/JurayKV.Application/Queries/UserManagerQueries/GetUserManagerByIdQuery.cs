@@ -43,6 +43,11 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
 
             var user = await _userManager.GetByIdAsync(request.Id);
             var reff = await _userManager.GetReferralInfoByPhoneAsync(user.RefferedBy);
+            string last10DigitsPhoneNumber1 = "";
+            try { 
+             last10DigitsPhoneNumber1 = user.PhoneNumber.Substring(Math.Max(0, user.PhoneNumber.Length - 10));
+
+            }catch(Exception ex) { }
             UserManagerDetailsDto outcome = new UserManagerDetailsDto
             {
                 Id = user.Id,
@@ -87,7 +92,9 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
                 ResponseOnTieRequest = user.ResponseOnTieRequest,
                 Tie2Request = user.Tie2Request,
                 TwoFactorEnable = user.TwoFactorEnable,
-                EmailComfirmed = user.EmailComfirmed
+                EmailComfirmed = user.EmailComfirmed,
+                RefCode = last10DigitsPhoneNumber1,
+               
             };
 
             

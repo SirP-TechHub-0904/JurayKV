@@ -138,7 +138,7 @@ builder.Services.AddTransient<SymmetricSecurityKeyService>();
 
  
 // Add your command handler
-builder.Services.AddTransient<IRequestHandler<LoginCommand, string>, LoginCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<LoginCommand, LoginResponse>, LoginCommandHandler>();
 
 //register services and handlers
 builder.Services.AddTransient<IRequestHandler<GetAllBucketListQuery, List<BucketListDto>>, GetAllBucketListQuery.GetAllBucketListQueryHandler>();
@@ -167,10 +167,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
- app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHttpsRedirection();
 //app.UseCustomJwtMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();

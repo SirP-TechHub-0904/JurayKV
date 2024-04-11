@@ -61,5 +61,6 @@ namespace JurayKV.Application.Queries.UserManagerQueries
         public bool EmailComfirmed { get; set; }
         public bool TwoFactorEnable { get; set; }
 
+        public string RefCode { get; set; }
     }
 }

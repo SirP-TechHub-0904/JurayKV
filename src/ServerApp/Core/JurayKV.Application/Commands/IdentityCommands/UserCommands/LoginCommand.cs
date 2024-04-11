@@ -14,13 +14,13 @@ using JurayKV.Application.Services;
 using Microsoft.Extensions.Configuration;
 namespace JurayKV.Application.Commands.IdentityCommands.UserCommands
 {
-    public sealed class LoginCommand : IRequest<string> // Change return type to string for token
+    public sealed class LoginCommand : IRequest<LoginResponse> // Change return type to string for token
     {
         public string Email { get; set; }
         public string Password { get; set; }
     }
 
-    public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, string> // Change return type to string for token
+    public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse> // Change return type to string for token
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SymmetricSecurityKeyService _symmetricSecurityKeyService;
@@ -32,14 +32,36 @@ namespace JurayKV.Application.Commands.IdentityCommands.UserCommands
             _configuration = configuration;
         }
 
-        public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
+
                 if (user != null && await _userManager.CheckPasswordAsync(user, request.Password))
                 {
-                    return GenerateToken(user);
+                    if (user.EmailConfirmed == false)
+                    {
+                        return new LoginResponse
+                        {
+                            Verified = false,
+                            UserId = user.Id,
+                            Email = user.Email,
+                        };
+                    }
+                    else
+                    {
+                        string token = GenerateToken(user);
+
+                        return new LoginResponse
+                        {
+                            Token = token,
+                            UserId = user.Id,
+                            Email = user.Email,
+                            Verified = true
+                        };
+                    }
+
                 }
             }
             catch
