@@ -72,7 +72,21 @@
 
 
                     <div class="position-relative">
-                        <input type="image" src="@Model.Ads.ImageUrl" alt="Submit" class="img-fluid">
+                        <input @*type="image"*@ src="@Model.Ads.ImageUrl" alt="Submit" class="img-fluid">
+
+
+                             @if (Model.Ads.ImageKey.EndsWith(".jpg") || Model.Ads.ImageKey.EndsWith(".jpeg") || Model.Ads.ImageKey.EndsWith(".png") || Model.Ads.ImageKey.EndsWith(".gif") || Model.Ads.ImageKey.EndsWith(".bmp"))
+                            {
+                                <img src="@Model.Ads.ImageUrl" class="img-fluid" />
+                            }
+                            else if (Model.Ads.ImageKey.EndsWith(".mp4") || Model.Ads.ImageKey.EndsWith(".avi") || Model.Ads.ImageKey.EndsWith(".mov") || Model.Ads.ImageKey.EndsWith(".wmv") || Model.Ads.ImageKey.EndsWith(".flv"))
+                            {
+                                <video controls style="height:120px;width:250px;">
+                                    <source src="@Model.Ads.ImageUrl" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+ 
                     </div>
                 </form>
 

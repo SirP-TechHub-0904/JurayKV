@@ -36,6 +36,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Id = d.Id,
                     ImageUrl = d.ImageUrl,
+                    ImageKey = d.ImageKey,
                     CreatedAtUtc = d.CreatedAtUtc,
                     ShowInDropdown = d.ShowInDropdown,
                     Name = d.Name,
@@ -60,6 +61,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 {
                     Id = d.Id,
                     ImageUrl = d.ImageUrl,
+                    ImageKey = d.ImageKey,
                     CreatedAtUtc = d.CreatedAtUtc,
                     ShowInDropdown = d.ShowInDropdown,
                     Name = d.Name,

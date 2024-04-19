@@ -36,9 +36,25 @@
                        Advert Image
                     </dt>
                     <dd class="col-sm-10">
+                        
                         <a href="@Model.UpdateKvAd.ImageUrl" target="_blank">
-                            <img src="@Model.UpdateKvAd.ImageUrl" class="img-fluid" style="height:100px" />
+
+
+                            @if (Model.UpdateKvAd.ImageKey.EndsWith(".jpg") || Model.UpdateKvAd.ImageKey.EndsWith(".jpeg") || Model.UpdateKvAd.ImageKey.EndsWith(".png") || Model.UpdateKvAd.ImageKey.EndsWith(".gif") || Model.UpdateKvAd.ImageKey.EndsWith(".bmp"))
+                            {
+                                <img src="@Model.UpdateKvAd.ImageUrl" class="img-fluid" style="max-height: 100px;" />
+                            }
+                            else if (Model.UpdateKvAd.ImageKey.EndsWith(".mp4") || Model.UpdateKvAd.ImageKey.EndsWith(".avi") || Model.UpdateKvAd.ImageKey.EndsWith(".mov") || Model.UpdateKvAd.ImageKey.EndsWith(".wmv") || Model.UpdateKvAd.ImageKey.EndsWith(".flv"))
+                            {
+                                <video controls style="height:120px;width:250px;">
+                                    <source src="@Model.UpdateKvAd.ImageUrl" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+
+
                         </a>
+
                     </dd>
                     <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.UpdateKvAd.CreatedAtUtc)

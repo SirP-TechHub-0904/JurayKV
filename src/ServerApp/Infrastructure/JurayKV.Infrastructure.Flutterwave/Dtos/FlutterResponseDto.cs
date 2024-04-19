@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace JurayKV.Infrastructure.Flutterwave.Dtos
 {
@@ -11,6 +11,7 @@ namespace JurayKV.Infrastructure.Flutterwave.Dtos
         public string status { get; set; }
         public string message { get; set; }
         public Data data { get; set; }
+
     }
 
     public class Data

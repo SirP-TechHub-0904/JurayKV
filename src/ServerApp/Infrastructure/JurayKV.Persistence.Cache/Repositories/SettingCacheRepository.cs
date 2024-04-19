@@ -54,7 +54,12 @@ namespace JurayKV.Persistence.Cache.Repositories
 
                     AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
                     AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
-                    AirtimeMinRecharge = d.AirtimeMinRecharge
+                    AirtimeMinRecharge = d.AirtimeMinRecharge,
+
+                    BankAccount = d.BankAccount,
+                    BankAccountNumber = d.BankAccountNumber,
+                    BankName = d.BankName,
+                     
                 };
 
                 list = await _repository.GetListAsync(selectExp);
@@ -90,7 +95,12 @@ namespace JurayKV.Persistence.Cache.Repositories
 
                     AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
                     AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
-                    AirtimeMinRecharge = d.AirtimeMinRecharge
+                    AirtimeMinRecharge = d.AirtimeMinRecharge,
+
+                    BankAccount = d.BankAccount,
+                    BankAccountNumber = d.BankAccountNumber,
+                    BankName = d.BankName,
+                     
                 };
 
                 setting = await _repository.GetByIdAsync(settingId, selectExp);
@@ -127,7 +137,11 @@ namespace JurayKV.Persistence.Cache.Repositories
 
                     AirtimeMaxRechargeTieOne = d.AirtimeMaxRechargeTieOne,
                     AirtimeMaxRechargeTieTwo = d.AirtimeMaxRechargeTieTwo,
-                    AirtimeMinRecharge = d.AirtimeMinRecharge
+                    AirtimeMinRecharge = d.AirtimeMinRecharge,
+                    BankAccount = d.BankAccount,
+                    BankAccountNumber = d.BankAccountNumber,
+                    BankName = d.BankName,
+                     
                 };
                 return setting;
             }

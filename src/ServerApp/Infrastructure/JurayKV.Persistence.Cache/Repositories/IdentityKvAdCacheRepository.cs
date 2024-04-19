@@ -83,6 +83,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     VideoUrl = d.VideoUrl,
                     Active = d.Active,
                     ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                    ImageKey = d.KvAd.ImageFile.ImageKey,
                     Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
 
                     Points = await PointByIdentityId(d.Id, d.UserId),
@@ -138,6 +139,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                 LastModifiedAtUtc = mainidentityKvAd.LastModifiedAtUtc,
                 Active = mainidentityKvAd.Active,
                 KvAdImage = mainidentityKvAd.KvAd.ImageFile.ImageUrl,
+                KvAdImageKey = mainidentityKvAd.KvAd.ImageFile.ImageKey,
+
                 Fullname = mainidentityKvAd.User.SurName + " " + mainidentityKvAd.User.FirstName + " " + mainidentityKvAd.User.LastName,
                 ResultOne = mainidentityKvAd.ResultOne,
                 ResultTwo = mainidentityKvAd.ResultTwo,
@@ -210,6 +213,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                     VideoUrl = d.VideoUrl,
                     Active = d.Active,
                     ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                    ImageKey = d.KvAd.ImageFile.ImageKey,
                     Points = await PointByIdentityId(d.Id, d.UserId),
                     AdsStatus = d.AdsStatus
                 };
@@ -266,7 +270,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                 UserId = d.UserId,
                 VideoUrl = d.VideoUrl,
                 Active = d.Active,
-                ImageUrl = d.KvAd.ImageFile.ImageUrl
+                ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                ImageKey = d.KvAd.ImageFile.ImageKey,
             }).ToList();
             return list;
         }
@@ -305,7 +310,8 @@ namespace JurayKV.Persistence.Cache.Repositories
                 UserId = d.UserId,
                 VideoUrl = d.VideoUrl,
                 Active = d.Active,
-                ImageUrl = d.KvAd.ImageFile.ImageUrl
+                ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                ImageKey = d.KvAd.ImageFile.ImageKey,
             }).ToList();
             return list;
         }
@@ -330,6 +336,7 @@ namespace JurayKV.Persistence.Cache.Repositories
                 VideoUrl = d.VideoUrl,
                 Active = d.Active,
                 ImageUrl = d.KvAd.ImageFile.ImageUrl,
+                ImageKey = d.KvAd.ImageFile.ImageKey,
                 Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
                 Company = d.KvAd.Company.Name,
                 KvAdName = d.KvAd.Bucket.Name

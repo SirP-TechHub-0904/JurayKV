@@ -62,6 +62,11 @@ internal class UpdateSettingCommandHandler : IRequestHandler<UpdateSettingComman
             getupdate.AirtimeMaxRechargeTieTwo = request.Setting.AirtimeMaxRechargeTieTwo;
             getupdate.AirtimeMinRecharge = request.Setting.AirtimeMinRecharge;
 
+
+            getupdate.BankAccount = request.Setting.BankAccount;
+            getupdate.BankName = request.Setting.BankName;
+            getupdate.BankAccountNumber = request.Setting.BankAccountNumber;
+
             await _settingRepository.UpdateAsync(getupdate);
 
             await _settingCacheHandler.RemoveListAsync();

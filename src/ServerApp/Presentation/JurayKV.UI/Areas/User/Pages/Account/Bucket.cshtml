@@ -30,7 +30,19 @@
 
                 <h4 style="text-align:center;">@item.BucketName</h4>
                 <div class="position-relative">
-                    <input type="image" src="@item.ImageUrl" alt="Submit" class="img-fluid">
+
+                    @if (item.ImageKey.EndsWith(".jpg") || item.ImageKey.EndsWith(".jpeg") || item.ImageKey.EndsWith(".png") || item.ImageKey.EndsWith(".gif") || item.ImageKey.EndsWith(".bmp"))
+                    {
+                        <input type="image" src="@item.ImageUrl" alt="Submit" class="img-fluid">
+                    }
+                    else if (item.ImageKey.EndsWith(".mp4") || item.ImageKey.EndsWith(".avi") || item.ImageKey.EndsWith(".mov") || item.ImageKey.EndsWith(".wmv") || item.ImageKey.EndsWith(".flv"))
+                    {
+                        <video controls style="height:120px;width:250px;">
+                            <source src="@item.ImageUrl" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    }
+
 
                 </div>
                 <form method="post">

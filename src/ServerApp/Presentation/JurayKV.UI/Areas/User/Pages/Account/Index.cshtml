@@ -11,7 +11,8 @@
 
 @if (TempData["success"] != null)
 {
-    <div class="alert alert-success">  @TempData["success"]
+    <div class="alert alert-success">
+        @TempData["success"]
     </div>
 }
 
@@ -28,54 +29,54 @@
                         <a asp-page="./CSA" class="btn btn-warning btn-xs">Upgrade to CSA</a>
                     }
                 </span>
-             </div>
-        <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-</div>
-<!-- /.col -->
-<div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-coins"></i></span>
-
-        <div class="info-box-content">
-            <span class="info-box-text">Points</span>
-            <span class="info-box-number">@Model.DashboardData.Points</span>
+            </div>
+            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
     </div>
-    <!-- /.info-box -->
-</div>
-<!-- /.col -->
-<!-- fix for small devices only -->
-<div class="clearfix hidden-md-up"></div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-coins"></i></span>
 
-<div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-        <span class="info-box-icon bg-success elevation-1"><i class="fab fa-square-whatsapp"></i></span>
-
-        <div class="info-box-content">
-            <span class="info-box-text">Ads Running</span>
-            <span class="info-box-number">@Model.DashboardData.AdsRunning</span>
+            <div class="info-box-content">
+                <span class="info-box-text">Points</span>
+                <span class="info-box-number">@Model.DashboardData.Points</span>
+            </div>
+            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
     </div>
-    <!-- /.info-box -->
-</div>
-<!-- /.col -->
-<div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-money"></i></span>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
 
-        <div class="info-box-content">
-            <span class="info-box-text">Exchange Rate</span>
-            <span class="info-box-number">@Model.DashboardData.ExchangeRate</span>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fab fa-square-whatsapp"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Ads Running</span>
+                <span class="info-box-number">@Model.DashboardData.AdsRunning</span>
+            </div>
+            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
     </div>
-    <!-- /.info-box -->
-</div>
-<!-- /.col -->
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-money"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Exchange Rate</span>
+                <span class="info-box-number">@Model.DashboardData.ExchangeRate</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
 </div>
 <div class="row">
 
@@ -170,4 +171,38 @@
     </div>
 </div>
 
- 
+
+@section Scripts {
+
+    <div class="modal fade" id="mainModal" data-backdrop="static">
+        <div class="modal-dialog modal-md" style="width: 70% !important;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <a target="_blank" href="https://chat.whatsapp.com/GEdI02VVEvWLpIG6avUpK7" class="btn btn-primary" style="width:100%;">
+                    
+                        <i class="fab fa-whatsapp" style="color: #017561; font-weight: 900; font-size: 20px; background-color: white; padding: 5px; border-radius: 10px; "></i>
+                      Koboview WhatsApp Community Link</a>
+                    <h5 style="text-align:center;">    Click on the link to join Koboview WhatsApp Community. 
+
+                    </h5>
+                    <br />
+                    <a target="_blank" href="https://youtu.be/YP7sRRNpaOM" class="btn btn-primary" style="width:100%;">
+                    <i class="fab fa-youtube" style="color: #f40000; font-weight: 900; font-size: 20px; background-color: white; padding: 5px; border-radius: 10px; "></i>  Youtube Link</a>
+                    <h5 style="text-align:center;">   Click on the above link to learn how Koboview works
+                    </h5>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(window).on('load', function () {
+            $('#mainModal').modal('show');
+        });
+    </script>
+
+}

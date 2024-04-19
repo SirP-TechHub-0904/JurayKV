@@ -40,6 +40,15 @@ namespace JurayKV.UI.Areas.Client.Pages.Account
 
             return Page();
         }
+        [BindProperty]
+        public BankInfo BankInfoResult { get; set; }
+
+        public class BankInfo
+        {
+            public string? BankAccount { get; set; }
+            public string? BankName { get; set; }
+            public string? BankAccountNumber { get; set; }
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -55,8 +64,19 @@ namespace JurayKV.UI.Areas.Client.Pages.Account
             {
                 string userId = _userManager.GetUserId(HttpContext.User);
                 CreateCompanyAdvertRequestCommand command = new CreateCompanyAdvertRequestCommand(Command, imagefile, Guid.Parse(userId));
-                var Result = await _mediator.Send(command);
-                return Redirect(Result.data.link);
+                AdvertResponse Result = await _mediator.Send(command);
+
+                if(Result.PaymentGateWay == Domain.Primitives.Enum.PaymentGateway.Flutterwave)
+                {
+                    return Redirect(Result.FlutterResponseDto.data.link);
+                }
+                else if (Result.PaymentGateWay == Domain.Primitives.Enum.PaymentGateway.Bank)
+                {
+                    
+                    return RedirectToPage("./PaymentInfo");
+
+                }
+                
             }
             catch (Exception ex)
             {

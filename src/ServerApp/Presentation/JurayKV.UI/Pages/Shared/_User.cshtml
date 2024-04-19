@@ -240,17 +240,7 @@
                                 </a>
                             </li>
                         }
-                        <li class="nav-item" style="background-color: #746e6e;">
 
-                            <a asp-page="/Account/CSA" asp-area="User" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p class="uppercase">
-                                    CSA Dashboard @if (!User.IsInRole("CSA"))
-                                    {<span style=" font-size: 12px; color: red;">(Upgrade)</span>}
-                                </p>
-                            </a>
-
-                        </li>
                         @*@await Component.InvokeAsync("Ads")*@
 
                         @if (User.IsInRole(Constants.CompanyPolicy))
@@ -275,6 +265,17 @@
                         }
                         else
                         {
+                            <li class="nav-item">
+
+                                <a asp-page="/Account/CSA" asp-area="User" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p class="uppercase">
+                                        CSA Dashboard @if (!User.IsInRole("CSA"))
+                                        {<span style=" font-size: 12px; color: red;">(Upgrade)</span>}
+                                    </p>
+                                </a>
+
+                            </li>
                             <li class="nav-item">
                                 <a asp-page="/Account/RunningAds" asp-area="User" class="nav-link">
                                     <i class="nav-icon fas fa-th"></i>

@@ -3,6 +3,7 @@ using JurayKV.Application.Caching.Repositories;
 using JurayKV.Application.Infrastructures;
 using JurayKV.Application.Queries.CompanyQueries;
 using JurayKV.Domain.Aggregates.AdvertRequestAggregate;
+using JurayKV.Domain.Aggregates.SettingAggregate;
 using JurayKV.Domain.Aggregates.TransactionAggregate;
 using JurayKV.Domain.ValueObjects;
 using JurayKV.Infrastructure.Flutterwave.Dtos;
@@ -24,7 +25,7 @@ namespace JurayKV.Application.Commands.AdvertRequestCommands
 {
  
 
-public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponseDto>
+public sealed class CreateCompanyAdvertRequestCommand : IRequest<AdvertResponse>
     {
         public CreateCompanyAdvertRequestCommand(AdvertRequest advertRequest, IFormFile file, Guid userId)
         {
@@ -38,8 +39,9 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
         public Guid UserId { get; set; }
     }
 
-    internal class CreateCompanyAdvertRequestCommandHandler : IRequestHandler<CreateCompanyAdvertRequestCommand, FlutterResponseDto>
+    internal class CreateCompanyAdvertRequestCommandHandler : IRequestHandler<CreateCompanyAdvertRequestCommand, AdvertResponse>
     {
+        private readonly ISettingRepository _settingRepository;
         private readonly IAdvertRequestRepository _advertRequestRepository;
         private readonly IAdvertRequestCacheHandler _advertRequestCacheHandler;
         private readonly IStorageService _storage;
@@ -62,7 +64,8 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
                 IWalletCacheRepository walletCacheRepository,
                 IFlutterTransactionService repositoryService,
                 IHttpContextAccessor httpContextAccessor,
-                IRepository repository)
+                IRepository repository,
+                ISettingRepository settingRepository)
         {
             _advertRequestRepository = advertRequestRepository;
             _advertRequestCacheHandler = advertRequestCacheHandler;
@@ -74,10 +77,12 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
             _repositoryService = repositoryService;
             _httpContextAccessor = httpContextAccessor;
             _repository = repository;
+            _settingRepository = settingRepository;
         }
 
-        public async Task<FlutterResponseDto> Handle(CreateCompanyAdvertRequestCommand request, CancellationToken cancellationToken)
+        public async Task<AdvertResponse> Handle(CreateCompanyAdvertRequestCommand request, CancellationToken cancellationToken)
         {
+            AdvertResponse responseData = new AdvertResponse();
             _ = request.ThrowIfNull(nameof(request));
             IDbContextTransaction dbContextTransaction = await _repository
               .BeginTransactionAsync(IsolationLevel.Unspecified, cancellationToken);
@@ -143,6 +148,23 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
             await _transactionCacheHandler.RemoveDetailsByIdAsync(transaction.Id);
             await _transactionCacheHandler.RemoveList10ByUserAsync(transaction.UserId);
 
+
+                var setting = await _settingRepository.GetSettingAsync();
+                if(setting.PaymentGateway == Domain.Primitives.Enum.PaymentGateway.Bank)
+                {
+                    responseData.PaymentGateWay = Domain.Primitives.Enum.PaymentGateway.Bank;
+                    responseData.BankName = setting.BankName;
+                    responseData.BankAccountNumber = setting.BankAccountNumber;
+                    responseData.BankAccount = setting.BankAccount;
+
+                    return responseData;
+                }
+                else
+                {
+
+                
+
+
             DataDeviceInformation dataDeviceInformation = new DataDeviceInformation();
             //run the flutterwave transaction
             var httpContext = _httpContextAccessor.HttpContext;
@@ -164,7 +186,11 @@ public sealed class CreateCompanyAdvertRequestCommand : IRequest<FlutterResponse
 
             FlutterResponseDto dataResponse = await _repositoryService.InitializeTransaction(model);
 
-            return dataResponse;
+                responseData.FlutterResponseDto = dataResponse;
+                    responseData.PaymentGateWay = Domain.Primitives.Enum.PaymentGateway.Flutterwave;
+
+                    return responseData;
+                }
             }
             catch (Exception)
             {

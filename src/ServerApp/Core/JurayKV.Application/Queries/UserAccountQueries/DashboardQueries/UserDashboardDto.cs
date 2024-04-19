@@ -11,6 +11,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
     {
         public string Fullname { get;set; }
         public string Company { get;set; }
+        public string Passport { get;set; }
         public string Status { get; set; }
         public decimal Points { get;set;}
         public decimal Balance { get;set; }
@@ -52,6 +53,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
     {
         public Guid Id { get; set; } 
         public string Image { get; set; }
+        public string ImageKey { get; set; }
 
         public int Views { get; set; }
 

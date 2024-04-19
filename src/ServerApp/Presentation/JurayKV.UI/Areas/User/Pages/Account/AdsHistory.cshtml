@@ -39,9 +39,21 @@
                                         <a href="" style="font-size:10px;">@item.CreatedAtUtc.ToString("hh:mm tt")</a>
                                     </td>
                                     <td>
-                                        <a href="@item.ImageUrl" target="_blank">
-                                            <img src="@item.ImageUrl" class="img-fluid" style="max-height:50px;" />
+                                        
+                                        <a href="@item.ImageUrl" target="_blank" style="">
+                                            @if (item.ImageKey.EndsWith(".jpg") || item.ImageKey.EndsWith(".jpeg") || item.ImageKey.EndsWith(".png") || item.ImageKey.EndsWith(".gif") || item.ImageKey.EndsWith(".bmp"))
+                                            {
+                                                <img src="@item.ImageUrl" class="img-fluid" style="max-height: 50px;" />
+                                            }
+                                            else if (item.ImageKey.EndsWith(".mp4") || item.ImageKey.EndsWith(".avi") || item.ImageKey.EndsWith(".mov") || item.ImageKey.EndsWith(".wmv") || item.ImageKey.EndsWith(".flv"))
+                                            {
+                                                <video controls style="height:120px;width:250px;">
+                                                    <source src="@item.ImageUrl" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            }
                                         </a>
+
                                     </td>
 
                                     <td>

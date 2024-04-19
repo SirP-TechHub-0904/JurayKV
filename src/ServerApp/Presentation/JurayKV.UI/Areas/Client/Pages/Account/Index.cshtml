@@ -8,6 +8,7 @@
         <div class="info-box">
 
             <div class="info-box-content">
+                @*passport*@
                 <span class="info-box-text">@Model.DashboardData.Company</span>
                 <span class="info-box-text">@Model.DashboardData.Status</span>
 
@@ -88,7 +89,17 @@
                                     <td>
                                         <a href="@item.Image">
 
-                                            <img src="@item.Image" height="50" width="50" />
+                                            @if (item.ImageKey.EndsWith(".jpg") || item.ImageKey.EndsWith(".jpeg") || item.ImageKey.EndsWith(".png") || item.ImageKey.EndsWith(".gif") || item.ImageKey.EndsWith(".bmp"))
+                                            {
+                                                <img src="@item.Image" class="img-fluid" style="max-height: 50px;" />
+                                            }
+                                            else if (item.ImageKey.EndsWith(".mp4") || item.ImageKey.EndsWith(".avi") || item.ImageKey.EndsWith(".mov") || item.ImageKey.EndsWith(".wmv") || item.ImageKey.EndsWith(".flv"))
+                                            {
+                                                <video controls style="height:120px;width:250px;">
+                                                    <source src="@item.Image" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            }
                                         </a>
                                     </td>
                                     <td>@item.Views</td>

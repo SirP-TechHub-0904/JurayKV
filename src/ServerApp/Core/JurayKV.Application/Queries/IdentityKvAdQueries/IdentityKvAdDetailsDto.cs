@@ -15,6 +15,7 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
         public Guid KvAdId { get;  set; }
         public string KvAdName { get;  set; }
         public string? KvAdImage { get;  set; }
+        public string? KvAdImageKey { get;  set; }
         public string Activity { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? LastModifiedAtUtc { get; set; }

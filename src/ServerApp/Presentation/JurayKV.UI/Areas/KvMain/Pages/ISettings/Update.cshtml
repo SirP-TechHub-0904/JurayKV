@@ -91,6 +91,23 @@
                         <span asp-validation-for="Setting.AirtimeMinRecharge" class="text-danger"></span>
                     </div>
 
+
+                    <div class="form-group">
+                        <label asp-for="Setting.BankAccount" class="control-label"></label>
+                        <input asp-for="Setting.BankAccount" class="form-control" />
+                        <span asp-validation-for="Setting.BankAccount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Setting.BankName" class="control-label"></label>
+                        <input asp-for="Setting.BankName" class="form-control" />
+                        <span asp-validation-for="Setting.BankName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Setting.BankAccountNumber" class="control-label"></label>
+                        <input asp-for="Setting.BankAccountNumber" class="form-control" />
+                        <span asp-validation-for="Setting.BankAccountNumber" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>

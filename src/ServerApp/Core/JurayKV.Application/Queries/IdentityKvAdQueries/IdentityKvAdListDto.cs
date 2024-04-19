@@ -15,6 +15,7 @@ namespace JurayKV.Application.Queries.IdentityKvAdQueries
         public DateTime? LastModifiedAtUtc { get; set; }
         public string VideoUrl { get; set; }
         public string ImageUrl { get; set; }
+        public string ImageKey { get; set; }
         public bool Active { get; set; }
         public AdsStatus AdsStatus { get; set; }
         public int Points { get;set; }

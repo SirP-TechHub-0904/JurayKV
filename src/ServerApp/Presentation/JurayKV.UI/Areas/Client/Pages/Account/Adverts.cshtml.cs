@@ -31,6 +31,7 @@ namespace JurayKV.UI.Areas.Client.Pages.Account
         public List<KvAdListDto> KvAds = new List<KvAdListDto>();
         public List<KvAdListDto> KvAdsUpcoming = new List<KvAdListDto>();
         public List<KvAdListDto> KvAdsFinished = new List<KvAdListDto>();
+        public DateTime CurrentDate { get;set;}
         public async Task<IActionResult> OnGetAsync()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
@@ -41,7 +42,7 @@ namespace JurayKV.UI.Areas.Client.Pages.Account
             KvAds = await _mediator.Send(command);
 
             DateTime currentDate = DateForSix.GetTheDateBySix(DateTime.UtcNow.AddHours(1));
-
+            CurrentDate = currentDate;
             // Get finished items (where the date is before 6 am today)
             KvAdsFinished = KvAds.Where(x => x.Status == Domain.Primitives.Enum.DataStatus.Active)
                 .Where(item => item.CreatedAtUtc.Date < currentDate.Date).OrderByDescending(X => X.CreatedAtUtc)
@@ -52,7 +53,10 @@ namespace JurayKV.UI.Areas.Client.Pages.Account
                 .Where(item => item.CreatedAtUtc.Date >= currentDate.Date).OrderBy(X => X.CreatedAtUtc)
                 .ToList();
 
-             
+            KvAds = KvAds.OrderBy(X => X.CreatedAtUtc)
+                .ToList();
+
+
             return Page();
         }
 

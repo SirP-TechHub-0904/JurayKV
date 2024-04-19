@@ -28,9 +28,7 @@
                                 <th>Date</th>
                                 <th>Image</th>
                                 <th>Status </th>
-                                @*<th>Active </th>*@
-
-                                @*<th> </th>*@
+                                
 
                             </tr>
                         </thead>
@@ -38,7 +36,7 @@
                             int sn = 0;
                         }
                         <tbody>
-                            @foreach (var item in Model.KvAdsUpcoming)
+                            @foreach (var item in Model.KvAds)
                             {
                                 <tr>
                                     <td>
@@ -59,12 +57,25 @@
 
                                     <td>
                                         <a href="@item.ImageUrl" target="_blank">
-                                            <img src="@item.ImageUrl" class="img-fluid" style="height:50px" />
+                                             
+
+                                               @if (item.ImageKey.EndsWith(".jpg") || item.ImageKey.EndsWith(".jpeg") || item.ImageKey.EndsWith(".png") || item.ImageKey.EndsWith(".gif") || item.ImageKey.EndsWith(".bmp"))
+                                                {
+                                                    <img src="@item.ImageUrl" class="img-fluid" style="max-height: 50px;" />
+                                                }
+                                                else if (item.ImageKey.EndsWith(".mp4") || item.ImageKey.EndsWith(".avi") || item.ImageKey.EndsWith(".mov") || item.ImageKey.EndsWith(".wmv") || item.ImageKey.EndsWith(".flv"))
+                                                {
+                                                    <video controls style="height:120px;width:250px;">
+                                                        <source src="@item.ImageUrl" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
+                                             
                                         </a>
                                     </td>
                                     <td>
                                         @{
-
+                                            
                                             DateTime sixAMDateTime = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0);
                                             DateTime sixAMDateTimec = new DateTime(item.CreatedAtUtc.Year, item.CreatedAtUtc.Month, item.CreatedAtUtc.Day, 6, 0, 0).AddDays(1);
                                         }
@@ -75,55 +86,17 @@
 
                                             <span class="btn btn-success">ACTIVE</span>
                                         }
+                                        else if (item.CreatedAtUtc.Date < Model.CurrentDate.Date)
+                                        {
+                                            <span class="btn btn-warning">COMPLETED</span>
+                                        }
                                         else
                                         {
                                             <span class="btn btn-warning">UPCOMING</span>
 
                                         }
                                     </td>
-                                    @*<td>
-
-                                            <form method="post">
-                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                                <input asp-for="BucketId" value="@item.BucketId" type="hidden" />
-                                                <input asp-for="AdsId" value="@item.Id" type="hidden" />
-                                                <div class="form-group">
-                                                    @if (item.Active == false)
-                                                    {
-                                                        <input asp-for="Active" value="true" type="hidden" />
-
-
-                                                        <input type="submit" value="Make Active" class="btn btn-primary" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input asp-for="Active" value="false" type="hidden" />
-
-
-                                                        <input type="submit" value="Cancel Active" class="btn btn-danger" />
-                                                    }
-                                                </div>
-                                            </form>
-                                        </td>*@
-
-                                    @*<td>
-                                            <div class="btn-group">
-
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-success btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                                                        Action
-                                                    </button>
-                                                    <div class="dropdown-menu" style="">
-
-                                                        <a class="dropdown-item" asp-page="./Info" asp-route-id="@item.Id">Details</a>
-                                                        <a class="dropdown-item" asp-page="./Update" asp-route-id="@item.Id">Update</a>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </td>*@
-
+                                   
                                 </tr>
                             }
                         </tbody>
@@ -133,14 +106,13 @@
         </div>
     </div>
 
-    <div class="card-body ">
+    @*<div class="card-body ">
         <div class="boxed-div">
 
             <div class="card-header">
                 <h4 class="">COMPLETED ADs</h4>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
+             <div class="card-body">
                 <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -194,6 +166,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
 
 </div>

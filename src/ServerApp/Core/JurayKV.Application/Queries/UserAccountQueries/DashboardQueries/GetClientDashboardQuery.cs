@@ -61,6 +61,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                     return null;
                 }
                 userdto.Fullname = user.Fullname;
+                userdto.Passport = user.PassportUrl;
                 //get company by userid
                 var company = await _companyCacheRepository.GetByUserIdAsync(request.UserId);
                 userdto.Company = company.Name;
@@ -74,6 +75,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
                 userdto.LastTenAds = companyads.Select(d => new LastTenAds
                 {
                     Image = d.ImageUrl,
+                    ImageKey = d.ImageKey,
                     Id = d.Id,
                     Views = d.IdentityKvAdListDtos.Sum(x => x.Points),
                     CreatedAtUtc = d.CreatedAtUtc

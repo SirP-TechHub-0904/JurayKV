@@ -20,6 +20,7 @@ namespace JurayKV.Application.Queries.KvAdQueries
         public string CompanyName { get; set; } 
         public DateTime CreatedAtUtc { get; set; }
         public string ImageUrl { get; set; }
+        public string ImageKey { get; set; }
         public DataStatus Status { get; set; }
 
         public bool Exist { get; set; }

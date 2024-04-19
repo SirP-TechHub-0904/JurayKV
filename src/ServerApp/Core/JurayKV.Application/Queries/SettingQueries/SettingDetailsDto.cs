@@ -34,5 +34,11 @@ namespace JurayKV.Application.Queries.SettingQueries
         public decimal AirtimeMaxRechargeTieOne { get; set; }
         public decimal AirtimeMaxRechargeTieTwo { get; set; }
         public decimal AirtimeMinRecharge { get; set; }
+
+        public string? BankAccount { get; set; }
+        public string? BankName { get; set; }
+        public string? BankAccountNumber { get; set; }
+         
+
     }
 }

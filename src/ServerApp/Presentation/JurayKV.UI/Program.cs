@@ -169,7 +169,7 @@ namespace JurayKV.UI
                 });
                 options.AddPolicy(Constants.Dashboard, policy =>
                 {
-                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.Dashboard);
+                    policy.RequireRole(Constants.SuperAdminPolicy, Constants.Dashboard, Constants.CompanyPolicy);
                 });
                 options.AddPolicy(Constants.Transaction, policy =>
                 {
@@ -186,6 +186,8 @@ namespace JurayKV.UI
                 //        Constants.AdvertPolicy, Constants.UsersManagerPolicy, Constants.ClientPolicy, Constants.UserPolicy
                 //                                );
                 //});
+                //     [Authorize(Policy = Constants.CompanyPolicy)]
+
                 options.AddPolicy(Constants.ValidatorPolicy, policy =>
                 {
                     policy.RequireRole(Constants.ValidatorPolicy);
