@@ -46,6 +46,9 @@ internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyComman
         // Persist to the database
         await _companyRepository.InsertAsync(company);
 
+
+
+
         // Remove the cache
         await _companyCacheHandler.RemoveListAsync();
         await _companyCacheHandler.RemoveDropdownListAsync();

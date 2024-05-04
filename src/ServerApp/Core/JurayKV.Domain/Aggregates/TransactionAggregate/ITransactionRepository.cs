@@ -25,5 +25,9 @@ namespace JurayKV.Domain.Aggregates.TransactionAggregate
         Task<List<Transaction>> GetReferralListByUserId(Guid userId);
         Task<int> TransactionCount(Guid userId);
 
+        Task<List<ListTransactionUserDto>> GetListUserTransactions(int pageSize, int pageNumber, string? searchString, int sortOrder);
+        Task<ListTransactionUserDto> GetUserTransactionsSummary();
+
+
     }
 }

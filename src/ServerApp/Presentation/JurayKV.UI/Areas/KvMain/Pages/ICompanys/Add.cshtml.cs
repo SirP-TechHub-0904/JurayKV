@@ -24,12 +24,14 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
     public class AddModel : PageModel
     {
         private readonly IExceptionLogger _exceptionLogger;
+        private readonly IEmailSender _emailSender;
 
         private readonly IMediator _mediator;
-        public AddModel(IMediator mediator, IExceptionLogger exceptionLogger)
+        public AddModel(IMediator mediator, IExceptionLogger exceptionLogger, IEmailSender emailSender)
         {
             _mediator = mediator;
             _exceptionLogger = exceptionLogger;
+            _emailSender = emailSender;
         }
 
         [BindProperty]
@@ -80,9 +82,10 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
         public async Task<IActionResult> OnPostAsync()
         {
             Guid UserId = Guid.Empty;
+            CreateUserDto create = new CreateUserDto();
             try
             {
-                CreateUserDto create = new CreateUserDto();
+                
                 create.Surname = Input.Surname;
                 create.Firstname = Input.FirstName;
                 create.Email = Input.Email;
@@ -120,6 +123,79 @@ namespace JurayKV.UI.Areas.KvMain.Pages.ICompanys
             {
                 CreateCompanyCommand command = new CreateCompanyCommand(CompanyName, UserId, AmountPerPoint);
                 Guid Result = await _mediator.Send(command);
+
+
+                //send emails to company
+                try
+                {
+                    string emailTemplate = @"
+<h5>Welcome aboard! We are thrilled to have you join Koboview advertising platform. 
+As a valued client, you now have access to our powerful tools and features that 
+will help you maximize your advertising efforts.</h5>
+<h6>Login with your email and temporary password 
+
+</h6>
+
+<ul>
+<li>Email: @@email@@</li>
+<li>Password: @@password@@</li>
+<li>Website: https://koboview.com/Auth/Account/Login</li>
+	</ul>
+<br>
+<p style=""text-align: center;"">
+Reset your password within 24hrs after logging in. 
+<br><br>
+Do look out for our next email on how to place your adverts on koboview.
+</p>
+";
+                    emailTemplate = emailTemplate.Replace("@@email@@", create.Email);
+                    emailTemplate = emailTemplate.Replace("@@password@@", create.Password);
+                    bool result = await _emailSender.SendCompanyAsync(emailTemplate, UserId.ToString(), "Welcome to koboview", CompanyName);
+
+
+                }
+                catch (Exception c)
+                {
+
+                }
+                //next email
+
+                try
+                {
+                    string emailTemplate2 = @"
+<h5>Hope you have successfully logged in to your koboview account?
+
+</h5>
+<h6>This email is a guide on how to place an advert on koboview.
+<br>
+Below are the steps;
+</h6>
+<ul style=""list-style-type: none !important;"">
+ <li>
+1. Login to your dashboard 
+</li>
+<li>2. Click on Advert Request and make a request for ads
+</li>
+<li>3. Put Amount of Ads views needed according to your budget. Add additional information (Website address,  WhatsApp link, blog etc.)
+</li>
+<li>4. Upload and image if you have any. If you have none, we can design one for you.
+</li>
+<li>5. Go ahead and click on submit to make a payment through the account details provided. 
+</li>
+<li>6. Submit evidence of payment through this link.  https://wa.me/message/6SQ57ENNZMRPB1 
+		</li>
+";
+
+                    bool result = await _emailSender.SendCompanyAsync(emailTemplate2, UserId.ToString(), "How to make an Advert Request", CompanyName);
+
+
+                }
+                catch (Exception c)
+                {
+
+                }
+
+
                 TempData["success"] = "Added Successfuly";
             }
             catch (Exception ex)

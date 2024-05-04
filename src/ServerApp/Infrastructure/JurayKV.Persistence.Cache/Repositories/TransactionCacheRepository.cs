@@ -35,30 +35,30 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (list == null)
             //{
-                Expression<Func<Transaction, TransactionListDto>> selectExp = d => new TransactionListDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    Description = d.Description,
-                    UniqueReference = d.UniqueReference,
-                    OptionalNote = d.OptionalNote,
-                    Status = d.Status,
-                    TrackCode = d.TrackCode,
-                    TransactionReference = d.TransactionReference,
-                    TransactionType = d.TransactionType,
-                    UserId = d.UserId,
-                    Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
-                    WalletId = d.WalletId,
-                    WalletBalance = d.Wallet.Amount,
-                    CreatedAtUtc = d.CreatedAtUtc
-                };
+            Expression<Func<Transaction, TransactionListDto>> selectExp = d => new TransactionListDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.FirstName + " " + d.User.LastName,
+                WalletId = d.WalletId,
+                WalletBalance = d.Wallet.Amount,
+                CreatedAtUtc = d.CreatedAtUtc
+            };
 
-               var list = await _repository.GetListAsync(selectExp);
+            var list = await _repository.GetListAsync(selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
 
-            return list.OrderByDescending(x=>x.CreatedAtUtc).ToList();
+            return list.OrderByDescending(x => x.CreatedAtUtc).ToList();
         }
 
         public async Task<TransactionDetailsDto> GetByIdAsync(Guid transactionId)
@@ -68,25 +68,25 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (transaction == null)
             //{
-                Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    Description = d.Description,
-                    UniqueReference = d.UniqueReference,
-                    OptionalNote = d.OptionalNote,
-                    Status = d.Status,
-                    TrackCode = d.TrackCode,
-                    TransactionReference = d.TransactionReference,
-                    TransactionType = d.TransactionType,
-                    UserId = d.UserId,
-                    WalletId = d.WalletId,
-                    CreatedAtUtc = d.CreatedAtUtc,
-                    TransactionVerificationId = d.TransactionVerificationId,
-                    
-                };
+            Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                WalletId = d.WalletId,
+                CreatedAtUtc = d.CreatedAtUtc,
+                TransactionVerificationId = d.TransactionVerificationId,
 
-                var transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+            };
+
+            var transaction = await _repository.GetByIdAsync(transactionId, selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, transaction);
             //}
@@ -101,23 +101,23 @@ namespace JurayKV.Persistence.Cache.Repositories
 
             //if (transaction == null)
             //{
-                Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    Description = d.Description,
-                    UniqueReference = d.UniqueReference,
-                    OptionalNote = d.OptionalNote,
-                    Status = d.Status,
-                    TrackCode = d.TrackCode,
-                    TransactionReference = d.TransactionReference,
-                    TransactionType = d.TransactionType,
-                    UserId = d.UserId,
-                    WalletId = d.WalletId,
-                    CreatedAtUtc = d.CreatedAtUtc
-                };
+            Expression<Func<Transaction, TransactionDetailsDto>> selectExp = d => new TransactionDetailsDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                WalletId = d.WalletId,
+                CreatedAtUtc = d.CreatedAtUtc
+            };
 
-              var  transaction = await _repository.GetByIdAsync(transactionId, selectExp);
+            var transaction = await _repository.GetByIdAsync(transactionId, selectExp);
 
             //    await _distributedCache.SetAsync(cacheKey, transaction);
             //}
@@ -125,7 +125,7 @@ namespace JurayKV.Persistence.Cache.Repositories
             return transaction;
         }
 
-       
+
         public async Task<List<TransactionListDto>> GetListByCountAsync(int toplistcount, Guid userId)
         {
             //string cacheKey = TransactionCacheKeys.ListByCountUserIdKey(userId);
@@ -134,24 +134,24 @@ namespace JurayKV.Persistence.Cache.Repositories
             //if (list == null)
             //{
 
-                var xlist = await _transactionRepository.LastListByCountByUserId(toplistcount, userId);
-               var list = xlist.Select(d => new TransactionListDto
-                {
-                    Id = d.Id,
-                    Amount = d.Amount,
-                    Description = d.Description,
-                   UniqueReference = d.UniqueReference,
-                   OptionalNote = d.OptionalNote,
-                   Status = d.Status,
-                    TrackCode = d.TrackCode,
-                    TransactionReference = d.TransactionReference,
-                    TransactionType = d.TransactionType,
-                    UserId = d.UserId,
-                    Fullname = d.User.SurName + " " + d.User.SurName,
-                    WalletId = d.WalletId,
-                    WalletBalance = d.Wallet.Amount,
-                    CreatedAtUtc = d.CreatedAtUtc
-                }).ToList();
+            var xlist = await _transactionRepository.LastListByCountByUserId(toplistcount, userId);
+            var list = xlist.Select(d => new TransactionListDto
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+                Description = d.Description,
+                UniqueReference = d.UniqueReference,
+                OptionalNote = d.OptionalNote,
+                Status = d.Status,
+                TrackCode = d.TrackCode,
+                TransactionReference = d.TransactionReference,
+                TransactionType = d.TransactionType,
+                UserId = d.UserId,
+                Fullname = d.User.SurName + " " + d.User.SurName,
+                WalletId = d.WalletId,
+                WalletBalance = d.Wallet.Amount,
+                CreatedAtUtc = d.CreatedAtUtc
+            }).ToList();
 
             //    await _distributedCache.SetAsync(cacheKey, list);
             //}
@@ -166,7 +166,7 @@ namespace JurayKV.Persistence.Cache.Repositories
 
         public async Task<int> TransactionCount(Guid userId)
         {
-           return await _transactionRepository.TransactionCount(userId);
+            return await _transactionRepository.TransactionCount(userId);
         }
         public async Task<List<TransactionListDto>> GetListByUserIdAsync(Guid userId, int count)
         {
@@ -242,6 +242,45 @@ namespace JurayKV.Persistence.Cache.Repositories
         public async Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId)
         {
             return await _transactionRepository.CheckTransactionAboveTieOne(uniqueId, userId);
+        }
+
+        public async Task<List<ListTransactionDto>> ListUserTransactions(int pageSize, int pageNumber, string searchString, int sortOrder)
+        {
+
+            var xlist = await _transactionRepository.GetListUserTransactions(pageSize, pageNumber, searchString, sortOrder);
+            var list = xlist.Select(d => new ListTransactionDto
+            {
+                UserId = d.UserId,
+                Email = d.Email,
+                Name = d.Name,
+                Phone = d.Phone,
+                TotalPoints = d.TotalPoints,
+                TotalReferrals = d.TotalReferrals,
+                TotalDebit = d.TotalDebit,
+                WalletBalance = d.WalletBalance,
+                TotalInList = d.TotalInList,
+
+            }).ToList();
+
+
+            return list;
+        }
+
+        public async Task<ListTransactionDto> GetUserTransactionsSummary()
+        {
+            var d = await _transactionRepository.GetUserTransactionsSummary();
+            var list = new ListTransactionDto
+            {
+
+                TotalPoints = d.TotalPoints,
+                TotalReferrals = d.TotalReferrals,
+                TotalDebit = d.TotalDebit,
+                WalletBalance = d.WalletBalance,
+                TotalInList = d.TotalInList,
+
+            };
+
+            return list;
         }
     }
 

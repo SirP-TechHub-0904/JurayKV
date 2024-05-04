@@ -60,7 +60,7 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
             ResponseCreateUserDto response = new ResponseCreateUserDto();
             try
             {
-                 
+
 
                 // Create a random number generator
                 Random random = new Random();
@@ -162,27 +162,35 @@ UserManager<ApplicationUser> userManager, IUserManagerCacheHandler userManagerCa
                 CreateWalletCommand walletcommand = new CreateWalletCommand(user.Id, "", "wallet created on " + DateTime.UtcNow, 0);
                 Guid Result = await _mediator.Send(walletcommand);
                 //
-                GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(user.Id.ToString());
 
-                EmailVerificationCode getexistingVcode = await _mediator.Send(command);
-                if (getexistingVcode == null)
+                if (request.Data.Role == "Company")
                 {
-
-                    SendEmailVerificationCodeCommand verificationcommand = new SendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode);
-                    bool verificationresult = await _mediator.Send(verificationcommand);
-                    user.VerificationCode = vcode;
+                   
                 }
                 else
                 {
-                      user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}";
+
+                    GetEmailVerificationCodeQuery command = new GetEmailVerificationCodeQuery(user.Id.ToString());
+
+                    EmailVerificationCode getexistingVcode = await _mediator.Send(command);
+                    if (getexistingVcode == null)
+                    {
+
+                        SendEmailVerificationCodeCommand verificationcommand = new SendEmailVerificationCodeCommand(user.Email, user.PhoneNumber, user.Id.ToString(), verificationCode);
+                        bool verificationresult = await _mediator.Send(verificationcommand);
+                        user.VerificationCode = vcode;
+                    }
+                    else
+                    {
+                        user.VerificationCode = $"Your Koboview OTP is {getexistingVcode.Code}";
+                    }
+
+
+                    await _userManager.UpdateAsync(user);
+                    //send email.
+                    bool result = await _emailSender.SendAsync(vcode, user.Id.ToString(), "Email Comfirmation");
+
                 }
-
-
-                await _userManager.UpdateAsync(user);
-                //send email.
-                bool result = await _emailSender.SendAsync(vcode, user.Id.ToString(), "Email Comfirmation");
-
-
 
                 string maskedEmail = EmailMask.MaskEmail(applicationUser.Email);
 

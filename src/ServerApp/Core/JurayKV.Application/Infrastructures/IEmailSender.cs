@@ -8,6 +8,7 @@ public interface IEmailSender
 {
     Task<bool> SendAsync(string smsMessage, string id, string subject);
     Task<bool> SendEmailAsync(string smsMessage, string email, string subject);
+    Task<bool> SendCompanyAsync(string smsMessage, string id, string subject, string compnayname);
 }
 
 public sealed class EmailMessage

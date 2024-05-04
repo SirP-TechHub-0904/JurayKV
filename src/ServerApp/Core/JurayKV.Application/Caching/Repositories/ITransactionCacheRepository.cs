@@ -22,5 +22,9 @@ namespace JurayKV.Application.Caching.Repositories
 
         Task<int> TransactionCount(Guid userId);
         Task<bool> CheckTransactionAboveTieOne(string uniqueId, Guid userId);
+
+        Task<List<ListTransactionDto>> ListUserTransactions(int pageSize, int pageNumber, string searchString, int sortOrder);
+        Task<ListTransactionDto> GetUserTransactionsSummary();
+
     }
 }
