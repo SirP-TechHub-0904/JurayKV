@@ -13,9 +13,9 @@ namespace JurayKV.Application.Interswitch
    public sealed class ListBillersCategoryQuery : IRequest<BillerCategoryListResponse>
     {
         
-    }
+    
 
-    internal class ListBillersCategoryQueryHandler : IRequestHandler<ListBillersCategoryQuery, BillerCategoryListResponse>
+    public class ListBillersCategoryQueryHandler : IRequestHandler<ListBillersCategoryQuery, BillerCategoryListResponse>
     {
         private readonly ISwitchRepository _switchRepository;
 
@@ -31,5 +31,6 @@ namespace JurayKV.Application.Interswitch
             var response = await _switchRepository.ListBillersCategory();
             return response;
         }
+    }
     }
 }

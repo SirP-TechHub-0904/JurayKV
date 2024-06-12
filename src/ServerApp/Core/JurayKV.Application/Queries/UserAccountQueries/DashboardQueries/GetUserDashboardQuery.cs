@@ -28,7 +28,7 @@ namespace JurayKV.Application.Queries.UserAccountQueries.DashboardQueries
         public Guid UserId { get; }
 
         // Handler
-        private class GetUserDashboardQueryHandler : IRequestHandler<GetUserDashboardQuery, UserDashboardDto>
+        public class GetUserDashboardQueryHandler : IRequestHandler<GetUserDashboardQuery, UserDashboardDto>
         {
             private readonly IMediator _mediator;
             private readonly IUserManagerCacheRepository _userManagerCacheRepository;

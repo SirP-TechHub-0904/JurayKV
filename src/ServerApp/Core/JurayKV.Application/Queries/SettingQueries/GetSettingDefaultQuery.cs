@@ -15,7 +15,7 @@ namespace JurayKV.Application.Queries.SettingQueries
         
 
         // Handler
-        private class GetSettingDefaultQueryHandler : IRequestHandler<GetSettingDefaultQuery, SettingDetailsDto>
+        public class GetSettingDefaultQueryHandler : IRequestHandler<GetSettingDefaultQuery, SettingDetailsDto>
         {
             private readonly IQueryRepository _repository;
             private readonly ISettingCacheRepository _settingCacheRepository;

@@ -12,9 +12,9 @@ namespace JurayKV.Application.VtuServices
             BillGateway = billGateway;
         }
         public BillGateway BillGateway { get; set; }
-    }
     
-    internal class GetVariationCategoryCommandHandler : IRequestHandler<GetVariationCategoryCommand, List<CategoryVariation>>
+
+    public class GetVariationCategoryCommandHandler : IRequestHandler<GetVariationCategoryCommand, List<CategoryVariation>>
     {
         private readonly ICategoryVariationRepository _variationRepository;
 
@@ -32,4 +32,5 @@ namespace JurayKV.Application.VtuServices
             return result;
         }
     }
+}
 }

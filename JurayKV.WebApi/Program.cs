@@ -25,6 +25,17 @@ using JurayKV.Application.Queries.IdentityKvAdQueries;
 using JurayKV.Application.Caching.Handlers;
 using JurayKV.Persistence.Cache.Handlers;
 using Microsoft.Extensions.Options;
+using JurayKV.Application.Queries.UserAccountQueries.DashboardQueries;
+using JurayKV.Application.Queries.WalletQueries;
+using JurayKV.Application.Queries.UserManagerQueries;
+using JurayKV.Application.Queries.KvPointQueries;
+using JurayKV.Application.Queries.SettingQueries;
+using JurayKV.Application.VtuServices;
+using JurayKV.Domain.Aggregates.CategoryVariationAggregate;
+using JurayKV.Application.Interswitch;
+using JurayKvV.Infrastructure.Interswitch.ResponseModel;
+using JurayKV.Application.Queries.OtherQueries;
+using JurayKvV.Infrastructure.Interswitch.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -94,7 +105,7 @@ builder.Services.AddSwaggerGen(option =>
 ////                        {
 ////                            // Log the reason for token invalidation
 ////                           // Log.LogError("Token validation failed: Invalid token.");
-                            
+
 ////                        }
 
 ////                        return Task.CompletedTask;
@@ -111,7 +122,7 @@ builder.Services.AddSwaggerGen(option =>
 
 
 
-
+builder.Services.AddCaching();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddRelationalDbContext(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.ConfigureApplicationCookie(options =>
@@ -148,6 +159,24 @@ builder.Services.AddTransient<IBucketCacheRepository, BucketCacheRepository>();
 
 // Register services
 builder.Services.AddTransient<IRequestHandler<DashboardQuery, DashboardDto>, DashboardQuery.DashboardQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetUserDashboardQuery, UserDashboardDto>, GetUserDashboardQuery.GetUserDashboardQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetWalletUserByIdQuery, WalletDetailsDto>, GetWalletUserByIdQuery.GetWalletUserByIdQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetUserManagerByIdQuery, UserManagerDetailsDto>, GetUserManagerByIdQuery.GetUserManagerByIdQueryHandler>();
+
+builder.Services.AddTransient<IRequestHandler<GetKvPointListByUserIdQuery, List<KvPointListDto>>, GetKvPointListByUserIdQuery.GetKvPointListByUserIdQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetSettingDefaultQuery, SettingDetailsDto>, GetSettingDefaultQuery.GetSettingDefaultQueryHandler>();
+ 
+
+builder.Services.AddTransient<IRequestHandler<GetVariationCategoryCommand, List<CategoryVariation>>, GetVariationCategoryCommand.GetVariationCategoryCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<ListBillersCategoryQuery, BillerCategoryListResponse>, ListBillersCategoryQuery.ListBillersCategoryQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetCategoryVariationByIdQuery, CategoryVariation>, GetCategoryVariationByIdQuery.GetCategoryVariationByIdQueryHandler>();
+  
+
+
+
+
+builder.Services.AddScoped<IUserManagerCacheRepository, UserManagerCacheRepository>();
+
 builder.Services.AddTransient<IDashboardCacheRepository, DashboardCacheRepository>(); // Replace YourDashboardCacheRepositoryImplementation with the actual implementation class.
 //
 builder.Services.AddTransient<IRequestHandler<GetIdentityKvAdActiveByUserIdListQuery, List<IdentityKvAdListDto>>, GetIdentityKvAdActiveByUserIdListQuery.GetIdentityKvAdActiveByUserIdListQueryHandler>();
@@ -160,6 +189,13 @@ builder.Services.AddTransient<IIdentityKvAdCacheRepository, IdentityKvAdCacheRep
 //
 builder.Services.AddTransient<IRequestHandler<GetBucketByIdQuery, BucketDetailsDto>, GetBucketByIdQuery.GetBucketByIdQueryHandler>();
 builder.Services.AddTransient<IIdentityKvAdCacheHandler, IdentityKvAdCacheHandler>();
+builder.Services.AddTransient<IWalletCacheRepository, WalletCacheRepository>();
+builder.Services.AddTransient<ITransactionCacheRepository, TransactionCacheRepository>();
+builder.Services.AddTransient<ISettingCacheRepository, SettingCacheRepository>();
+builder.Services.AddTransient<IKvPointCacheRepository, KvPointCacheRepository>();
+builder.Services.AddTransient<IKvAdCacheRepository, KvAdCacheRepository>();
+builder.Services.AddTransient<ISwitchRepository, SwitchRepository>();
+builder.Services.AddTransient<IExchangeRateCacheRepository, ExchangeRateCacheRepository>();
 
 builder.Services.AddDistributedMemoryCache();
 var app = builder.Build();

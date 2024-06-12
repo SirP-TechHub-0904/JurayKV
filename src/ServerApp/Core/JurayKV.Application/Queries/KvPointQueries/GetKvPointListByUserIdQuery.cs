@@ -12,7 +12,7 @@ public sealed class GetKvPointListByUserIdQuery : IRequest<List<KvPointListDto>>
     }
 
     public Guid UserId { get; }
-    private class GetKvPointListByUserIdQueryHandler : IRequestHandler<GetKvPointListByUserIdQuery, List<KvPointListDto>>
+    public class GetKvPointListByUserIdQueryHandler : IRequestHandler<GetKvPointListByUserIdQuery, List<KvPointListDto>>
     {
         private readonly IKvPointCacheRepository _kvPointCacheRepository;
 

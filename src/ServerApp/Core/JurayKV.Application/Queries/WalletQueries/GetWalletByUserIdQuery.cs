@@ -17,7 +17,7 @@ public sealed class GetWalletUserByIdQuery : IRequest<WalletDetailsDto>
     public Guid UserId { get; }
 
     // Handler
-    private class GetWalletUserByIdQueryHandler : IRequestHandler<GetWalletUserByIdQuery, WalletDetailsDto>
+    public class GetWalletUserByIdQueryHandler : IRequestHandler<GetWalletUserByIdQuery, WalletDetailsDto>
     {
         private readonly IQueryRepository _repository;
 

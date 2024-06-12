@@ -20,7 +20,7 @@ public sealed class GetUserManagerByIdQuery : IRequest<UserManagerDetailsDto>
     public Guid Id { get; }
 
     // Handler
-    private class GetUserManagerByIdQueryHandler : IRequestHandler<GetUserManagerByIdQuery, UserManagerDetailsDto>
+    public class GetUserManagerByIdQueryHandler : IRequestHandler<GetUserManagerByIdQuery, UserManagerDetailsDto>
     {
         private readonly IUserManagerCacheRepository _userManager;
         private readonly IQueryRepository _repository;

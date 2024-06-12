@@ -1,5 +1,7 @@
 ﻿using JurayKV.Application.Caching.Handlers;
+using JurayKV.Application.Caching.Repositories;
 using JurayKV.Persistence.Cache.Handlers;
+using JurayKV.Persistence.Cache.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using TanvirArjel.ArgumentChecker;
 
@@ -22,7 +24,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityKvAdCacheHandler, IdentityKvAdCacheHandler>();
         services.AddScoped<IUserManagerCacheHandler, UserManagerCacheHandler>();
         services.AddScoped<IImageCacheHandler, ImageCacheHandler>();
-
+        services.AddScoped<IUserManagerCacheRepository, UserManagerCacheRepository>();
+        
         services.AddScoped<IKvAdCacheHandler, KvAdCacheHandler>();
         services.AddScoped<IKvPointCacheHandler, KvPointCacheHandler>();
         services.AddScoped<ITransactionCacheHandler, TransactionCacheHandler>();
