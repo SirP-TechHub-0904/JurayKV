@@ -1,0 +1,80 @@
+name: Deploy JurayKV API to Hostinger
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'src/ServerApp/Presentation/JurayKV.Api/**'
+      - 'src/ServerApp/Core/**'
+      - 'src/ServerApp/Infrastructure/**'
+      - 'PostmarkEmailService/**'
+      - 'scripts/deploy-api.sh'
+      - '.github/workflows/deploy-api.yml'
+  workflow_dispatch:
+    inputs:
+      force_update_env:
+        description: 'Force overwrite server .env with GitHub Secret APP_ENV'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  deploy-api:
+    name: Build & Deploy Web API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 7 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Publish JurayKV.Api
+        run: |
+          dotnet publish src/ServerApp/Presentation/JurayKV.Api/JurayKV.Api.csproj \
+            -c Release \
+            -o ./publish-api \
+            /p:UseAppHost=false
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -H "${{ secrets.HOSTINGER_SERVER_IP }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Prepare Remote Directories
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
+            "mkdir -p ~/apps/juraykv/api-staging ~/apps/juraykv/scripts"
+
+      - name: Sync Published Files to Staging
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no" \
+            ./publish-api/ ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/api-staging/
+
+          rsync -avz \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no" \
+            ./scripts/deploy-api.sh ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/scripts/
+
+      - name: Run API Deployment & Port Detection
+        env:
+          APP_ENV: ${{ secrets.APP_ENV }}
+          FORCE_UPDATE: ${{ github.event.inputs.force_update_env || 'false' }}
+        run: |
+          ENV_B64=""
+          if [ -n "$APP_ENV" ]; then
+            ENV_B64=$(echo "$APP_ENV" | base64 -w 0)
+          fi
+
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
+            "chmod +x ~/apps/juraykv/scripts/deploy-api.sh && \
+             INITIAL_ENV_B64='$ENV_B64' FORCE_UPDATE_ENV='$FORCE_UPDATE' ~/apps/juraykv/scripts/deploy-api.sh ~/apps/juraykv"

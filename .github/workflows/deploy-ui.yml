@@ -1,13 +1,17 @@
-name: Deploy JurayKV to Hostinger
+name: Deploy JurayKV UI (Web) to Hostinger
 
 on:
   push:
     branches:
       - master
       - main
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
+    paths:
+      - 'src/ServerApp/Presentation/JurayKV.UI/**'
+      - 'src/ServerApp/Core/**'
+      - 'src/ServerApp/Infrastructure/**'
+      - 'PostmarkEmailService/**'
+      - 'scripts/deploy-ui.sh'
+      - '.github/workflows/deploy-ui.yml'
   workflow_dispatch:
     inputs:
       force_update_env:
@@ -17,13 +21,25 @@ on:
         type: boolean
 
 jobs:
-  deploy:
-    name: Deploy API & UI to Hostinger VPS
+  deploy-ui:
+    name: Build & Deploy Web UI
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup .NET 7 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Publish JurayKV.UI
+        run: |
+          dotnet publish src/ServerApp/Presentation/JurayKV.UI/JurayKV.UI.csproj \
+            -c Release \
+            -o ./publish-ui \
+            /p:UseAppHost=false
 
       - name: Setup SSH
         run: |
@@ -32,26 +48,23 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -H "${{ secrets.HOSTINGER_SERVER_IP }}" >> ~/.ssh/known_hosts 2>/dev/null || true
 
-      - name: Prepare Remote App Directory
+      - name: Prepare Remote Directories
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
             ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
-            "mkdir -p ~/apps/juraykv"
+            "mkdir -p ~/apps/juraykv/ui-staging ~/apps/juraykv/scripts"
 
-      - name: Sync Project Files via Rsync
+      - name: Sync Published Files to Staging
         run: |
           rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.vs' \
-            --exclude='**/bin' \
-            --exclude='**/obj' \
-            --exclude='.env' \
-            --exclude='*.local.json' \
             -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no" \
-            ./ ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/
+            ./publish-ui/ ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/ui-staging/
 
-      - name: Run Deployment & Port Detection on Hostinger
+          rsync -avz \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no" \
+            ./scripts/deploy-ui.sh ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/scripts/
+
+      - name: Run UI Deployment & Port Detection
         env:
           APP_ENV: ${{ secrets.APP_ENV }}
           FORCE_UPDATE: ${{ github.event.inputs.force_update_env || 'false' }}
@@ -63,6 +76,5 @@ jobs:
 
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
             ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
-            "cd ~/apps/juraykv && \
-             chmod +x deploy.sh && \
-             INITIAL_ENV_B64='$ENV_B64' FORCE_UPDATE_ENV='$FORCE_UPDATE' ./deploy.sh"
+            "chmod +x ~/apps/juraykv/scripts/deploy-ui.sh && \
+             INITIAL_ENV_B64='$ENV_B64' FORCE_UPDATE_ENV='$FORCE_UPDATE' ~/apps/juraykv/scripts/deploy-ui.sh ~/apps/juraykv"
