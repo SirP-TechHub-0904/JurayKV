@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace JurayKV.Api;
 
@@ -8,21 +8,12 @@ public static class ConfigurationHelper
 	{
 		ArgumentNullException.ThrowIfNull(builder);
 
-		bool isUnixLikeSystem = Environment.OSVersion.Platform == PlatformID.Unix
-								|| Environment.OSVersion.Platform == PlatformID.MacOSX;
-
-		string connectionString;
-
-		if (isUnixLikeSystem)
+		string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+		if (string.IsNullOrWhiteSpace(connectionString))
 		{
 			connectionString = builder.Configuration.GetConnectionString("DockerDbConnection");
 		}
-		else
-		{
-			string connectionName = builder.Environment.IsDevelopment() ? "DefaultConnection" : "DefaultConnection";
-			connectionString = builder.Configuration.GetConnectionString(connectionName);
-		}
 
-		return connectionString;
+		return connectionString ?? string.Empty;
 	}
 }

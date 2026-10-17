@@ -28,27 +28,21 @@ mkdir -p "$UI_DIR" "$STAGING_DIR"
 # ------------------------------------------------------------------------------
 # 1. Environment File (.env) Handling: First Deploy vs Subsequent
 # ------------------------------------------------------------------------------
-if [ ! -f "$ENV_FILE" ]; then
-    echo "📝 First deploy: .env does not exist."
+if [ ! -f "$ENV_FILE" ] || [ $(wc -c < "$ENV_FILE" 2>/dev/null || echo 0) -lt 30 ] || [ "$FORCE_UPDATE_ENV" = "true" ]; then
     if [ -n "$INITIAL_ENV_B64" ]; then
         echo "🔑 Writing .env from GitHub Secret (Base64)..."
         echo "$INITIAL_ENV_B64" | base64 -d > "$ENV_FILE"
-    elif [ -n "$INITIAL_ENV" ]; then
-        echo "🔑 Writing .env from GitHub Secret (Plain)..."
-        echo "$INITIAL_ENV" > "$ENV_FILE"
-    else
-        echo "⚠️ Creating empty .env file..."
-        touch "$ENV_FILE"
-    fi
-    chmod 600 "$ENV_FILE"
-    echo "🔒 Set .env permissions to 600."
-else
-    echo "✅ Existing .env found. Preserving current secrets."
-    if [ "$FORCE_UPDATE_ENV" = "true" ] && [ -n "$INITIAL_ENV_B64" ]; then
-        echo "⚠️ FORCE_UPDATE_ENV is true. Overwriting .env..."
-        echo "$INITIAL_ENV_B64" | base64 -d > "$ENV_FILE"
         chmod 600 "$ENV_FILE"
+        echo "🔒 Set .env permissions to 600."
+    elif [ ! -f "$ENV_FILE" ]; then
+        echo "⚠️ WARNING: APP_ENV secret is missing from GitHub Secrets! Creating placeholder .env..."
+        touch "$ENV_FILE"
+        chmod 600 "$ENV_FILE"
+    else
+        echo "⚠️ Existing .env is almost empty, but no APP_ENV secret was provided to fill it."
     fi
+else
+    echo "✅ Existing .env found ($(wc -l < "$ENV_FILE") lines). Preserving current secrets."
 fi
 
 # ------------------------------------------------------------------------------
@@ -160,6 +154,10 @@ if $SUDO systemctl is-active --quiet juraykv-ui; then
     echo "=================================================="
 else
     echo "❌ juraykv-ui failed to start. Last service logs:"
-    $SUDO journalctl -u juraykv-ui -n 30 --no-pager
+    $SUDO journalctl -u juraykv-ui -n 50 --no-pager
+    if [ -d "$UI_DIR/logs" ]; then
+        echo "📄 Application error logs from $UI_DIR/logs:"
+        cat "$UI_DIR"/logs/*.log 2>/dev/null | tail -n 40 || true
+    fi
     exit 1
 fi
