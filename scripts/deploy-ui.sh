@@ -3,12 +3,13 @@ set -e
 
 # ==============================================================================
 # JurayKV UI (Web) Deployment Script (Bare-Metal Systemd)
+# Independent .env located in ~/apps/juraykv/ui/.env
 # ==============================================================================
 
 DEPLOY_BASE="${1:-$HOME/apps/juraykv}"
 UI_DIR="$DEPLOY_BASE/ui"
 STAGING_DIR="$DEPLOY_BASE/ui-staging"
-ENV_FILE="$DEPLOY_BASE/.env"
+ENV_FILE="$UI_DIR/.env"
 
 CURRENT_USER=$(whoami)
 SUDO=""
@@ -19,6 +20,7 @@ fi
 echo "=================================================="
 echo "🚀 Deploying JurayKV UI (Web .NET 7) to Systemd"
 echo "📂 Target Directory: $UI_DIR"
+echo "📄 Config File:      $ENV_FILE"
 echo "👤 Run As User:      $CURRENT_USER"
 echo "=================================================="
 
@@ -26,27 +28,7 @@ echo "=================================================="
 mkdir -p "$UI_DIR" "$STAGING_DIR"
 
 # ------------------------------------------------------------------------------
-# 1. Environment File (.env) Handling: First Deploy vs Subsequent
-# ------------------------------------------------------------------------------
-if [ ! -f "$ENV_FILE" ] || [ $(wc -c < "$ENV_FILE" 2>/dev/null || echo 0) -lt 30 ] || [ "$FORCE_UPDATE_ENV" = "true" ]; then
-    if [ -n "$INITIAL_ENV_B64" ]; then
-        echo "🔑 Writing .env from GitHub Secret (Base64)..."
-        echo "$INITIAL_ENV_B64" | base64 -d > "$ENV_FILE"
-        chmod 600 "$ENV_FILE"
-        echo "🔒 Set .env permissions to 600."
-    elif [ ! -f "$ENV_FILE" ]; then
-        echo "⚠️ WARNING: APP_ENV secret is missing from GitHub Secrets! Creating placeholder .env..."
-        touch "$ENV_FILE"
-        chmod 600 "$ENV_FILE"
-    else
-        echo "⚠️ Existing .env is almost empty, but no APP_ENV secret was provided to fill it."
-    fi
-else
-    echo "✅ Existing .env found ($(wc -l < "$ENV_FILE") lines). Preserving current secrets."
-fi
-
-# ------------------------------------------------------------------------------
-# 2. Port Detection Helpers
+# 1. Port Detection Helpers
 # ------------------------------------------------------------------------------
 is_port_in_use() {
     local port=$1
@@ -82,7 +64,15 @@ find_free_port() {
 # Stop UI service temporarily to test if port belongs to us
 $SUDO systemctl stop juraykv-ui 2>/dev/null || true
 
-CURRENT_UI_PORT=$(grep -E '^UI_PORT=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2 | tr -d '\r\n')
+# ------------------------------------------------------------------------------
+# 2. Independent UI .env File Management
+# ------------------------------------------------------------------------------
+CURRENT_UI_PORT=""
+if [ -f "$ENV_FILE" ]; then
+    CURRENT_UI_PORT=$(grep -E '^UI_PORT=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2 | tr -d '\r\n')
+fi
+
+# Detect free port
 if [ -n "$CURRENT_UI_PORT" ] && ! is_port_in_use "$CURRENT_UI_PORT"; then
     FINAL_UI_PORT="$CURRENT_UI_PORT"
     echo "✅ Reusing configured UI_PORT: $FINAL_UI_PORT"
@@ -92,8 +82,59 @@ else
     echo "🎯 Assigned free port for UI: $FINAL_UI_PORT"
 fi
 
-sed -i '/^UI_PORT=/d' "$ENV_FILE"
-echo "UI_PORT=$FINAL_UI_PORT" >> "$ENV_FILE"
+if [ ! -f "$ENV_FILE" ]; then
+    echo "📝 First deploy: Generating UI template .env at $ENV_FILE..."
+    cat > "$ENV_FILE" <<EOF
+UI_PORT=$FINAL_UI_PORT
+ASPNETCORE_ENVIRONMENT=Production
+
+# Database Connection (update with your actual database password via nano)
+ConnectionStrings__DefaultConnection=Server=147.93.128.160,1433;Database=db_a64c98_kview;User Id=user_db;Password=Exwhyzee@123;TrustServerCertificate=True;
+
+# Payment Gateways - Flutterwave / Rave
+RaveConfig__IsLive=false
+RaveConfig__PbfPubKey=FLWPUBK_TEST-f4bb871959b328ba5c04417f81263902-X
+RaveConfig__SecretKey=FLWSECK_TEST-2e538587a52c4836a1e5860199817f71-X
+FLWSECK-Key=FLWSECK-3ebc176be7413ec684592804c5cd98b7-X
+FLWSECK_Key=FLWSECK-3ebc176be7413ec684592804c5cd98b7-X
+
+# Email - Postmark
+PostmarkSettings__ServerToken=dbdbf019-d67e-4752-bd26-12d8d610b805
+
+# Payment Gateways - Interswitch
+Interswitch__ClientId=IKIA5AA595B96948BB9AB2352EDC62DCAB7EF74F3715
+Interswitch__ClientSecret=xQaenok1q2xOXlUSA+m5ZZk0hl59lwfRBOQtiMw3BCw=
+Interswitch__MerchantCode=VNA
+
+# Payment Gateways - Opay
+OpayInit__BaseUrl=https://testapi.opaycheckout.com
+OpayInit__MarchantId=256623121083870
+OpayInit__PublicKey=OPAYPUB17021995948040.14617475491626442
+OpayInit__PrivateKey=OPAYPRV17021995948040.4458307725859857
+
+# VTU Service
+VTU__BaseUrl=https://vtu.ng/wp-json/api/v1/
+VTU__Username=XYZTECH
+VTU__SecretKey=AhambuJuray@123
+
+# SMS Service
+SmsApiToken=FdxLOHNVfiy9GTe4bsElIw5WA1oDJcvCMP8072rYn3ZhXaRzmBgqtuSQUjk6Kp
+
+# Twilio SMS
+TWILIO_ACCOUNT_SID=AC9415f9094a6a0f2f68ab9163e1c89fe6
+TWILIO_AUTH_TOKEN=336ebfe3b04709e989042533c2051721
+
+# AWS S3 / Cloud Storage
+AwsConfiguration__AWSAccessKey=AKIA4Y267QYK25XMO6WE
+AwsConfiguration__AWSSecretKey=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
+EOF
+    chmod 600 "$ENV_FILE"
+    echo "🔒 Set $ENV_FILE permissions to 600."
+else
+    echo "✅ Preserving existing $ENV_FILE. Updating UI_PORT..."
+    sed -i '/^UI_PORT=/d' "$ENV_FILE"
+    echo "UI_PORT=$FINAL_UI_PORT" >> "$ENV_FILE"
+fi
 
 # ------------------------------------------------------------------------------
 # 3. Swap Staging Binaries into Live Directory
@@ -149,15 +190,16 @@ sleep 5
 # ------------------------------------------------------------------------------
 if $SUDO systemctl is-active --quiet juraykv-ui; then
     echo "=================================================="
-    echo "🎉 JURAYKV UI DEPLOYED SUCCESSFULLY!"
+    echo "🎉 JURAYKV UI DEPLOYED & RUNNING!"
     echo "🌐 Active on: http://127.0.0.1:$FINAL_UI_PORT"
     echo "=================================================="
 else
-    echo "❌ juraykv-ui failed to start. Last service logs:"
-    $SUDO journalctl -u juraykv-ui -n 50 --no-pager
-    if [ -d "$UI_DIR/logs" ]; then
-        echo "📄 Application error logs from $UI_DIR/logs:"
-        cat "$UI_DIR"/logs/*.log 2>/dev/null | tail -n 40 || true
-    fi
-    exit 1
+    echo "⚠️ juraykv-ui is not active yet."
+    echo "Recent logs from journalctl:"
+    $SUDO journalctl -u juraykv-ui -n 30 --no-pager || true
+    echo "=================================================="
+    echo "💡 To configure your UI secrets via nano:"
+    echo "   nano $ENV_FILE"
+    echo "   sudo systemctl restart juraykv-ui"
+    echo "=================================================="
 fi

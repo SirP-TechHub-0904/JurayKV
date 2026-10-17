@@ -13,12 +13,6 @@ on:
       - 'scripts/deploy-ui.sh'
       - '.github/workflows/deploy-ui.yml'
   workflow_dispatch:
-    inputs:
-      force_update_env:
-        description: 'Force overwrite server .env with GitHub Secret APP_ENV'
-        required: false
-        default: 'false'
-        type: boolean
 
 jobs:
   deploy-ui:
@@ -65,16 +59,7 @@ jobs:
             ./scripts/deploy-ui.sh ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/scripts/
 
       - name: Run UI Deployment & Port Detection
-        env:
-          APP_ENV: ${{ secrets.APP_ENV }}
-          FORCE_UPDATE: ${{ github.event.inputs.force_update_env || 'false' }}
         run: |
-          ENV_B64=""
-          if [ -n "$APP_ENV" ]; then
-            ENV_B64=$(echo "$APP_ENV" | base64 -w 0)
-          fi
-
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
             ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
-            "chmod +x ~/apps/juraykv/scripts/deploy-ui.sh && \
-             INITIAL_ENV_B64='$ENV_B64' FORCE_UPDATE_ENV='$FORCE_UPDATE' ~/apps/juraykv/scripts/deploy-ui.sh ~/apps/juraykv"
+            "chmod +x ~/apps/juraykv/scripts/deploy-ui.sh && ~/apps/juraykv/scripts/deploy-ui.sh ~/apps/juraykv"

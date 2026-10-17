@@ -3,12 +3,13 @@ set -e
 
 # ==============================================================================
 # JurayKV API Deployment Script (Bare-Metal Systemd)
+# Independent .env located in ~/apps/juraykv/api/.env
 # ==============================================================================
 
 DEPLOY_BASE="${1:-$HOME/apps/juraykv}"
 API_DIR="$DEPLOY_BASE/api"
 STAGING_DIR="$DEPLOY_BASE/api-staging"
-ENV_FILE="$DEPLOY_BASE/.env"
+ENV_FILE="$API_DIR/.env"
 
 CURRENT_USER=$(whoami)
 SUDO=""
@@ -19,6 +20,7 @@ fi
 echo "=================================================="
 echo "🚀 Deploying JurayKV API (.NET 7) to Systemd"
 echo "📂 Target Directory: $API_DIR"
+echo "📄 Config File:      $ENV_FILE"
 echo "👤 Run As User:      $CURRENT_USER"
 echo "=================================================="
 
@@ -26,27 +28,7 @@ echo "=================================================="
 mkdir -p "$API_DIR" "$STAGING_DIR"
 
 # ------------------------------------------------------------------------------
-# 1. Environment File (.env) Handling: First Deploy vs Subsequent
-# ------------------------------------------------------------------------------
-if [ ! -f "$ENV_FILE" ] || [ $(wc -c < "$ENV_FILE" 2>/dev/null || echo 0) -lt 30 ] || [ "$FORCE_UPDATE_ENV" = "true" ]; then
-    if [ -n "$INITIAL_ENV_B64" ]; then
-        echo "🔑 Writing .env from GitHub Secret (Base64)..."
-        echo "$INITIAL_ENV_B64" | base64 -d > "$ENV_FILE"
-        chmod 600 "$ENV_FILE"
-        echo "🔒 Set .env permissions to 600."
-    elif [ ! -f "$ENV_FILE" ]; then
-        echo "⚠️ WARNING: APP_ENV secret is missing from GitHub Secrets! Creating placeholder .env..."
-        touch "$ENV_FILE"
-        chmod 600 "$ENV_FILE"
-    else
-        echo "⚠️ Existing .env is almost empty, but no APP_ENV secret was provided to fill it."
-    fi
-else
-    echo "✅ Existing .env found ($(wc -l < "$ENV_FILE") lines). Preserving current secrets."
-fi
-
-# ------------------------------------------------------------------------------
-# 2. Port Detection Helpers
+# 1. Port Detection Helpers
 # ------------------------------------------------------------------------------
 is_port_in_use() {
     local port=$1
@@ -82,7 +64,15 @@ find_free_port() {
 # Stop API service temporarily to test if port belongs to us
 $SUDO systemctl stop juraykv-api 2>/dev/null || true
 
-CURRENT_API_PORT=$(grep -E '^API_PORT=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2 | tr -d '\r\n')
+# ------------------------------------------------------------------------------
+# 2. Independent API .env File Management
+# ------------------------------------------------------------------------------
+CURRENT_API_PORT=""
+if [ -f "$ENV_FILE" ]; then
+    CURRENT_API_PORT=$(grep -E '^API_PORT=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2 | tr -d '\r\n')
+fi
+
+# Detect free port
 if [ -n "$CURRENT_API_PORT" ] && ! is_port_in_use "$CURRENT_API_PORT"; then
     FINAL_API_PORT="$CURRENT_API_PORT"
     echo "✅ Reusing configured API_PORT: $FINAL_API_PORT"
@@ -92,8 +82,37 @@ else
     echo "🎯 Assigned free port for API: $FINAL_API_PORT"
 fi
 
-sed -i '/^API_PORT=/d' "$ENV_FILE"
-echo "API_PORT=$FINAL_API_PORT" >> "$ENV_FILE"
+if [ ! -f "$ENV_FILE" ]; then
+    echo "📝 First deploy: Generating API template .env at $ENV_FILE..."
+    cat > "$ENV_FILE" <<EOF
+API_PORT=$FINAL_API_PORT
+ASPNETCORE_ENVIRONMENT=Production
+
+# Database Connection (update with your actual database password via nano)
+ConnectionStrings__DefaultConnection=Server=147.93.128.160,1433;Database=db_a64c98_kview;User Id=user_db;Password=Exwhyzee@123;TrustServerCertificate=True;
+
+# JWT Authentication
+Jwt__Key=2E56uS1k+pWFPQcVsflFqyRjeMlNxRVWWkYgcFEV4jdedRMdjJQvjVRBAwlnN1LeukYzMMjm8X8Rzq3AGMVlaA==
+Jwt__Issuer=SampleIdentity.com
+Jwt__LifeTime=86400
+
+# External Login Providers (OAuth)
+ExternalLoginProviders__Google__ClientId=826428690319-r7q1543cl4lmcrkc9pavovin4m3mfvms.apps.googleusercontent.com
+ExternalLoginProviders__Google__ClientSecret=Bd15s3IdSHMDu0niCdwar66q
+ExternalLoginProviders__Facebook__AppId=2352153101679325
+ExternalLoginProviders__Facebook__AppSecret=a1fd8d2739d6130883d29dd4bab55fcd
+ExternalLoginProviders__Twitter__ConsumerKey=7RJZ92eHoN3CDih8A4fNQISB0
+ExternalLoginProviders__Twitter__ConsumerSecret=FHR6n9r6KoVj5GEzWFJslRL2m295zrI1QGEWsqCpmWIbx7gGX3
+ExternalLoginProviders__Microsoft__ApplicationId=e606555b-9ee9-4b34-a886-3fd9db93e9fe
+ExternalLoginProviders__Microsoft__Password=yrABB723%]{tkujmMDYI11)
+EOF
+    chmod 600 "$ENV_FILE"
+    echo "🔒 Set $ENV_FILE permissions to 600."
+else
+    echo "✅ Preserving existing $ENV_FILE. Updating API_PORT..."
+    sed -i '/^API_PORT=/d' "$ENV_FILE"
+    echo "API_PORT=$FINAL_API_PORT" >> "$ENV_FILE"
+fi
 
 # ------------------------------------------------------------------------------
 # 3. Swap Staging Binaries into Live Directory
@@ -149,15 +168,16 @@ sleep 5
 # ------------------------------------------------------------------------------
 if $SUDO systemctl is-active --quiet juraykv-api; then
     echo "=================================================="
-    echo "🎉 JURAYKV API DEPLOYED SUCCESSFULLY!"
+    echo "🎉 JURAYKV API DEPLOYED & RUNNING!"
     echo "🔗 Active on: http://127.0.0.1:$FINAL_API_PORT"
     echo "=================================================="
 else
-    echo "❌ juraykv-api failed to start. Last service logs:"
-    $SUDO journalctl -u juraykv-api -n 50 --no-pager
-    if [ -d "$API_DIR/Logs" ]; then
-        echo "📄 Application error logs from $API_DIR/Logs:"
-        cat "$API_DIR"/Logs/*.txt 2>/dev/null | tail -n 40 || true
-    fi
-    exit 1
+    echo "⚠️ juraykv-api is not active yet."
+    echo "Recent logs from journalctl:"
+    $SUDO journalctl -u juraykv-api -n 30 --no-pager || true
+    echo "=================================================="
+    echo "💡 To configure your API secrets via nano:"
+    echo "   nano $ENV_FILE"
+    echo "   sudo systemctl restart juraykv-api"
+    echo "=================================================="
 fi
