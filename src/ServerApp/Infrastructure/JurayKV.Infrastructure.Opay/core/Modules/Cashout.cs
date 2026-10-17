@@ -14,9 +14,9 @@ namespace JurayKV.Infrastructure.Opay.core.Modules
 
         private readonly String BASEURL = "http://sandbox.cashierapi.operapay.com/api/v3";
 
-        private readonly String MERCHANTID = "256620112018031";
-        private readonly String PUBLICKEY = "OPAYPUB16058777635980.9961229244591103";
-        private readonly String PRIVATEKEY = "OPAYPRV16058777635980.3804652128291669";
+        private readonly String MERCHANTID = "";
+        private readonly String PUBLICKEY = "";
+        private readonly String PRIVATEKEY = "";
 
         public Cashout(IConnectionClient connectionClient)
     {

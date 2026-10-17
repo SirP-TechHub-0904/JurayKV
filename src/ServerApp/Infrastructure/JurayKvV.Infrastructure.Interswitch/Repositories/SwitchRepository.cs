@@ -1,4 +1,4 @@
-﻿using JurayKvV.Infrastructure.Interswitch.RequestModel;
+using JurayKvV.Infrastructure.Interswitch.RequestModel;
 using JurayKvV.Infrastructure.Interswitch.ResponseModel;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -393,8 +393,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/services";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -443,8 +443,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/services?categoryId={categoryId}";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -483,8 +483,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/services/options?serviceid={billerId}";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -523,8 +523,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/Transactions/validatecustomers";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -582,8 +582,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/services/categories";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -625,8 +625,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/configuration/fundstransferbanks";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -667,8 +667,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = "https://qa.interswitchng.com/quicktellerservice/api/v5/transactions/TransferFunds";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
@@ -711,8 +711,8 @@ namespace JurayKvV.Infrastructure.Interswitch.Repositories
             {
                 string apiUrl = $"https://qa.interswitchng.com/quicktellerservice/api/v5/Transactions/DoAccountNameInquiry";
                 string terminalId = "3pbl0001";
-                string clientId = "IKIA72C65D005F93F30E573EFEAC04FA6DD9E4D344B1";
-                string clientSecret = "YZMqZezsltpSPNb4+49PGeP7lYkzKn1a5SaVSyzKOiI=";
+                string clientId = _configuration["Interswitch:ClientId"];
+                string clientSecret = _configuration["Interswitch:ClientSecret"];
 
                 //access bearer
                 Authentication authentication = new Authentication(_configuration);
