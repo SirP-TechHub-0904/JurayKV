@@ -1,0 +1,68 @@
+name: Deploy JurayKV to Hostinger
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      force_update_env:
+        description: 'Force overwrite server .env with GitHub Secret APP_ENV'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  deploy:
+    name: Deploy API & UI to Hostinger VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -H "${{ secrets.HOSTINGER_SERVER_IP }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Prepare Remote App Directory
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
+            "mkdir -p ~/apps/juraykv"
+
+      - name: Sync Project Files via Rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.vs' \
+            --exclude='**/bin' \
+            --exclude='**/obj' \
+            --exclude='.env' \
+            --exclude='*.local.json' \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no" \
+            ./ ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }}:~/apps/juraykv/
+
+      - name: Run Deployment & Port Detection on Hostinger
+        env:
+          APP_ENV: ${{ secrets.APP_ENV }}
+          FORCE_UPDATE: ${{ github.event.inputs.force_update_env || 'false' }}
+        run: |
+          ENV_B64=""
+          if [ -n "$APP_ENV" ]; then
+            ENV_B64=$(echo "$APP_ENV" | base64 -w 0)
+          fi
+
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.HOSTINGER_SSH_PORT || 22 }} -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SERVER_IP }} \
+            "cd ~/apps/juraykv && \
+             chmod +x deploy.sh && \
+             INITIAL_ENV_B64='$ENV_B64' FORCE_UPDATE_ENV='$FORCE_UPDATE' ./deploy.sh"

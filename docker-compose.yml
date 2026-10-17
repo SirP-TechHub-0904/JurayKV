@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  juraykv-api:
+    container_name: juraykv-api
+    build:
+      context: .
+      dockerfile: src/ServerApp/Presentation/JurayKV.Api/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-5001}:80"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ASPNETCORE_URLS=http://+:80
+
+  juraykv-ui:
+    container_name: juraykv-ui
+    build:
+      context: .
+      dockerfile: src/ServerApp/Presentation/JurayKV.UI/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${UI_PORT:-5000}:80"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ASPNETCORE_URLS=http://+:80
